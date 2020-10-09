@@ -16,7 +16,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return File::get(public_path() . '/react/index.html');
 });
-
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
