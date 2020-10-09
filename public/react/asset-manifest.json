@@ -1,0 +1,38 @@
+{
+  "files": {
+    "main.css": "/react/static/css/main.27a0204d.chunk.css",
+    "main.js": "/react/static/js/main.7f9742b0.chunk.js",
+    "main.js.map": "/react/static/js/main.7f9742b0.chunk.js.map",
+    "runtime-main.js": "/react/static/js/runtime-main.3da33eb3.js",
+    "runtime-main.js.map": "/react/static/js/runtime-main.3da33eb3.js.map",
+    "static/css/2.220ccb42.chunk.css": "/react/static/css/2.220ccb42.chunk.css",
+    "static/js/2.cfaf5b78.chunk.js": "/react/static/js/2.cfaf5b78.chunk.js",
+    "static/js/2.cfaf5b78.chunk.js.map": "/react/static/js/2.cfaf5b78.chunk.js.map",
+    "index.html": "/react/index.html",
+    "precache-manifest.df9f0d03b65f7ced5318b30955148c50.js": "/react/precache-manifest.df9f0d03b65f7ced5318b30955148c50.js",
+    "service-worker.js": "/react/service-worker.js",
+    "static/css/2.220ccb42.chunk.css.map": "/react/static/css/2.220ccb42.chunk.css.map",
+    "static/css/main.27a0204d.chunk.css.map": "/react/static/css/main.27a0204d.chunk.css.map",
+    "static/js/2.cfaf5b78.chunk.js.LICENSE.txt": "/react/static/js/2.cfaf5b78.chunk.js.LICENSE.txt",
+    "static/media/black.png": "/react/static/media/black.f14fed51.png",
+    "static/media/blacket.png": "/react/static/media/blacket.f0ca3076.png",
+    "static/media/blacko.png": "/react/static/media/blacko.e44a1dd0.png",
+    "static/media/blackot.png": "/react/static/media/blackot.3a5ad7bb.png",
+    "static/media/blacks.png": "/react/static/media/blacks.216d4546.png",
+    "static/media/blackst.png": "/react/static/media/blackst.3fad8195.png",
+    "static/media/white.png": "/react/static/media/white.c24c0c51.png",
+    "static/media/whitee.png": "/react/static/media/whitee.7755ca79.png",
+    "static/media/whiteet.png": "/react/static/media/whiteet.d10cd0cc.png",
+    "static/media/whiteo.png": "/react/static/media/whiteo.1e81fee0.png",
+    "static/media/whites.png": "/react/static/media/whites.7cb9db03.png",
+    "static/media/whiteso.png": "/react/static/media/whiteso.f76a057b.png",
+    "static/media/whitest.png": "/react/static/media/whitest.05051e66.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.3da33eb3.js",
+    "static/css/2.220ccb42.chunk.css",
+    "static/js/2.cfaf5b78.chunk.js",
+    "static/css/main.27a0204d.chunk.css",
+    "static/js/main.7f9742b0.chunk.js"
+  ]
+}
