@@ -6,7 +6,7 @@
 
 [Laravel](https://laravel.com/) with [Jetstream](https://jetstream.laravel.com/) for user management.
 
-Virtuall no change to default.
+Virtually no change from default.
 
 ### Server
 
