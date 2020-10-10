@@ -6,6 +6,7 @@ use Assert\Assertion;
 use App\Concepts\FFG\L5R\Dices\DiceValue;
 use App\Concepts\FFG\L5R\Dices\RingDiceValue;
 use App\Concepts\FFG\L5R\Dices\SkillDiceValue;
+use App\Concepts\FFG\L5R\Rolls\Modifier;
 
 class Dice
 {
@@ -23,7 +24,9 @@ class Dice
 
   public DiceValue $value;
 
-  public function __construct(string $type, string $status, DiceValue $value)
+  public ?string $reason;
+
+  public function __construct(string $type, string $status, DiceValue $value, ?string $reason = null)
   {
     Assertion::inArray($type, array(self::RING, self::SKILL));
     Assertion::inArray($status, array(
@@ -32,10 +35,15 @@ class Dice
       self::KEPT,
       self::REROLLED,
     ));
+    if ($status === self::REROLLED) {
+      Assertion::notNull($reason);
+    }
+    Assertion::nullOrInArray($reason, Modifier::LIST);
 
     $this->type = $type;
     $this->status = $status;
     $this->value = $value;
+    $this->reason = $reason;
   }
 
   public static function init(string $type): Dice
@@ -61,7 +69,8 @@ class Dice
     return new Dice(
       $type,
       $data['status'],
-      new $dice($data['value'])
+      new $dice($data['value']),
+      $data['reason'] ?? null,
     );
   }
 }

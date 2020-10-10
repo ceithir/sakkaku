@@ -39,4 +39,25 @@ class DiceTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         new Dice('ring', 'super', new RingDiceValue(array()));
     }
+
+    public function testCanPassReason()
+    {
+        $dice = Dice::fromArray(array(
+            'type' => 'ring',
+            'status' => 'dropped',
+            'value' => array('success' => 1),
+            'reason' => 'adversity',
+        ));
+        $this->assertEquals('adversity', $dice->reason);
+    }
+
+    public function testReasonIsMandatoryForReroll()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        Dice::fromArray(array(
+            'type' => 'ring',
+            'status' => 'rerolled',
+            'value' => array(),
+        ));
+    }
 }
