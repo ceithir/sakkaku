@@ -3,16 +3,18 @@
 namespace App\Concepts\FFG\L5R\Dices;
 
 use Assert\Assertion;
+use App\Concepts\FFG\L5R\Dices\DiceValue;
 
-class RingDiceValue
+class RingDiceValue extends DiceValue
 {
-  public int $opportunity;
-
-  public int $strife;
-
-  public int $success;
-
-  public int $explosion;
+  const FACETS = array(
+    array(),
+    array('opportunity' => 1, 'strife' => 1),
+    array('opportunity' => 1),
+    array('strife' => 1, 'success' => 1),
+    array('success' => 1),
+    array('explosion' => 1, 'strife' => 1),
+  );
 
   public function __construct(array $data)
   {
@@ -38,17 +40,8 @@ class RingDiceValue
     $this->explosion = $explosion;
   }
 
-  public static function random()
+  public static function random(): DiceValue
   {
-    $facets = array(
-      array(),
-      array('opportunity' => 1, 'strife' => 1),
-      array('opportunity' => 1),
-      array('strife' => 1, 'success' => 1),
-      array('success' => 1),
-      array('explosion' => 1, 'strife' => 1),
-    );
-
-    return new self($facets[array_rand($facets)]);
+    return new self(self::FACETS[array_rand(self::FACETS)]);
   }
 }
