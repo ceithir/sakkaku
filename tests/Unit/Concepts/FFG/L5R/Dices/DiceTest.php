@@ -60,4 +60,15 @@ class DiceTest extends TestCase
             'value' => array(),
         ));
     }
+
+    public function testModifierMustExist()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $dice = Dice::fromArray(array(
+            'type' => 'ring',
+            'status' => 'kept',
+            'value' => ['success' => 1],
+            'metadata' => ['modifier' => 'coolness'],
+        ));
+    }
 }
