@@ -20,4 +20,12 @@ class RollController extends Controller
 
       return response()->json($roll);
     }
+
+    public function reroll(Request $request)
+    {
+      $roll = Roll::fromArray($request->input('roll'));
+      $roll->reroll($request->input('positions'), $request->input('modifier'));
+
+      return response()->json($roll);
+    }
 }
