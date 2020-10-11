@@ -12,4 +12,12 @@ class RollController extends Controller
     {
       return response()->json(Roll::init($request->all()), 201);
     }
+
+    public function keep(Request $request)
+    {
+      $roll = Roll::fromArray($request->input('roll'));
+      $roll->keep($request->input('positions'));
+
+      return response()->json($roll);
+    }
 }
