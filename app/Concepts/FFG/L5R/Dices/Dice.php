@@ -75,4 +75,41 @@ class Dice
       $data['metadata'] ?? array(),
     );
   }
+
+  public function isPending(): bool
+  {
+    return $this->status === Dice::PENDING;
+  }
+
+  public function isKept(): bool
+  {
+    return $this->status === Dice::KEPT;
+  }
+
+  public function isDropped(): bool
+  {
+    return $this->status === Dice::DROPPED;
+  }
+
+  public function keep(): void
+  {
+    Assertion::true($this->isPending());
+    $this->status = Dice::KEPT;
+  }
+
+  public function drop(): void
+  {
+    Assertion::true($this->isPending());
+    $this->status = Dice::DROPPED;
+  }
+
+  public function isSuccess(): bool
+  {
+    return $this->value->success > 0 || $this->value->explosion > 0;
+  }
+
+  public function hasStrife(): bool
+  {
+    return $this->value->strife > 0;
+  }
 }
