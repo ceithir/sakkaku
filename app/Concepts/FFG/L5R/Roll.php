@@ -60,8 +60,6 @@ class Roll
 
   public function keep(array $positions): void
   {
-    Assertion::false($this->requiresReroll());
-    $this->assertPositions($positions);
     $this->assertKeepable($positions);
 
     $explosions = [];
@@ -85,6 +83,27 @@ class Roll
     ));
   }
 
+  public function reroll(array $positions, string $modifier): void
+  {
+    $this->assertRerollable($positions, $modifier);
+
+    $rerolls = [];
+    foreach($positions as $position) {
+      $dice = $this->dices[$position];
+      $dice->reroll($modifier);
+      $rerolls[] = Dice::init($dice->type, ['modifier' => $modifier]);
+    }
+
+    $this->dices = array_values(array_merge(
+      $this->dices,
+      $rerolls,
+    ));
+    $this->metadata['rerolls'] = array_values(array_merge(
+      $this->getRerolls(),
+      [$modifier],
+    ));
+  }
+
   public function isCompromised(): bool
   {
     return in_array(Modifier::COMPROMISED, $this->parameters->modifiers);
@@ -94,7 +113,7 @@ class Roll
   {
     foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $modifier) {
       if (in_array($modifier, $this->parameters->modifiers)) {
-        if (!isset($this->metadata['rerolls']) || !in_array($modifier, $this->metadata['rerolls'])) {
+        if (!in_array($modifier, $this->getRerolls())) {
           return true;
         }
       }
@@ -128,7 +147,7 @@ class Roll
     return $this->result()['success'] >= $this->parameters->tn;
   }
 
-  private function assertPositions(array $positions)
+  private function assertPositions(array $positions): void
   {
     Assertion::allInteger($positions);
     Assertion::allBetween($positions, 0, count($this->dices)-1);
@@ -138,8 +157,11 @@ class Roll
     }
   }
 
-  private function assertKeepable(array $positions)
+  private function assertKeepable(array $positions): void
   {
+    Assertion::false($this->requiresReroll());
+    $this->assertPositions($positions);
+
     if ($this->isCompromised()) {
       foreach($positions as $position) {
         Assertion::false($this->dices[$position]->hasStrife());
@@ -173,5 +195,37 @@ class Roll
     }
 
     Assertion::greaterOrEqualThan(count($positions), 1);
+  }
+
+  private function getRerolls(): array
+  {
+    return $this->metadata['rerolls'] ?? array();
+  }
+
+  private function assertRerollable(array $positions, string $modifier)
+  {
+    Assertion::true($this->requiresReroll());
+    Assertion::inArray($modifier, [Modifier::ADVERSITY, Modifier::DISTINCTION]);
+    Assertion::inArray($modifier, $this->parameters->modifiers);
+    Assertion::notInArray($modifier, $this->getRerolls());
+    $this->assertPositions($positions);
+
+    if ($modifier === Modifier::ADVERSITY) {
+      foreach($positions as $position) {
+        Assertion::true($this->dices[$position]->isSuccess());
+      }
+
+      $successDices = array_filter(
+        $this->dices,
+        function(Dice $dice) {
+          return $dice->isPending() && $dice->isSuccess();
+        }
+      );
+      Assertion::eq(min(2, count($successDices)), count($positions));
+    }
+
+    if ($modifier === Modifier::DISTINCTION) {
+      Assertion::between(count($positions), 0, 2);
+    }
   }
 }

@@ -48,14 +48,15 @@ class Dice
     $this->metadata = $metadata;
   }
 
-  public static function init(string $type): Dice
+  public static function init(string $type, array $metadata = array()): Dice
   {
     $dice = $type === self::SKILL ? SkillDiceValue::class : RingDiceValue::class;
 
     return new Dice(
       $type,
       self::PENDING,
-      $dice::random()
+      $dice::random(),
+      $metadata
     );
   }
 
@@ -101,6 +102,13 @@ class Dice
   {
     Assertion::true($this->isPending());
     $this->status = Dice::DROPPED;
+  }
+
+  public function reroll(string $modifier): void
+  {
+    Assertion::true($this->isPending());
+    $this->status = Dice::REROLLED;
+    $this->metadata['modifier'] = $modifier;
   }
 
   public function isSuccess(): bool

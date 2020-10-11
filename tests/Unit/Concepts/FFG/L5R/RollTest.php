@@ -205,4 +205,128 @@ class RollTest extends TestCase
       $roll->result()
     );
   }
+
+  public function testCanReroll()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => ['distinction']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'distinction');
+    $this->assertCount(3, $roll->dices);
+    $this->assertEquals('rerolled', $roll->dices[1]->status);
+    $this->assertEquals(['modifier' => 'distinction'], $roll->dices[1]->metadata);
+    $this->assertEquals('skill', $roll->dices[2]->type);
+    $this->assertEquals(['modifier' => 'distinction'], $roll->dices[2]->metadata);
+    $this->assertEquals(['rerolls' => ['distinction']], $roll->metadata);
+  }
+
+  public function testCannotReReroll()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0, 'modifiers' => ['distinction']],
+      'dices' => [['type' => 'ring', 'status' => 'pending', 'value' => []]],
+      'metadata' => ['rerolls' => ['distinction']],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0], 'distinction');
+  }
+
+  public function testCannotRerollIfNotAllowedInParameters()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0,],
+      'dices' => [['type' => 'ring', 'status' => 'pending', 'value' => []]],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0], 'distinction');
+  }
+
+  public function testMustRerollBestDicesIfAdversity()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0, 'modifiers' => ['adversity']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0], 'adversity');
+  }
+
+  public function testMustRerollUpToTwoDicesIfAdversity()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0, 'modifiers' => ['adversity']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([], 'adversity');
+  }
+
+  public function testCanRerollLessThanTwoDicesIfAdversityAndNotEnoughTargets()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0, 'modifiers' => ['adversity']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'adversity');
+    $this->assertCount(3, $roll->dices);
+    $this->assertEquals('rerolled', $roll->dices[1]->status);
+    $this->assertEquals(['rerolls' => ['adversity']], $roll->metadata);
+  }
+
+  public function testCanRerollNoDiceWithDistinction()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0, 'modifiers' => ['distinction']],
+      'dices' => [['type' => 'ring', 'status' => 'pending', 'value' => ['success' => 1]]],
+    ]);
+    $roll->reroll([], 'distinction');
+    $this->assertCount(1, $roll->dices);
+    $this->assertEquals('pending', $roll->dices[0]->status);
+    $this->assertEquals(['rerolls' => ['distinction']], $roll->metadata);
+  }
 }
