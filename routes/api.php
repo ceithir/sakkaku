@@ -19,6 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('public/ffg/l5r/rolls/create', [RollController::class, 'create']);
-Route::post('public/ffg/l5r/rolls/keep', [RollController::class, 'keep']);
-Route::post('public/ffg/l5r/rolls/reroll', [RollController::class, 'reroll']);
+Route::post('public/ffg/l5r/rolls/{action}', [RollController::class, 'stateless']);

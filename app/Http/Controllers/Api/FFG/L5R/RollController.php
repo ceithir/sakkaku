@@ -10,36 +10,27 @@ use Assert\InvalidArgumentException;
 
 class RollController extends Controller
 {
-    public function create(Request $request)
+    public function stateless($action, Request $request)
     {
-      return $this->handleRequest('create', $request);
-    }
+      if(!in_array($action, ['create', 'keep', 'reroll'])) {
+        return response(null, 404);
+      }
 
-    public function keep(Request $request)
-    {
-      return $this->handleRequest('keep', $request);
-    }
-
-    public function reroll(Request $request)
-    {
-      return $this->handleRequest('reroll', $request);
-    }
-
-    private function handleRequest($action, Request $request)
-    {
-      Assertion::inArray($action, ['create', 'keep', 'reroll']);
       try {
         if ($action === 'create') {
           return response()->json(Roll::init($request->all()), 201);
         }
 
         $roll = Roll::fromArray($request->input('roll'));
+
         if ($action === 'reroll') {
           $roll->reroll($request->input('positions'), $request->input('modifier'));
         }
+
         if ($action === 'keep') {
           $roll->keep($request->input('positions'));
         }
+
         return response()->json($roll);
       } catch (InvalidArgumentException $e) {
         report($e);
