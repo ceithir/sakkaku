@@ -113,6 +113,16 @@ class RollTest extends TestCase
     );
   }
 
+  public function testCannotKeepDicesWithStrifeIfCompromised()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 0, 'modifiers' => ['compromised']],
+      'dices' => [['type' => 'ring', 'status' => 'pending', 'value' => ['strife' => 1, 'success' => 1]]],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->keep([0]);
+  }
+
   public function testCannotKeepIfRerollsArePending()
   {
     $roll = Roll::fromArray([
@@ -167,6 +177,31 @@ class RollTest extends TestCase
     $this->assertTrue($roll->isSuccess());
     $this->assertEquals(
       ['opportunity' => 1, 'strife' => 1, 'success' => 2],
+      $roll->result()
+    );
+  }
+
+  public function testCanKeepZeroDiceIfSomeDicesAreAlreadyKept()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 0],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'kept',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['opportunity' => 1, 'strife' => 1],
+        ]
+      ],
+    ]);
+    $roll->keep([]);
+    $this->assertFalse($roll->isSuccess());
+    $this->assertEquals(
+      ['opportunity' => 0, 'strife' => 1, 'success' => 1],
       $roll->result()
     );
   }

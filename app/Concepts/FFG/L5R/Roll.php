@@ -61,14 +61,8 @@ class Roll
   public function keep(array $positions): void
   {
     Assertion::false($this->requiresReroll());
-
     $this->assertPositions($positions);
-
-    if ($this->isCompromised()) {
-      $this->assertKeepWhenCompromised($positions);
-    } else {
-      Assertion::greaterOrEqualThan(count($positions), 1);
-    }
+    $this->assertKeepable($positions);
 
     $explosions = [];
     for ($i=0; $i < count($this->dices); $i++) {
@@ -144,24 +138,40 @@ class Roll
     }
   }
 
-  // Compromised: Cannot keep dice with strife
-  private function assertKeepWhenCompromised(array $positions)
+  private function assertKeepable(array $positions)
   {
-    foreach($positions as $position) {
-      Assertion::false($this->dices[$position]->hasStrife());
+    if ($this->isCompromised()) {
+      foreach($positions as $position) {
+        Assertion::false($this->dices[$position]->hasStrife());
+      }
     }
 
-    $atLeastOneNonStrifeDice = count(
+    $alreadyHasKeptDices = count(
       array_filter(
         $this->dices,
         function(Dice $dice) {
-          return $dice->isPending() && !$dice->hasStrife();
+          return $dice->isKept();
         }
       )
     ) > 0;
-
-    if ($atLeastOneNonStrifeDice) {
-      Assertion::greaterOrEqualThan(count($positions), 1);
+    if ($alreadyHasKeptDices) {
+      return;
     }
+
+    if ($this->isCompromised()) {
+      $noNonStrifeDiceAvailable = count(
+        array_filter(
+          $this->dices,
+          function(Dice $dice) {
+            return $dice->isPending() && !$dice->hasStrife();
+          }
+        )
+      ) === 0;
+      if ($noNonStrifeDiceAvailable) {
+        return;
+      }
+    }
+
+    Assertion::greaterOrEqualThan(count($positions), 1);
   }
 }
