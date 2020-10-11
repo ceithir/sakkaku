@@ -24,9 +24,9 @@ class Dice
 
   public DiceValue $value;
 
-  public ?string $reason;
+  public array $metadata;
 
-  public function __construct(string $type, string $status, DiceValue $value, ?string $reason = null)
+  public function __construct(string $type, string $status, DiceValue $value, array $metadata = array())
   {
     Assertion::inArray($type, array(self::RING, self::SKILL));
     Assertion::inArray($status, array(
@@ -36,14 +36,16 @@ class Dice
       self::REROLLED,
     ));
     if ($status === self::REROLLED) {
-      Assertion::notNull($reason);
+      Assertion::keyExists($metadata, 'modifier');
     }
-    Assertion::nullOrInArray($reason, Modifier::LIST);
+    if (isset($metadata['modifier'])) {
+      Assertion::inArray($metadata['modifier'], Modifier::LIST);
+    }
 
     $this->type = $type;
     $this->status = $status;
     $this->value = $value;
-    $this->reason = $reason;
+    $this->metadata = $metadata;
   }
 
   public static function init(string $type): Dice
@@ -70,7 +72,7 @@ class Dice
       $type,
       $data['status'],
       new $dice($data['value']),
-      $data['reason'] ?? null,
+      $data['metadata'] ?? array(),
     );
   }
 }

@@ -40,18 +40,18 @@ class DiceTest extends TestCase
         new Dice('ring', 'super', new RingDiceValue(array()));
     }
 
-    public function testCanPassReason()
+    public function testCanPassModifier()
     {
         $dice = Dice::fromArray(array(
             'type' => 'ring',
             'status' => 'dropped',
             'value' => array('success' => 1),
-            'reason' => 'adversity',
+            'metadata' => array('modifier' => 'adversity'),
         ));
-        $this->assertEquals('adversity', $dice->reason);
+        $this->assertEquals('adversity', $dice->metadata['modifier']);
     }
 
-    public function testReasonIsMandatoryForReroll()
+    public function testModifierIsMandatoryForReroll()
     {
         $this->expectException(InvalidArgumentException::class);
         Dice::fromArray(array(
