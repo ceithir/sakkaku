@@ -20,3 +20,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('public/ffg/l5r/rolls/{action}', [RollController::class, 'stateless']);
+
+Route::middleware('auth:sanctum')->post('/ffg/l5r/rolls/create', [RollController::class, 'create']);

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Concepts\FFG\L5R\Roll;
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
+use App\Models\ContextualizedRoll;
 
 class RollController extends Controller
 {
@@ -32,6 +33,39 @@ class RollController extends Controller
         }
 
         return response()->json($roll);
+      } catch (InvalidArgumentException $e) {
+        report($e);
+        return response(null, 400);
+      }
+    }
+
+    public function create(Request $request)
+    {
+      try {
+        $roll = new ContextualizedRoll();
+        $roll->type = 'FFG-L5R';
+        $roll->user_id = $request->user()->id;
+
+        $campaign = $request->input('campaign');
+        $character = $request->input('character');
+        $description = $request->input('description');
+        Assertion::allNotEmpty([$campaign, $character, $description]);
+
+        $roll->campaign = $campaign;
+        $roll->character = $character;
+        $roll->description = $description;
+
+        $roll->setRoll(Roll::init($request->all()));
+
+        $roll->save();
+
+        return response()->json(
+          array_merge(
+            ['id' => $roll->id],
+            $roll->roll
+          ),
+          201
+        );
       } catch (InvalidArgumentException $e) {
         report($e);
         return response(null, 400);
