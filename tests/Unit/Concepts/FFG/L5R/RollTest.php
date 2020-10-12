@@ -350,4 +350,46 @@ class RollTest extends TestCase
     $this->expectException(InvalidArgumentException::class);
     $roll->keep([0, 1]);
   }
+
+  public function testRollOneMoreDiceWithVoid()
+  {
+    $roll = Roll::init([
+      'tn' => 3,
+      'ring' => 2,
+      'skill' => 1,
+      'modifiers' => ['void'],
+    ]);
+    $this->assertCount(4, $roll->dices);
+  }
+
+  public function testCanKeepOneMoreDiceWithVoid()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 1,
+        'skill' => 1,
+        'modifiers' => ['void']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->keep([0, 2]);
+    $this->assertTrue($roll->isSuccess());
+  }
 }

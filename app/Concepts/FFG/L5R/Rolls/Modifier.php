@@ -7,6 +7,12 @@ class Modifier
   const DISTINCTION = 'distinction';
   const ADVERSITY = 'adversity';
   const COMPROMISED = 'compromised';
+  const VOID = 'void';
 
-  const LIST = [self::DISTINCTION, self::ADVERSITY, self::COMPROMISED];
+  const LIST = [
+    self::DISTINCTION,
+    self::ADVERSITY,
+    self::COMPROMISED,
+    self::VOID,
+  ];
 }

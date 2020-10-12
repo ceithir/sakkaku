@@ -34,6 +34,9 @@ class Roll
     for ($i = 0; $i < $parameters->ring; $i++) {
       $dices[] = Dice::init(Dice::RING);
     }
+    if (in_array(Modifier::VOID, $parameters->modifiers)) {
+      $dices[] = Dice::init(Dice::RING);
+    }
     for ($i = 0; $i < $parameters->skill; $i++) {
       $dices[] = Dice::init(Dice::SKILL);
     }
@@ -185,7 +188,16 @@ class Roll
         return $dice->isKept();
       }
     ));
-    Assertion::between($existingKeptDicesCount + count($positions), 1, $this->parameters->ring);
+    Assertion::between($existingKeptDicesCount + count($positions), 1, $this->maxKeepable());
+  }
+
+  private function maxKeepable(): int
+  {
+    if (in_array(Modifier::VOID, $this->parameters->modifiers)) {
+      return $this->parameters->ring +1;
+    }
+
+    return $this->parameters->ring;
   }
 
   private function getRerolls(): array
