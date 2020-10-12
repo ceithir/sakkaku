@@ -329,4 +329,25 @@ class RollTest extends TestCase
     $this->assertEquals('pending', $roll->dices[0]->status);
     $this->assertEquals(['rerolls' => ['distinction']], $roll->metadata);
   }
+
+  public function testCannotKeepMoreDicesThanRing()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 1, 'ring' => 1, 'skill' => 1],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->keep([0, 1]);
+  }
 }

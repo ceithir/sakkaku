@@ -166,21 +166,6 @@ class Roll
       foreach($positions as $position) {
         Assertion::false($this->dices[$position]->hasStrife());
       }
-    }
-
-    $alreadyHasKeptDices = count(
-      array_filter(
-        $this->dices,
-        function(Dice $dice) {
-          return $dice->isKept();
-        }
-      )
-    ) > 0;
-    if ($alreadyHasKeptDices) {
-      return;
-    }
-
-    if ($this->isCompromised()) {
       $noNonStrifeDiceAvailable = count(
         array_filter(
           $this->dices,
@@ -194,7 +179,13 @@ class Roll
       }
     }
 
-    Assertion::greaterOrEqualThan(count($positions), 1);
+    $existingKeptDicesCount = count(array_filter(
+      $this->dices,
+      function(Dice $dice) {
+        return $dice->isKept();
+      }
+    ));
+    Assertion::between($existingKeptDicesCount + count($positions), 1, $this->parameters->ring);
   }
 
   private function getRerolls(): array
