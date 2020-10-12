@@ -431,4 +431,35 @@ class RollTest extends TestCase
     $roll = Roll::fromArray($rollAsArray);
     $this->assertEquals($rollAsArray, $roll->toArray());
   }
+
+  public function testCanKeepExtraDicesFromExplosions()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 1,
+        'skill' => 1,
+        'modifiers' => []
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'kept',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'dropped',
+          'value' => [],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->keep([2]);
+    $this->assertTrue($roll->isSuccess());
+  }
 }

@@ -198,11 +198,24 @@ class Roll
 
   private function maxKeepable(): int
   {
+    $total = $this->parameters->ring;
+
     if (in_array(Modifier::VOID, $this->parameters->modifiers)) {
-      return $this->parameters->ring +1;
+      $total += 1;
     }
 
-    return $this->parameters->ring;
+    $total += array_reduce(
+      $this->dices,
+      function(int $carry, Dice $dice) {
+        if (!$dice->isKept()) {
+          return $carry;
+        }
+        return $carry + $dice->value->explosion;
+      },
+      0
+    );
+
+    return $total;
   }
 
   private function getRerolls(): array
