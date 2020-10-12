@@ -16,7 +16,7 @@ class ContextualizedRoll extends Model
         'result' => 'json',
     ];
 
-    public function user(): ?User
+    public function user()
     {
         return $this->belongsTo('App\Models\User');
     }
