@@ -114,6 +114,25 @@ class RollController extends Controller
       return response()->json($this->rollToPublicArray($roll));
     }
 
+    public function index()
+    {
+      $paginator = ContextualizedRoll::orderBy('created_at', 'desc')
+        ->with('user')
+        ->paginate();
+
+      return response()->json([
+        'items' => $paginator->map(
+          function(ContextualizedRoll $roll) {
+            return $this->rollToPublicArray($roll);
+          }
+        ),
+        'total' => $paginator->total(),
+        'per_page' => $paginator->perPage(),
+        'first' => $paginator->firstItem(),
+        'last' => $paginator->lastItem(),
+      ]);
+    }
+
     private function rollToPublicArray(ContextualizedRoll $roll): array
     {
       return [
