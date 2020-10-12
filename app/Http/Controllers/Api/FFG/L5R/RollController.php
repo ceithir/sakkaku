@@ -72,18 +72,19 @@ class RollController extends Controller
       }
     }
 
-    public function stateful($action, ContextualizedRoll $rollWithContext, Request $request)
+    public function stateful($id, $action, Request $request)
     {
+      $rollWithContext = ContextualizedRoll::findOrFail($id);
       if(!in_array($action, ['keep', 'reroll'])) {
         return response(null, 404);
       }
 
-      if (!$rollWithContext->user_id || $rollWithContext->user_id !== $request->user->id) {
+      if (!$rollWithContext->user_id || $rollWithContext->user_id !== $request->user()->id) {
         return response(null, 403);
       }
 
       try {
-        Assertion::null($roll->result);
+        Assertion::null($rollWithContext->result);
         $roll = $rollWithContext->getRoll();
 
         if ($action === 'reroll') {
@@ -95,7 +96,7 @@ class RollController extends Controller
 
         $rollWithContext->setRoll($roll);
         if ($roll->isComplete()) {
-          $rollWithContext->result = $roll->getResult();
+          $rollWithContext->result = $roll->result();
         }
         $rollWithContext->save();
 
