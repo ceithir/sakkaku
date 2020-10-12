@@ -71,4 +71,38 @@ class RollController extends Controller
         return response(null, 400);
       }
     }
+
+    public function stateful($action, ContextualizedRoll $rollWithContext, Request $request)
+    {
+      if(!in_array($action, ['keep', 'reroll'])) {
+        return response(null, 404);
+      }
+
+      if (!$rollWithContext->user_id || $rollWithContext->user_id !== $request->user->id) {
+        return response(null, 403);
+      }
+
+      try {
+        Assertion::null($roll->result);
+        $roll = $rollWithContext->getRoll();
+
+        if ($action === 'reroll') {
+          $roll->reroll($request->input('positions'), $request->input('modifier'));
+        }
+        if ($action === 'keep') {
+          $roll->keep($request->input('positions'));
+        }
+
+        $rollWithContext->setRoll($roll);
+        if ($roll->isComplete()) {
+          $rollWithContext->result = $roll->getResult();
+        }
+        $rollWithContext->save();
+
+        return response()->json($roll);
+      } catch (InvalidArgumentException $e) {
+        report($e);
+        return response(null, 400);
+      }
+    }
 }

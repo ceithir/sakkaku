@@ -155,6 +155,16 @@ class Roll
     return json_decode(json_encode($this), true);
   }
 
+  public function isComplete(): bool
+  {
+    return count(array_filter(
+      $this->dices,
+      function(Dice $dice) {
+        return $dice->isPending();
+      }
+    )) === 0;
+  }
+
   private function assertPositions(array $positions): void
   {
     Assertion::allInteger($positions);

@@ -389,8 +389,10 @@ class RollTest extends TestCase
         ],
       ],
     ]);
+    $this->assertFalse($roll->isComplete());
     $roll->keep([0, 2]);
     $this->assertTrue($roll->isSuccess());
+    $this->assertTrue($roll->isComplete());
   }
 
   public function testItConvertsToArrayNicely()
@@ -459,7 +461,9 @@ class RollTest extends TestCase
         ],
       ],
     ]);
+    $this->assertFalse($roll->isComplete());
     $roll->keep([2]);
     $this->assertTrue($roll->isSuccess());
+    $this->assertTrue($roll->isComplete());
   }
 }
