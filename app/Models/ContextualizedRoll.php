@@ -11,6 +11,11 @@ class ContextualizedRoll extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'roll' => 'json',
+        'result' => 'json',
+    ];
+
     public function user(): ?User
     {
         return $this->belongsTo('App\Models\User');
