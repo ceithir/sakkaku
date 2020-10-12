@@ -150,6 +150,11 @@ class Roll
     return $this->result()['success'] >= $this->parameters->tn;
   }
 
+  public function toArray(): array
+  {
+    return json_decode(json_encode($this), true);
+  }
+
   private function assertPositions(array $positions): void
   {
     Assertion::allInteger($positions);

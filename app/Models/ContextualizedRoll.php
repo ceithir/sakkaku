@@ -18,11 +18,11 @@ class ContextualizedRoll extends Model
 
     public function setRoll(Roll $roll): void
     {
-        $this->roll = (array) $roll;
+        $this->roll = $roll->toArray();
     }
 
     public function getRoll(): Roll
     {
-        return new Roll($this->roll);
+        return Roll::fromArray($this->roll);
     }
 }

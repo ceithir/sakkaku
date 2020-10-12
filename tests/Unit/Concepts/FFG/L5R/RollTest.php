@@ -392,4 +392,43 @@ class RollTest extends TestCase
     $roll->keep([0, 2]);
     $this->assertTrue($roll->isSuccess());
   }
+
+  public function testItConvertsToArrayNicely()
+  {
+    $rollAsArray = [
+      'parameters' => [
+        'tn' => 1,
+        'ring' => 1,
+        'skill' => 1,
+        'modifiers' => [],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [
+            'opportunity' => 1,
+            'success' => 0,
+            'strife' => 0,
+            'explosion' => 0,
+          ],
+          'metadata' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [
+            'opportunity' => 0,
+            'success' => 1,
+            'strife' => 0,
+            'explosion' => 0,
+          ],
+          'metadata' => [],
+        ],
+      ],
+      'metadata' => [],
+    ];
+    $roll = Roll::fromArray($rollAsArray);
+    $this->assertEquals($rollAsArray, $roll->toArray());
+  }
 }
