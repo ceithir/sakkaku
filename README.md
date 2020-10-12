@@ -16,6 +16,7 @@ The following envvars need to be manually set (through `eb setenv`):
 
 -   APP_KEY
 -   APP_URL
+-   SANCTUM_STATEFUL_DOMAINS
 
 ### HTTPS
 
