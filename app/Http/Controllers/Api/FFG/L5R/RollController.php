@@ -106,4 +106,29 @@ class RollController extends Controller
         return response(null, 400);
       }
     }
+
+    public function show($id)
+    {
+      $roll = ContextualizedRoll::findOrFail($id);
+
+      return response()->json($this->rollToPublicArray($roll));
+    }
+
+    private function rollToPublicArray(ContextualizedRoll $roll): array
+    {
+      return [
+        'id' => $roll->id,
+        'user' => $roll->user_id ? [
+          'id' => $roll->user->id,
+          'name' => $roll->user->name,
+        ] : null,
+        'created_at' => $roll->created_at,
+        'updated_at' => $roll->updated_at,
+        'campaign' => $roll->campaign,
+        'character' => $roll->character,
+        'description' => $roll->description,
+        'roll' => $roll->roll,
+        'result' => $roll->result,
+        ];
+    }
 }
