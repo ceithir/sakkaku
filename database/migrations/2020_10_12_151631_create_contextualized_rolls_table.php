@@ -18,6 +18,7 @@ class CreateContextualizedRollsTable extends Migration
             $table->timestamps();
             $table->foreignId('user_id')
                 ->nullable()
+                ->index()
                 ->constrained()
                 ->onDelete('set null');
             $table->string('type');
