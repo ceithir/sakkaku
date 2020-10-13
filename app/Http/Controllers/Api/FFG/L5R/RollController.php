@@ -114,9 +114,29 @@ class RollController extends Controller
       return response()->json($this->rollToPublicArray($roll));
     }
 
-    public function index()
+    public function index(Request $request)
     {
-      $paginator = ContextualizedRoll::orderBy('created_at', 'desc')
+      $query = ContextualizedRoll::orderBy('created_at', 'desc');
+
+      if ($request->input('campaign')) {
+        $query->where('campaign', $request->input('campaign'));
+      }
+
+      if ($request->input('character')) {
+        $query->where('character', $request->input('character'));
+      }
+
+      if ($request->input('player')) {
+        try {
+          Assertion::integerish($request->input('player'));
+        } catch (InvalidArgumentException $e) {
+          report($e);
+          return response(null, 400);
+        }
+        $query->where('user_id', (int) $request->input('player'));
+      }
+
+      $paginator = $query
         ->with('user')
         ->paginate();
 
