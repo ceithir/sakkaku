@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\FFG\L5R\RollController;
+use App\Models\ContextualizedRoll;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,7 +17,19 @@ use App\Http\Controllers\Api\FFG\L5R\RollController;
 */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'campaigns' => ContextualizedRoll::select('campaign')
+            ->where('user_id', $user->id)
+            ->distinct()
+            ->pluck('campaign'),
+        'characters' => ContextualizedRoll::select('character')
+            ->where('user_id', $user->id)
+            ->distinct()
+            ->pluck('character'),
+    ];
 });
 
 Route::get('public/ffg/l5r/rolls', [RollController::class, 'index']);
