@@ -71,4 +71,51 @@ class DiceTest extends TestCase
             'metadata' => ['modifier' => 'coolness'],
         ));
     }
+
+    public function testDicesAreBalanced()
+    {
+        $this->assertDiceBalance(
+            'ring',
+            [
+                'strife' => 1/2,
+                'opportunity' => 1/3,
+                'success' => 1/3,
+                'explosion' => 1/6,
+            ],
+        );
+
+        $this->assertDiceBalance(
+            'skill',
+            [
+                'opportunity' => 1/3,
+                'strife' => 1/4,
+                'success' => 5/12,
+                'explosion' => 1/6,
+            ],
+        );
+    }
+
+    private function assertDiceBalance($type, $expected)
+    {
+        $total = 100000;
+        $delta = $total / 100;
+
+        $strife = 0;
+        $opportunity = 0;
+        $success = 0;
+        $explosion = 0;
+
+        for ($i = 0; $i < $total; $i++) {
+            $dice = Dice::init($type);
+            $opportunity += $dice->value->opportunity;
+            $strife += $dice->value->strife;
+            $success += $dice->value->success;
+            $explosion += $dice->value->explosion;
+        }
+
+        $this->assertEqualsWithDelta($expected['strife']*$total, $strife, $delta);
+        $this->assertEqualsWithDelta($expected['opportunity']*$total, $opportunity, $delta);
+        $this->assertEqualsWithDelta($expected['success']*$total, $success, $delta);
+        $this->assertEqualsWithDelta($expected['explosion']*$total, $explosion, $delta);
+    }
 }
