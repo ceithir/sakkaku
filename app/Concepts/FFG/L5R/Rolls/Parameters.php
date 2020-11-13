@@ -7,7 +7,7 @@ use App\Concepts\Rolls\Modifiers;
 
 class Parameters
 {
-  public int $tn;
+  public ?int $tn;
 
   public int $ring;
 
@@ -17,13 +17,12 @@ class Parameters
 
   public function __construct(array $parameters)
   {
-    Assertion::keyExists($parameters, 'tn');
     Assertion::keyExists($parameters, 'ring');
     Assertion::keyExists($parameters, 'skill');
 
-    $tn = $parameters['tn'];
-    Assertion::integer($tn);
-    Assertion::greaterOrEqualThan($tn, 1);
+    $tn = $parameters['tn'] ?? null;
+    Assertion::nullOrInteger($tn);
+    Assertion::nullOrGreaterOrEqualThan($tn, 1);
 
     $ring = $parameters['ring'];
     Assertion::integer($ring);

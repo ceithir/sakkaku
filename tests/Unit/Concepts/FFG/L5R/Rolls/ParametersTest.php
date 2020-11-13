@@ -18,10 +18,16 @@ class ParametersTest extends TestCase
     $this->assertEquals(2, $parameters->skill);
   }
 
-  public function testRefuseWithoutTn()
+  public function testAcceptWithoutTn()
+  {
+    $parameters = new Parameters(['ring' => 1, 'skill' => 1]);
+    $this->assertEquals(null, $parameters->tn);
+  }
+
+  public function testRefuseWithoutSkill()
   {
     $this->expectException(InvalidArgumentException::class);
-    new Parameters(['ring' => 1, 'skill' => 1]);
+    new Parameters(['tn' => 1, 'ring' => 1]);
   }
 
   public function testAcceptModifiers()
