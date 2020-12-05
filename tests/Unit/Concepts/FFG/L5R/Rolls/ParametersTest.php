@@ -72,4 +72,15 @@ class ParametersTest extends TestCase
       'skill' => 6,
     ]);
   }
+
+  public function testErrorProperlyOnNonStringModifiers()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'tn' => 3,
+      'ring' => 3,
+      'skill' => 3,
+      'modifiers' => ['one', ['two']],
+    ]);
+  }
 }

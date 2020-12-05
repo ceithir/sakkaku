@@ -34,8 +34,8 @@ class Parameters
 
     $modifiers = $parameters['modifiers'] ?? array();
     Assertion::isArray($modifiers);
-    Assertion::eq(count(array_unique($modifiers)), count($modifiers));
     Assertion::allInArray($modifiers, Modifier::LIST);
+    Assertion::eq(count(array_unique($modifiers)), count($modifiers));
     Assertion::false(
       in_array(Modifier::ADVERSITY, $modifiers) && in_array(Modifier::DISTINCTION, $modifiers),
       'Adversity and distinction are mutually exclusive.'
