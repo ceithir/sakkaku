@@ -8,11 +8,13 @@ class Modifier
   const ADVERSITY = 'adversity';
   const COMPROMISED = 'compromised';
   const VOID = 'void';
+  const STIRRING = 'stirring';
 
   const LIST = [
     self::DISTINCTION,
     self::ADVERSITY,
     self::COMPROMISED,
     self::VOID,
+    self::STIRRING,
   ];
 }

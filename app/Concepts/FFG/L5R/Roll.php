@@ -256,7 +256,11 @@ class Roll
     }
 
     if ($modifier === Modifier::DISTINCTION) {
-      Assertion::between(count($positions), 0, 2);
+      if (in_array(Modifier::STIRRING, $this->parameters->modifiers)) {
+        Assertion::between(count($positions), 0, 3);
+      } else {
+        Assertion::between(count($positions), 0, 2);
+      }
     }
   }
 }
