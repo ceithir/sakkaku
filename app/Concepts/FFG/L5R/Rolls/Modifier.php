@@ -9,6 +9,7 @@ class Modifier
   const COMPROMISED = 'compromised';
   const VOID = 'void';
   const STIRRING = 'stirring';
+  const SHADOW = 'shadow';
 
   const LIST = [
     self::DISTINCTION,
@@ -16,5 +17,12 @@ class Modifier
     self::COMPROMISED,
     self::VOID,
     self::STIRRING,
+    self::SHADOW,
+  ];
+
+  const REROLL_ENABLERS = [
+    self::DISTINCTION,
+    self::ADVERSITY,
+    self::SHADOW,
   ];
 }

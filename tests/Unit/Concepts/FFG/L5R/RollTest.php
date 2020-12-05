@@ -385,6 +385,77 @@ class RollTest extends TestCase
     $this->assertCount(6, $roll->dices);
   }
 
+  public function testCanRerollWithVictoryBeforeHonor()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => ['shadow']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'shadow');
+    $this->assertCount(3, $roll->dices);
+  }
+
+  public function testMustRerollAdversityBeforeVictoryBeforeHonor()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => ['adversity', 'shadow']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([1], 'shadow');
+  }
+
+  public function testCanRerollWithDisadvantageThenTechnique()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => ['adversity', 'shadow']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0], 'adversity');
+    $roll->reroll([1, 2], 'shadow');
+    $this->assertCount(5, $roll->dices);
+    $this->assertEquals(['rerolls' => ['adversity', 'shadow']], $roll->metadata);
+    $this->assertEquals('rerolled', $roll->dices[0]->status);
+    $this->assertEquals(['modifier' => 'adversity'], $roll->dices[0]->metadata);
+    $this->assertEquals('rerolled', $roll->dices[1]->status);
+    $this->assertEquals(['modifier' => 'shadow'], $roll->dices[1]->metadata);
+    $this->assertEquals('pending', $roll->dices[4]->status);
+    $this->assertEquals(['modifier' => 'shadow'], $roll->dices[4]->metadata);
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([

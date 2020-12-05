@@ -114,7 +114,7 @@ class Roll
 
   public function requiresReroll(): bool
   {
-    foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $modifier) {
+    foreach(Modifier::REROLL_ENABLERS as $modifier) {
       if (in_array($modifier, $this->parameters->modifiers)) {
         if (!in_array($modifier, $this->getRerolls())) {
           return true;
@@ -236,7 +236,7 @@ class Roll
   private function assertRerollable(array $positions, string $modifier)
   {
     Assertion::true($this->requiresReroll());
-    Assertion::inArray($modifier, [Modifier::ADVERSITY, Modifier::DISTINCTION]);
+    Assertion::inArray($modifier, Modifier::REROLL_ENABLERS);
     Assertion::inArray($modifier, $this->parameters->modifiers);
     Assertion::notInArray($modifier, $this->getRerolls());
     $this->assertPositions($positions);
@@ -260,6 +260,14 @@ class Roll
         Assertion::between(count($positions), 0, 3);
       } else {
         Assertion::between(count($positions), 0, 2);
+      }
+    }
+
+    if ($modifier === Modifier::SHADOW) {
+      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
+        if (in_array($mod, $this->parameters->modifiers)) {
+          Assertion::inArray($mod, $this->getRerolls());
+        }
       }
     }
   }
