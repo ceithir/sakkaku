@@ -40,6 +40,10 @@ class Parameters
       in_array(Modifier::ADVERSITY, $modifiers) && in_array(Modifier::DISTINCTION, $modifiers),
       'Adversity and distinction are mutually exclusive.'
     );
+    Assertion::lessOrEqualThan(
+      count(array_intersect($modifiers, Modifier::SCHOOLS)),
+      1
+    );
 
     $this->tn = $tn;
     $this->ring = $ring;

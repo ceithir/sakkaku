@@ -458,6 +458,65 @@ class RollTest extends TestCase
     $this->assertEquals(['modifier' => 'shadow', 'source' => 'shadow'], $roll->dices[4]->metadata);
   }
 
+  public function testCanRerollMoreThanTwoDicesWithDeathdealer()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'distinction',
+        'deathdealer',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 1, 2], 'distinction');
+    $this->assertCount(6, $roll->dices);
+    $this->assertEquals(['rerolls' => ['distinction', 'deathdealer']], $roll->metadata);
+  }
+
+  public function testCanAlsoRerollDeathdealerWithoutDistinction()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'deathdealer',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 2], 'deathdealer');
+    $this->assertCount(5, $roll->dices);
+    $this->assertEquals(['rerolls' => ['deathdealer']], $roll->metadata);
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([

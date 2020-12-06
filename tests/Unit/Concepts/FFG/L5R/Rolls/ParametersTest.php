@@ -83,4 +83,15 @@ class ParametersTest extends TestCase
       'modifiers' => ['one', ['two']],
     ]);
   }
+
+  public function testCanOnlyHaveOneSchoolModifier()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'tn' => 3,
+      'ring' => 3,
+      'skill' => 3,
+      'modifiers' => ['shadow', 'deathdealer'],
+    ]);
+  }
 }

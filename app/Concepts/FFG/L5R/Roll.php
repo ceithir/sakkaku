@@ -97,7 +97,7 @@ class Roll
       $rerolls[] = Dice::init(
         $dice->type,
         [
-          'modifier' => $modifier, //Legacy
+          'modifier' => $modifier, // Legacy
           'source' => $modifier,
         ]
       );
@@ -111,6 +111,13 @@ class Roll
       $this->getRerolls(),
       [$modifier],
     ));
+
+    if ($modifier === Modifier::DISTINCTION && in_array(Modifier::DEATHDEALER, $this->parameters->modifiers)) {
+      $this->metadata['rerolls'] = array_values(array_merge(
+        $this->getRerolls(),
+        [Modifier::DEATHDEALER],
+      ));
+    }
   }
 
   public function isCompromised(): bool
@@ -262,6 +269,10 @@ class Roll
     }
 
     if ($modifier === Modifier::DISTINCTION) {
+      if (in_array(Modifier::DEATHDEALER, $this->parameters->modifiers)) {
+        return;
+      }
+
       if (in_array(Modifier::STIRRING, $this->parameters->modifiers)) {
         Assertion::between(count($positions), 0, 3);
       } else {
@@ -269,7 +280,7 @@ class Roll
       }
     }
 
-    if ($modifier === Modifier::SHADOW) {
+    if (in_array($modifier, Modifier::SCHOOLS)) {
       foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
         if (in_array($mod, $this->parameters->modifiers)) {
           Assertion::inArray($mod, $this->getRerolls());

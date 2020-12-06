@@ -10,6 +10,7 @@ class Modifier
   const VOID = 'void';
   const STIRRING = 'stirring';
   const SHADOW = 'shadow';
+  const DEATHDEALER = 'deathdealer';
 
   const LIST = [
     self::DISTINCTION,
@@ -18,11 +19,18 @@ class Modifier
     self::VOID,
     self::STIRRING,
     self::SHADOW,
+    self::DEATHDEALER,
   ];
 
   const REROLL_ENABLERS = [
     self::DISTINCTION,
     self::ADVERSITY,
     self::SHADOW,
+    self::DEATHDEALER,
+  ];
+
+  const SCHOOLS = [
+    self::SHADOW,
+    self::DEATHDEALER,
   ];
 }
