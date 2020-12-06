@@ -94,7 +94,13 @@ class Roll
     foreach($positions as $position) {
       $dice = $this->dices[$position];
       $dice->reroll($modifier);
-      $rerolls[] = Dice::init($dice->type, ['modifier' => $modifier]);
+      $rerolls[] = Dice::init(
+        $dice->type,
+        [
+          'modifier' => $modifier, //Legacy
+          'source' => $modifier,
+        ]
+      );
     }
 
     $this->dices = array_values(array_merge(

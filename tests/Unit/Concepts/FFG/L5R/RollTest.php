@@ -226,9 +226,9 @@ class RollTest extends TestCase
     $roll->reroll([1], 'distinction');
     $this->assertCount(3, $roll->dices);
     $this->assertEquals('rerolled', $roll->dices[1]->status);
-    $this->assertEquals(['modifier' => 'distinction'], $roll->dices[1]->metadata);
+    $this->assertEquals(['modifier' => 'distinction', 'end' => 'distinction'], $roll->dices[1]->metadata);
     $this->assertEquals('skill', $roll->dices[2]->type);
-    $this->assertEquals(['modifier' => 'distinction'], $roll->dices[2]->metadata);
+    $this->assertEquals(['modifier' => 'distinction', 'source' => 'distinction'], $roll->dices[2]->metadata);
     $this->assertEquals(['rerolls' => ['distinction']], $roll->metadata);
   }
 
@@ -449,11 +449,13 @@ class RollTest extends TestCase
     $this->assertCount(5, $roll->dices);
     $this->assertEquals(['rerolls' => ['adversity', 'shadow']], $roll->metadata);
     $this->assertEquals('rerolled', $roll->dices[0]->status);
-    $this->assertEquals(['modifier' => 'adversity'], $roll->dices[0]->metadata);
+    $this->assertEquals(['modifier' => 'adversity', 'end' => 'adversity'], $roll->dices[0]->metadata);
     $this->assertEquals('rerolled', $roll->dices[1]->status);
-    $this->assertEquals(['modifier' => 'shadow'], $roll->dices[1]->metadata);
+    $this->assertEquals(['modifier' => 'shadow', 'end' => 'shadow'], $roll->dices[1]->metadata);
+    $this->assertEquals('rerolled', $roll->dices[2]->status);
+    $this->assertEquals(['modifier' => 'shadow', 'source' => 'adversity', 'end' => 'shadow'], $roll->dices[2]->metadata);
     $this->assertEquals('pending', $roll->dices[4]->status);
-    $this->assertEquals(['modifier' => 'shadow'], $roll->dices[4]->metadata);
+    $this->assertEquals(['modifier' => 'shadow', 'source' => 'shadow'], $roll->dices[4]->metadata);
   }
 
   public function testCannotKeepMoreDicesThanRing()

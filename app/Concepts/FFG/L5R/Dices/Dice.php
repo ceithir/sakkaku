@@ -108,7 +108,8 @@ class Dice
   {
     Assertion::true($this->isPending());
     $this->status = Dice::REROLLED;
-    $this->metadata['modifier'] = $modifier;
+    $this->metadata['modifier'] = $modifier; // Legacy
+    $this->metadata['end'] = $modifier;
   }
 
   public function isSuccess(): bool
