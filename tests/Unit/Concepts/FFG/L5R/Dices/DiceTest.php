@@ -51,27 +51,6 @@ class DiceTest extends TestCase
         $this->assertEquals('adversity', $dice->metadata['modifier']);
     }
 
-    public function testModifierIsMandatoryForReroll()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        Dice::fromArray(array(
-            'type' => 'ring',
-            'status' => 'rerolled',
-            'value' => array(),
-        ));
-    }
-
-    public function testModifierMustExist()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $dice = Dice::fromArray(array(
-            'type' => 'ring',
-            'status' => 'kept',
-            'value' => ['success' => 1],
-            'metadata' => ['modifier' => 'coolness'],
-        ));
-    }
-
     public function testDicesAreBalanced()
     {
         $this->assertDiceBalance(

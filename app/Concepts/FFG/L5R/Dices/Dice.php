@@ -35,12 +35,6 @@ class Dice
       self::KEPT,
       self::REROLLED,
     ));
-    if ($status === self::REROLLED) {
-      Assertion::keyExists($metadata, 'modifier');
-    }
-    if (isset($metadata['modifier'])) {
-      Assertion::inArray($metadata['modifier'], Modifier::LIST);
-    }
 
     $this->type = $type;
     $this->status = $status;
