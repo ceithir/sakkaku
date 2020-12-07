@@ -115,4 +115,9 @@ class Dice
   {
     return $this->value->strife > 0;
   }
+
+  public function isBlank(): bool
+  {
+    return $this->value->strife === 0 && $this->value->opportunity === 0 && $this->value->success === 0 && $this->value->explosion === 0;
+  }
 }

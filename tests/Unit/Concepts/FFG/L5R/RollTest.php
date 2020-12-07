@@ -654,4 +654,181 @@ class RollTest extends TestCase
     $this->assertTrue($roll->isSuccess());
     $this->assertTrue($roll->isComplete());
   }
+
+  public function testCanBlankDicesWithAlteration()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 2,
+        'skill' => 1,
+        'modifiers' => ['ishiken'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->alter(
+      [
+        [
+          'position' => 0,
+          'value' => [],
+        ],
+        [
+          'position' => 2,
+          'value' => [],
+        ]
+      ],
+      'ishiken'
+    );
+    $this->assertCount(5, $roll->dices);
+    $this->assertEquals(['rerolls' => ['ishiken']], $roll->metadata);
+    $this->assertEquals('rerolled', $roll->dices[0]->status);
+    $this->assertEquals(['end' => 'ishiken'], $roll->dices[0]->metadata);
+    $this->assertEquals('pending', $roll->dices[3]->status);
+    $this->assertEquals(['source' => 'ishiken'], $roll->dices[3]->metadata);
+    $value = $roll->dices[3]->value;
+    $this->assertEquals(0, $value->opportunity);
+    $this->assertEquals(0, $value->strife);
+    $this->assertEquals(0, $value->success);
+    $this->assertEquals(0, $value->explosion);
+  }
+
+  public function testAlterBlankDices()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 2,
+        'skill' => 1,
+        'modifiers' => ['ishiken'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->alter(
+      [
+        [
+          'position' => 1,
+          'value' => ['success' => 1],
+        ]
+      ],
+      'ishiken'
+    );
+    $this->assertCount(4, $roll->dices);
+    $this->assertEquals(['rerolls' => ['ishiken']], $roll->metadata);
+    $this->assertEquals('rerolled', $roll->dices[1]->status);
+    $this->assertEquals(['end' => 'ishiken'], $roll->dices[1]->metadata);
+    $this->assertEquals('pending', $roll->dices[3]->status);
+    $this->assertEquals(['source' => 'ishiken'], $roll->dices[3]->metadata);
+    $value = $roll->dices[3]->value;
+    $this->assertEquals(0, $value->opportunity);
+    $this->assertEquals(0, $value->strife);
+    $this->assertEquals(1, $value->success);
+    $this->assertEquals(0, $value->explosion);
+  }
+
+  public function testCannotMixPullAndPushForIshiken()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 2,
+        'skill' => 1,
+        'modifiers' => ['ishiken'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->alter(
+      [
+        [
+          'position' => 1,
+          'value' => ['success' => 1],
+        ],
+        [
+          'position' => 2,
+          'value' => [],
+        ],
+      ],
+      'ishiken'
+    );
+  }
+
+  public function testCanAlterNothing()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 2,
+        'skill' => 1,
+        'modifiers' => ['ishiken'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->alter([], 'ishiken');
+    $this->assertCount(3, $roll->dices);
+    $this->assertEquals(['rerolls' => ['ishiken']], $roll->metadata);
+  }
 }

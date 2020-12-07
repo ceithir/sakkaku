@@ -119,6 +119,50 @@ class Roll
     }
   }
 
+  public function alter(array $alterations, string $modifier): void
+  {
+    Assertion::false($this->requiresReroll());
+    Assertion::true($this->requiresAlteration());
+    Assertion::inArray($modifier, $this->parameters->modifiers);
+    Assertion::notInArray($modifier, $this->getRerolls());
+
+    $positions = array_map(
+      function (array $alteration) {
+        return $alteration['position'];
+      },
+      $alterations
+    );
+    $this->assertPositions($positions);
+
+    Assertion::eq($modifier, Modifier::ISHIKEN);
+    $this->assertIshiken($alterations);
+
+    $rerolls = [];
+    foreach($alterations as $alteration) {
+      $position = $alteration['position'];
+      $value = $alteration['value'];
+      $originalDice = $this->dices[$position];
+      $alteredDice = Dice::fromArray([
+        'status' => 'pending',
+        'type' => $originalDice->type,
+        'value' => $value,
+        'metadata' => ['source' => $modifier],
+      ]);
+
+      $originalDice->reroll($modifier);
+      $rerolls[] = $alteredDice;
+    }
+
+    $this->dices = array_values(array_merge(
+      $this->dices,
+      $rerolls,
+    ));
+    $this->metadata['rerolls'] = array_values(array_merge(
+      $this->getRerolls(),
+      [$modifier],
+    ));
+  }
+
   public function isCompromised(): bool
   {
     return in_array(Modifier::COMPROMISED, $this->parameters->modifiers);
@@ -190,6 +234,7 @@ class Roll
   private function assertKeepable(array $positions): void
   {
     Assertion::false($this->requiresReroll());
+    Assertion::false($this->requiresAlteration());
     $this->assertPositions($positions);
 
     if ($this->isCompromised()) {
@@ -286,5 +331,41 @@ class Roll
         }
       }
     }
+  }
+
+  private function assertIshiken(array $alterations)
+  {
+    $positions = array_map(
+      function (array $alteration) {
+        return $alteration['position'];
+      },
+      $alterations
+    );
+    $chosenDices = array_intersect_key($this->dices, array_flip($positions));
+    $blankDices = array_filter(
+      $chosenDices,
+      function(Dice $dice) {
+        return $dice->isBlank();
+      }
+    );
+    Assertion::true(count($blankDices) === 0 || count($blankDices) === count($chosenDices));
+    foreach ($alterations as $alteration) {
+      $position = $alteration['position'];
+      $value = $alteration['value'];
+      $chosenDice = $this->dices[$position];
+      $alteredDice = Dice::fromArray([
+        'status' => 'pending',
+        'type' => $chosenDice->type,
+        'value' => $value,
+      ]);
+      Assertion::true(
+        ($chosenDice->isBlank() && !$alteredDice->isBlank()) || (!$chosenDice->isBlank() && $alteredDice->isBlank())
+      );
+    }
+  }
+
+  private function requiresAlteration(): bool
+  {
+    return in_array(Modifier::ISHIKEN, $this->parameters->modifiers) && !in_array(Modifier::ISHIKEN, $this->getRerolls());
   }
 }
