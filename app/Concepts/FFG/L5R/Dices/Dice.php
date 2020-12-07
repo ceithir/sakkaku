@@ -35,6 +35,7 @@ class Dice
       self::KEPT,
       self::REROLLED,
     ));
+    Assertion::eq($type, $value->getType());
 
     $this->type = $type;
     $this->status = $status;

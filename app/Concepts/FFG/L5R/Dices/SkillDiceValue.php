@@ -51,4 +51,9 @@ class SkillDiceValue extends DiceValue
   {
     return new self(self::FACETS[array_rand(self::FACETS)]);
   }
+
+  public function getType(): string
+  {
+    return "skill";
+  }
 }

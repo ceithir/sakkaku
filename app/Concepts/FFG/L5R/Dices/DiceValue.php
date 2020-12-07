@@ -13,4 +13,6 @@ abstract class DiceValue
   public int $explosion;
 
   public abstract static function random(): DiceValue;
+
+  public abstract function getType(): string;
 }

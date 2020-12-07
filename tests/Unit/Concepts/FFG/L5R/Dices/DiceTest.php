@@ -40,6 +40,12 @@ class DiceTest extends TestCase
         new Dice('ring', 'super', new RingDiceValue(array()));
     }
 
+    public function testRejectMixedDice()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new Dice('ring', 'pending', new SkillDiceValue(array('success' => 1, 'opportunity' => 1)));
+    }
+
     public function testCanPassModifier()
     {
         $dice = Dice::fromArray(array(
