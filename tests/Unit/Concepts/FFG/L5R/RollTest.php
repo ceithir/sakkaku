@@ -173,6 +173,7 @@ class RollTest extends TestCase
     $this->assertCount(4, $roll->dices);
     $this->assertTrue($roll->dices[0]->isDropped());
     $this->assertTrue($roll->dices[3]->isPending());
+    $this->assertEquals(['source' => 'explosion'], $roll->dices[3]->metadata);
     $this->assertEquals('ring', $roll->dices[3]->type);
     $this->assertTrue($roll->isSuccess());
     $this->assertEquals(

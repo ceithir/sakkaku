@@ -72,7 +72,7 @@ class Roll
         if (in_array($i, $positions)) {
           $dice->keep();
           for ($j = 0; $j < $dice->value->explosion; $j++) {
-            $explosions[] = Dice::init($dice->type);
+            $explosions[] = Dice::init($dice->type, ['source' => 'explosion']);
           }
         } else {
           $dice->drop();
