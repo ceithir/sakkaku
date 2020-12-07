@@ -97,7 +97,6 @@ class Roll
       $rerolls[] = Dice::init(
         $dice->type,
         [
-          'modifier' => $modifier, // Legacy
           'source' => $modifier,
         ]
       );
