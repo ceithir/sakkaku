@@ -518,6 +518,65 @@ class RollTest extends TestCase
     $this->assertEquals(['rerolls' => ['deathdealer']], $roll->metadata);
   }
 
+  public function testManipulatorWorksTheSameAsDeathdealerWithDistinction()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'distinction',
+        'manipulator',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 1, 2], 'distinction');
+    $this->assertCount(6, $roll->dices);
+    $this->assertEquals(['rerolls' => ['distinction', 'manipulator']], $roll->metadata);
+  }
+
+  public function testManipulatorWorksByItselfFineToo()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'manipulator',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 2], 'manipulator');
+    $this->assertCount(5, $roll->dices);
+    $this->assertEquals(['rerolls' => ['manipulator']], $roll->metadata);
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([

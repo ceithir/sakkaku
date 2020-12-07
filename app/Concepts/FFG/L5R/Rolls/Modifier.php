@@ -12,6 +12,7 @@ class Modifier
   const SHADOW = 'shadow';
   const DEATHDEALER = 'deathdealer';
   const ISHIKEN = 'ishiken';
+  const MANIPULATOR = 'manipulator';
 
   const LIST = [
     self::DISTINCTION,
@@ -22,6 +23,7 @@ class Modifier
     self::SHADOW,
     self::DEATHDEALER,
     self::ISHIKEN,
+    self::MANIPULATOR,
   ];
 
   const REROLL_ENABLERS = [
@@ -29,11 +31,13 @@ class Modifier
     self::ADVERSITY,
     self::SHADOW,
     self::DEATHDEALER,
+    self::MANIPULATOR,
   ];
 
   const SCHOOLS = [
     self::SHADOW,
     self::DEATHDEALER,
     self::ISHIKEN,
+    self::MANIPULATOR,
   ];
 }

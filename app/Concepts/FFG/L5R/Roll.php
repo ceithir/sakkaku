@@ -106,16 +106,15 @@ class Roll
       $this->dices,
       $rerolls,
     ));
-    $this->metadata['rerolls'] = array_values(array_merge(
-      $this->getRerolls(),
-      [$modifier],
-    ));
+    $this->appendToRerollMetadata($modifier);
 
-    if ($modifier === Modifier::DISTINCTION && in_array(Modifier::DEATHDEALER, $this->parameters->modifiers)) {
-      $this->metadata['rerolls'] = array_values(array_merge(
-        $this->getRerolls(),
-        [Modifier::DEATHDEALER],
-      ));
+    if ($modifier === Modifier::DISTINCTION) {
+      if (in_array(Modifier::DEATHDEALER, $this->parameters->modifiers)) {
+        $this->appendToRerollMetadata(Modifier::DEATHDEALER);
+      }
+      if (in_array(Modifier::MANIPULATOR, $this->parameters->modifiers)) {
+        $this->appendToRerollMetadata(Modifier::MANIPULATOR);
+      }
     }
   }
 
@@ -157,10 +156,7 @@ class Roll
       $this->dices,
       $rerolls,
     ));
-    $this->metadata['rerolls'] = array_values(array_merge(
-      $this->getRerolls(),
-      [$modifier],
-    ));
+    $this->appendToRerollMetadata($modifier);
   }
 
   public function isCompromised(): bool
@@ -313,7 +309,7 @@ class Roll
     }
 
     if ($modifier === Modifier::DISTINCTION) {
-      if (in_array(Modifier::DEATHDEALER, $this->parameters->modifiers)) {
+      if (in_array(Modifier::DEATHDEALER, $this->parameters->modifiers) || in_array(Modifier::MANIPULATOR, $this->parameters->modifiers)) {
         return;
       }
 
@@ -367,5 +363,13 @@ class Roll
   private function requiresAlteration(): bool
   {
     return in_array(Modifier::ISHIKEN, $this->parameters->modifiers) && !in_array(Modifier::ISHIKEN, $this->getRerolls());
+  }
+
+  private function appendToRerollMetadata(string $modifier): void
+  {
+    $this->metadata['rerolls'] = array_values(array_merge(
+      $this->getRerolls(),
+      [$modifier],
+    ));
   }
 }
