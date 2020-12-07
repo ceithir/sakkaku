@@ -13,7 +13,7 @@ class RollController extends Controller
 {
     public function stateless($action, Request $request)
     {
-      if(!in_array($action, ['create', 'keep', 'reroll'])) {
+      if(!in_array($action, ['create', 'keep', 'reroll', 'alter'])) {
         return response(null, 404);
       }
 
@@ -30,6 +30,10 @@ class RollController extends Controller
 
         if ($action === 'keep') {
           $roll->keep($request->input('positions'));
+        }
+
+        if ($action === 'alter') {
+          $roll->alter($request->input('alterations'), $request->input('modifier'));
         }
 
         return response()->json($roll);
@@ -75,7 +79,7 @@ class RollController extends Controller
     public function stateful($id, $action, Request $request)
     {
       $rollWithContext = ContextualizedRoll::findOrFail($id);
-      if(!in_array($action, ['keep', 'reroll'])) {
+      if(!in_array($action, ['keep', 'reroll', 'alter'])) {
         return response(null, 404);
       }
 
@@ -92,6 +96,9 @@ class RollController extends Controller
         }
         if ($action === 'keep') {
           $roll->keep($request->input('positions'));
+        }
+        if ($action === 'alter') {
+          $roll->alter($request->input('alterations'), $request->input('modifier'));
         }
 
         $rollWithContext->setRoll($roll);
