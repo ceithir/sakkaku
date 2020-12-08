@@ -322,7 +322,7 @@ class Roll
     }
 
     if ($modifier === Modifier::TWO_HEAVENS) {
-      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
+      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::DEATHDEALER, Modifier::MANIPULATOR] as $mod) {
         if (in_array($mod, $this->parameters->modifiers)) {
           Assertion::inArray($mod, $this->getRerolls());
         }
@@ -330,10 +330,13 @@ class Roll
     }
 
     if (in_array($modifier, Modifier::SCHOOLS)) {
-      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::TWO_HEAVENS] as $mod) {
+      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
         if (in_array($mod, $this->parameters->modifiers)) {
           Assertion::inArray($mod, $this->getRerolls());
         }
+      }
+      if (in_array(Modifier::TWO_HEAVENS, $this->parameters->modifiers) && !in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
+        Assertion::inArray(Modifier::TWO_HEAVENS, $this->getRerolls());
       }
     }
   }

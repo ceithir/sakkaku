@@ -693,6 +693,63 @@ class RollTest extends TestCase
     $roll->reroll([0], 'shadow');
   }
 
+  public function testWardingActuallyHappensAfterDeathdealer()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        '2heavens',
+        'deathdealer',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'opportunity' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'deathdealer');
+    $this->assertEquals(['rerolls' => ['deathdealer']], $roll->metadata);
+    $roll->reroll([0], '2heavens');
+    $this->assertEquals(['rerolls' => ['deathdealer', '2heavens']], $roll->metadata);
+
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        '2heavens',
+        'deathdealer',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'opportunity' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0], '2heavens');
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([
