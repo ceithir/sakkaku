@@ -780,6 +780,63 @@ class RollTest extends TestCase
     $roll->reroll([0], '2heavens');
   }
 
+  public function testCanManuallyRerollEverything()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'ruleless',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'opportunity' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 1, 2], 'ruleless');
+    $this->assertEquals(['rerolls' => ['ruleless']], $roll->metadata);
+  }
+
+  public function testNonManualRerollNeedToHaveBeenDoneBeforeManualOne()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'ruleless',
+        'shadow',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'opportunity' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0, 1, 2], 'ruleless');
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([

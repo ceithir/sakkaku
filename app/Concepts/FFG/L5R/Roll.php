@@ -343,6 +343,14 @@ class Roll
         Assertion::inArray(Modifier::TWO_HEAVENS, $this->getRerolls());
       }
     }
+
+    if ($modifier === Modifier::RULELESS) {
+      foreach($this->parameters->modifiers as $mod) {
+        if ($mod !== Modifier::RULELESS) {
+          Assertion::inArray($mod, $this->getRerolls());
+        }
+      }
+    }
   }
 
   private function assertIshiken(array $alterations)

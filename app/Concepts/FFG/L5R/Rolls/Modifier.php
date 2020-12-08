@@ -14,6 +14,7 @@ class Modifier
   const ISHIKEN = 'ishiken';
   const MANIPULATOR = 'manipulator';
   const TWO_HEAVENS = "2heavens";
+  const RULELESS = "ruleless";
 
   const LIST = [
     self::DISTINCTION,
@@ -26,6 +27,7 @@ class Modifier
     self::ISHIKEN,
     self::MANIPULATOR,
     self::TWO_HEAVENS,
+    self::RULELESS,
   ];
 
   const REROLL_ENABLERS = [
@@ -35,6 +37,7 @@ class Modifier
     self::DEATHDEALER,
     self::MANIPULATOR,
     self::TWO_HEAVENS,
+    self::RULELESS,
   ];
 
   const SCHOOLS = [
