@@ -294,18 +294,19 @@ class Roll
     Assertion::notInArray($modifier, $this->getRerolls());
     $this->assertPositions($positions);
 
-    if ($modifier === Modifier::ADVERSITY) {
+    if (in_array($modifier, [Modifier::ADVERSITY, Modifier::TWO_HEAVENS])) {
       foreach($positions as $position) {
         Assertion::true($this->dices[$position]->isSuccess());
       }
 
+      $min = $modifier === Modifier::ADVERSITY ? 2: 1;
       $successDices = array_filter(
         $this->dices,
         function(Dice $dice) {
           return $dice->isPending() && $dice->isSuccess();
         }
       );
-      Assertion::eq(min(2, count($successDices)), count($positions));
+      Assertion::eq(min($min, count($successDices)), count($positions));
     }
 
     if ($modifier === Modifier::DISTINCTION) {
@@ -320,8 +321,16 @@ class Roll
       }
     }
 
-    if (in_array($modifier, Modifier::SCHOOLS)) {
+    if ($modifier === Modifier::TWO_HEAVENS) {
       foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
+        if (in_array($mod, $this->parameters->modifiers)) {
+          Assertion::inArray($mod, $this->getRerolls());
+        }
+      }
+    }
+
+    if (in_array($modifier, Modifier::SCHOOLS)) {
+      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::TWO_HEAVENS] as $mod) {
         if (in_array($mod, $this->parameters->modifiers)) {
           Assertion::inArray($mod, $this->getRerolls());
         }

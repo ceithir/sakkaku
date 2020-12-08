@@ -577,6 +577,122 @@ class RollTest extends TestCase
     $this->assertEquals(['rerolls' => ['manipulator']], $roll->metadata);
   }
 
+  public function testMirumotoWardingIsAnotherWayToGetAReroll()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        '2heavens',
+        'shadow',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([0], '2heavens');
+    $this->assertCount(4, $roll->dices);
+    $this->assertEquals(['rerolls' => ['2heavens']], $roll->metadata);
+  }
+
+  public function testCanOnlyRerollSuccessWithMirumotoWarding()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        '2heavens',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([1], '2heavens');
+  }
+
+  public function testMustRerollDistinctionBeforeWarding()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'distinction',
+        '2heavens',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0], '2heavens');
+  }
+
+  public function testMustRerollWardingBeforeSchool()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'shadow',
+        '2heavens',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0], 'shadow');
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([
