@@ -299,14 +299,18 @@ class Roll
         Assertion::true($this->dices[$position]->isSuccess());
       }
 
-      $min = $modifier === Modifier::ADVERSITY ? 2: 1;
       $successDices = array_filter(
         $this->dices,
         function(Dice $dice) {
           return $dice->isPending() && $dice->isSuccess();
         }
       );
-      Assertion::eq(min($min, count($successDices)), count($positions));
+      if ($modifier === Modifier::ADVERSITY) {
+        Assertion::eq(count($positions), min(2, count($successDices)));
+      }
+      if ($modifier === Modifier::TWO_HEAVENS) {
+        Assertion::greaterOrEqualThan(count($positions), min(1, count($successDices)));
+      }
     }
 
     if ($modifier === Modifier::DISTINCTION) {

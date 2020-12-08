@@ -607,6 +607,36 @@ class RollTest extends TestCase
     $this->assertEquals(['rerolls' => ['2heavens']], $roll->metadata);
   }
 
+  public function testCanWardAnyNumberOfDices()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        '2heavens',
+        'shadow',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 2], '2heavens');
+    $this->assertCount(5, $roll->dices);
+    $this->assertEquals(['rerolls' => ['2heavens']], $roll->metadata);
+  }
+
   public function testCanOnlyRerollSuccessWithMirumotoWarding()
   {
     $roll = Roll::fromArray([
