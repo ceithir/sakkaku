@@ -94,4 +94,73 @@ class ParametersTest extends TestCase
       'modifiers' => ['shadow', 'deathdealer'],
     ]);
   }
+
+  public function testAcceptChanneledDices()
+  {
+    $parameters = new Parameters([
+      'tn' => 3,
+      'ring' => 3,
+      'skill' => 2,
+      'channeled' => [
+        ['type' => 'ring', 'value' => ['opportunity' => 1]],
+        ['type' => 'skill', 'value' => ['success' => 1]],
+      ],
+    ]);
+    $this->assertEquals(
+      [
+        ['type' => 'ring', 'value' => ['opportunity' => 1]],
+        ['type' => 'skill', 'value' => ['success' => 1]],
+      ],
+      $parameters->channeled
+    );
+  }
+
+  public function testRefuseChanneledDicesAboveMaxium()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'tn' => 2,
+      'ring' => 1,
+      'skill' => 1,
+      'channeled' => [
+        ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
+        ['type' => 'ring', 'value' => ['success' => 1]],
+      ],
+    ]);
+  }
+
+  public function testChanneledDicesCountVoidProperly()
+  {
+    $parameters = new Parameters([
+      'tn' => 2,
+      'ring' => 1,
+      'skill' => 1,
+      'modifiers' => ['void'],
+      'channeled' => [
+        ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
+        ['type' => 'ring', 'value' => ['success' => 1]],
+      ],
+    ]);
+    $this->assertEquals(
+      [
+        ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
+        ['type' => 'ring', 'value' => ['success' => 1]],
+      ],
+      $parameters->channeled
+    );
+  }
+
+  public function testRefuseInvalidDices()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'tn' => 2,
+      'ring' => 2,
+      'skill' => 2,
+      'channeled' => [
+        ['type' => 'ring', 'value' => ['explosion' => 1]],
+      ],
+    ]);
+  }
 }

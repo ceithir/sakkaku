@@ -4,6 +4,7 @@ namespace App\Concepts\FFG\L5R\Rolls;
 
 use Assert\Assertion;
 use App\Concepts\Rolls\Modifiers;
+use App\Concepts\FFG\L5R\Dices\Dice;
 
 class Parameters
 {
@@ -14,6 +15,8 @@ class Parameters
   public int $skill;
 
   public array $modifiers;
+
+  public array $channeled;
 
   public function __construct(array $parameters)
   {
@@ -45,9 +48,40 @@ class Parameters
       1
     );
 
+    $channeled = $parameters['channeled'] ?? [];
+    Assertion::isArray($channeled);
+    $channeledDices = array_map(
+      function(array $data) {
+        return Dice::fromArray(array_merge(
+          ['status' => 'pending'],
+          $data,
+        ));
+      },
+      $channeled
+    );
+    Assertion::lessOrEqualThan(
+      count(array_filter(
+        $channeledDices,
+        function(Dice $dice) {
+          return $dice->type ==='ring';
+        }
+      )) ,
+      $ring + (in_array(Modifier::VOID, $modifiers) ? 1 : 0)
+    );
+    Assertion::lessOrEqualThan(
+      count(array_filter(
+        $channeledDices,
+        function(Dice $dice) {
+          return $dice->type ==='skill';
+        }
+      )) ,
+      $skill
+    );
+
     $this->tn = $tn;
     $this->ring = $ring;
     $this->skill = $skill;
     $this->modifiers = $modifiers;
+    $this->channeled = $channeled;
   }
 }

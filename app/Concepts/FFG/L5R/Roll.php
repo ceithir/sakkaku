@@ -31,13 +31,43 @@ class Roll
   {
     $parameters = new Parameters($data);
     $dices = [];
-    for ($i = 0; $i < $parameters->ring; $i++) {
+
+    $channeledDices = array_map(
+      function(array $data) {
+        return Dice::fromArray(array_merge(
+          [
+            'status' => 'pending',
+            'metadata' => ['source' => 'channeled'],
+          ],
+          $data,
+        ));
+      },
+      $parameters->channeled
+    );
+
+    $channeledRingDices = array_filter(
+      $channeledDices,
+      function(Dice $dice) {
+        return $dice->type ==='ring';
+      }
+    );
+    foreach($channeledRingDices as $dice) {
+      $dices[] = $dice;
+    }
+    $ringTotal = $parameters->ring + (in_array(Modifier::VOID, $parameters->modifiers) ? 1 : 0);
+    for ($i = 0; $i < $ringTotal - count($channeledRingDices); $i++) {
       $dices[] = Dice::init(Dice::RING);
     }
-    if (in_array(Modifier::VOID, $parameters->modifiers)) {
-      $dices[] = Dice::init(Dice::RING);
+    $channeledSkillDices = array_filter(
+      $channeledDices,
+      function(Dice $dice) {
+        return $dice->type ==='skill';
+      }
+    );
+    foreach($channeledSkillDices as $dice) {
+      $dices[] = $dice;
     }
-    for ($i = 0; $i < $parameters->skill; $i++) {
+    for ($i = 0; $i < $parameters->skill - count($channeledSkillDices); $i++) {
       $dices[] = Dice::init(Dice::SKILL);
     }
     return new self(

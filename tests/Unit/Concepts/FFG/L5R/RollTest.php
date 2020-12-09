@@ -910,6 +910,7 @@ class RollTest extends TestCase
         'ring' => 1,
         'skill' => 1,
         'modifiers' => [],
+        'channeled' => [],
       ],
       'dices' => [
         [
@@ -1149,5 +1150,27 @@ class RollTest extends TestCase
     $roll->alter([], 'ishiken');
     $this->assertCount(3, $roll->dices);
     $this->assertEquals(['rerolls' => ['ishiken']], $roll->metadata);
+  }
+
+  public function testCanHaveChanneledDiceFromArray()
+  {
+    $roll = Roll::init([
+      'tn' => 3,
+      'ring' => 3,
+      'skill' => 3,
+      'channeled' => [
+        ['type' => 'ring', 'value' => ['success' => 1]],
+        ['type' => 'skill', 'value' => ['explosion' => 1]],
+        ['type' => 'skill', 'value' => ['success' => 1, 'opportunity' => 1]],
+      ],
+    ]);
+    $this->assertCount(6, $roll->dices);
+    $this->assertEquals(['source' => 'channeled'], $roll->dices[0]->metadata);
+    $this->assertEquals(['success' => 1, 'explosion' => 0, 'strife' => 0, 'opportunity' => 0], (array) $roll->dices[0]->value);
+    $this->assertEquals([], $roll->dices[1]->metadata);
+    $this->assertEquals([], $roll->dices[2]->metadata);
+    $this->assertEquals(['source' => 'channeled'], $roll->dices[3]->metadata);
+    $this->assertEquals(['source' => 'channeled'], $roll->dices[4]->metadata);
+    $this->assertEquals([], $roll->dices[5]->metadata);
   }
 }
