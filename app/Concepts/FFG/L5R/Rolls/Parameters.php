@@ -3,7 +3,7 @@
 namespace App\Concepts\FFG\L5R\Rolls;
 
 use Assert\Assertion;
-use App\Concepts\Rolls\Modifiers;
+use App\Concepts\FFG\L5R\Rolls\Modifier;
 use App\Concepts\FFG\L5R\Dices\Dice;
 
 class Parameters
