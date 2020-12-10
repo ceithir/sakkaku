@@ -837,6 +837,65 @@ class RollTest extends TestCase
     $roll->reroll([0, 1, 2], 'ruleless');
   }
 
+  public function testCanHaveAManualRerollWithAnEnemyTiming()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'ruthless',
+        'shadow',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'ruthless');
+    $this->assertCount(4, $roll->dices);
+    $this->assertEquals(['rerolls' => ['ruthless']], $roll->metadata);
+  }
+
+  public function testManualEnemyRerollHappensBeforeSchool()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'shadow',
+        'ruthless',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([1], 'shadow');
+  }
+
   public function testCannotKeepMoreDicesThanRing()
   {
     $roll = Roll::fromArray([

@@ -15,6 +15,7 @@ class Modifier
   const MANIPULATOR = 'manipulator';
   const TWO_HEAVENS = "2heavens";
   const RULELESS = "ruleless";
+  const RUTHLESS = "ruthless";
 
   const LIST = [
     self::DISTINCTION,
@@ -28,6 +29,7 @@ class Modifier
     self::MANIPULATOR,
     self::TWO_HEAVENS,
     self::RULELESS,
+    self::RUTHLESS,
   ];
 
   const REROLL_ENABLERS = [
@@ -38,6 +40,7 @@ class Modifier
     self::MANIPULATOR,
     self::TWO_HEAVENS,
     self::RULELESS,
+    self::RUTHLESS,
   ];
 
   const SCHOOLS = [

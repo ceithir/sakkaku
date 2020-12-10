@@ -387,6 +387,14 @@ class Roll
       }
     }
 
+    if ($modifier === Modifier::RUTHLESS) {
+      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::DEATHDEALER, Modifier::MANIPULATOR, Modifier::TWO_HEAVENS] as $mod) {
+        if (in_array($mod, $this->parameters->modifiers)) {
+          Assertion::inArray($mod, $this->getRerolls());
+        }
+      }
+    }
+
     if (in_array($modifier, Modifier::SCHOOLS)) {
       foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
         if (in_array($mod, $this->parameters->modifiers)) {
@@ -395,6 +403,9 @@ class Roll
       }
       if (in_array(Modifier::TWO_HEAVENS, $this->parameters->modifiers) && !in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
         Assertion::inArray(Modifier::TWO_HEAVENS, $this->getRerolls());
+      }
+      if (in_array(Modifier::RUTHLESS, $this->parameters->modifiers) && !in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
+        Assertion::inArray(Modifier::RUTHLESS, $this->getRerolls());
       }
     }
 
