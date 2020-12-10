@@ -411,7 +411,7 @@ class Roll
 
     if ($modifier === Modifier::RULELESS) {
       foreach($this->parameters->modifiers as $mod) {
-        if ($mod !== Modifier::RULELESS) {
+        if (in_array($mod, Modifier::REROLL_ENABLERS) && $mod !== Modifier::RULELESS) {
           Assertion::inArray($mod, $this->getRerolls());
         }
       }

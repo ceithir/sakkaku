@@ -1342,4 +1342,29 @@ class RollTest extends TestCase
     $this->assertCount(4, $roll->dices);
     $this->assertEquals(['source' => 'explosion'], $roll->dices[3]->metadata);
   }
+
+  public function testManualRerollOnlyCaresAboutRerollModifiers()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+        'modifiers' => ['stirring', 'ruleless'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'ruleless');
+    $this->assertCount(3, $roll->dices);
+  }
 }
