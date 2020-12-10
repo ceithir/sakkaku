@@ -50,6 +50,7 @@ class Parameters
 
     $channeled = $parameters['channeled'] ?? [];
     Assertion::isArray($channeled);
+    Assertion::allIsArray($channeled);
     $channeledDices = array_map(
       function(array $data) {
         Assertion::keyExists($data, 'type');
@@ -80,10 +81,26 @@ class Parameters
       $skill
     );
 
+    $kept = $parameters['kept'] ?? [];
+    Assertion::isArray($kept);
+    Assertion::allIsArray($kept);
+    foreach($kept as $data) {
+      Assertion::keyExists($data, 'type');
+      Assertion::keyExists($data, 'value');
+      Assertion::string($data['type']);
+      Assertion::isArray($data['value']);
+
+      $dice = Dice::initWithValue($data['type'], $data['value']);
+      if (in_array(Modifier::COMPROMISED, $modifiers)) {
+        Assertion::false($dice->hasStrife());
+      }
+    }
+
     $this->tn = $tn;
     $this->ring = $ring;
     $this->skill = $skill;
     $this->modifiers = $modifiers;
     $this->channeled = $channeled;
+    $this->kept = $kept;
   }
 }

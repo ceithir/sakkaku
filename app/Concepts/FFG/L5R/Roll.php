@@ -92,6 +92,12 @@ class Roll
   public function keep(array $positions): void
   {
     $this->assertKeepable($positions);
+    $noKeptDiceYet = count(array_filter(
+      $this->dices,
+      function (Dice $dice) {
+        return $dice->status ===  Dice::KEPT;
+      }
+    )) === 0;
 
     $explosions = [];
     for ($i=0; $i < count($this->dices); $i++) {
@@ -108,8 +114,25 @@ class Roll
       }
     }
 
+    $extraKeptDices = [];
+    if ($noKeptDiceYet) {
+      foreach($this->parameters->kept as $data) {
+        $dice = Dice::fromArray([
+          'status' => Dice::KEPT,
+          'type' => $data['type'],
+          'value' => $data['value'],
+          'metadata' => ['source' => 'kept'],
+        ]);
+        $extraKeptDices[] = $dice;
+        for ($j = 0; $j < $dice->value->explosion; $j++) {
+          $explosions[] = Dice::init($dice->type, ['source' => 'explosion']);
+        }
+      }
+    }
+
     $this->dices = array_values(array_merge(
       $this->dices,
+      $extraKeptDices,
       $explosions,
     ));
   }
@@ -284,6 +307,9 @@ class Roll
         return $dice->isKept();
       }
     ));
+    if ($existingKeptDicesCount > 0) {
+      $existingKeptDicesCount -= count($this->parameters->kept);
+    }
     Assertion::between($existingKeptDicesCount + count($positions), 1, $this->maxKeepable());
   }
 

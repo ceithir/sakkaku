@@ -911,6 +911,7 @@ class RollTest extends TestCase
         'skill' => 1,
         'modifiers' => [],
         'channeled' => [],
+        'kept' => [],
       ],
       'dices' => [
         [
@@ -1186,5 +1187,100 @@ class RollTest extends TestCase
     ]);
     $this->assertCount(6, $roll->dices);
     $this->assertEquals(['source' => 'channeled'], $roll->dices[0]->metadata);
+  }
+
+  public function testCanAddKeptDicesToCheck()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+        'kept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->keep([0]);
+    $this->assertCount(3, $roll->dices);
+    $this->assertTrue($roll->isComplete());
+    $this->assertEquals(['opportunity' => 1, 'success' => 1, 'strife' => 1], $roll->result());
+  }
+
+  public function testExtraKeptDicesAreNotAddedOnExplosions()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+        'kept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'kept',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'dropped',
+          'value' => [],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'kept',
+          'value' => ['opportunity' => 1],
+          'metadata' => ['source' => 'kept'],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['opportunity' => 1],
+          'metadata' => ['source' => 'explosion'],
+        ]
+      ],
+    ]);
+    $this->assertFalse($roll->isComplete());
+    $roll->keep([3]);
+    $this->assertCount(4, $roll->dices);
+    $this->assertTrue($roll->isComplete());
+    $this->assertEquals(['opportunity' => 2, 'success' => 1, 'strife' => 1], $roll->result());
+  }
+
+  public function testCanAddAKeptExplodingDice()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+        'kept' => [['type' => 'skill', 'value' => ['explosion' => 1]]],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->assertFalse($roll->isComplete());
+    $roll->keep([0]);
+    $this->assertFalse($roll->isComplete());
+    $this->assertCount(4, $roll->dices);
+    $this->assertEquals(['source' => 'explosion'], $roll->dices[3]->metadata);
   }
 }

@@ -150,7 +150,7 @@ class ParametersTest extends TestCase
     );
   }
 
-  public function testRefuseInvalidDices()
+  public function testRefuseInvalidChanneledDices()
   {
     $this->expectException(InvalidArgumentException::class);
     $this->expectException(InvalidArgumentException::class);
@@ -161,6 +161,36 @@ class ParametersTest extends TestCase
       'channeled' => [
         ['type' => 'ring', 'value' => ['explosion' => 1]],
       ],
+    ]);
+  }
+
+  public function testCanAddKeptDices()
+  {
+    $parameters = new Parameters([
+      'ring' => 1,
+      'skill' => 1,
+      'kept' => [
+        ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
+      ],
+    ]);
+    $this->assertEquals(
+      [
+        ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
+      ],
+      $parameters->kept
+    );
+  }
+
+  public function testRefuseKeptDicesWithStrifeIfCompromised()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'ring' => 1,
+      'skill' => 1,
+      'kept' => [
+        ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
+      ],
+      'modifiers' => ['compromised'],
     ]);
   }
 }
