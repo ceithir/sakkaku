@@ -1173,4 +1173,18 @@ class RollTest extends TestCase
     $this->assertEquals(['source' => 'channeled'], $roll->dices[4]->metadata);
     $this->assertEquals([], $roll->dices[5]->metadata);
   }
+
+  public function testCannotHackChanneledDices()
+  {
+    $roll = Roll::init([
+      'tn' => 3,
+      'ring' => 3,
+      'skill' => 3,
+      'channeled' => [
+        ['type' => 'ring', 'value' => ['success' => 1], 'metadata' => []],
+      ],
+    ]);
+    $this->assertCount(6, $roll->dices);
+    $this->assertEquals(['source' => 'channeled'], $roll->dices[0]->metadata);
+  }
 }

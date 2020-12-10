@@ -34,13 +34,11 @@ class Roll
 
     $channeledDices = array_map(
       function(array $data) {
-        return Dice::fromArray(array_merge(
-          [
-            'status' => 'pending',
-            'metadata' => ['source' => 'channeled'],
-          ],
-          $data,
-        ));
+        return Dice::initWithValue(
+          $data['type'],
+          $data['value'],
+          ['source' => 'channeled']
+        );
       },
       $parameters->channeled
     );
@@ -171,12 +169,11 @@ class Roll
       $position = $alteration['position'];
       $value = $alteration['value'];
       $originalDice = $this->dices[$position];
-      $alteredDice = Dice::fromArray([
-        'status' => 'pending',
-        'type' => $originalDice->type,
-        'value' => $value,
-        'metadata' => ['source' => $modifier],
-      ]);
+      $alteredDice = Dice::initWithValue(
+        $originalDice->type,
+        $value,
+        ['source' => $modifier],
+      );
 
       $originalDice->reroll($modifier);
       $rerolls[] = $alteredDice;
@@ -403,11 +400,10 @@ class Roll
       $position = $alteration['position'];
       $value = $alteration['value'];
       $chosenDice = $this->dices[$position];
-      $alteredDice = Dice::fromArray([
-        'status' => 'pending',
-        'type' => $chosenDice->type,
-        'value' => $value,
-      ]);
+      $alteredDice = Dice::initWithValue(
+        $chosenDice->type,
+        $value,
+      );
       Assertion::true(
         ($chosenDice->isBlank() && !$alteredDice->isBlank()) || (!$chosenDice->isBlank() && $alteredDice->isBlank())
       );

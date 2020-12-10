@@ -61,14 +61,23 @@ class Dice
     Assertion::keyExists($data, 'status');
     Assertion::keyExists($data, 'value');
 
-    $type = $data['type'];
-    $dice = $type === self::SKILL ? SkillDiceValue::class : RingDiceValue::class;
+    return new Dice(
+      $data['type'],
+      $data['status'],
+      DiceValue::build($data['type'], $data['value']),
+      $data['metadata'] ?? array(),
+    );
+  }
+
+  public static function initWithValue(string $type, $value, array $metadata = array()): Dice
+  {
+    Assertion::true($value instanceof DiceValue || is_array($value));
 
     return new Dice(
       $type,
-      $data['status'],
-      new $dice($data['value']),
-      $data['metadata'] ?? array(),
+      self::PENDING,
+      $value instanceof DiceValue ? $value : DiceValue::build($type, $value),
+      $metadata
     );
   }
 

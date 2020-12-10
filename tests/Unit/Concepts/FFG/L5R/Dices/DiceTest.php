@@ -80,6 +80,38 @@ class DiceTest extends TestCase
         );
     }
 
+    public function testCanInitWithValue()
+    {
+        $dice = Dice::initWithValue(
+            'ring',
+            ['opportunity' => 1, 'strife' => 1]
+        );
+        $this->assertEquals('pending', $dice->status);
+        $this->assertEquals('ring', $dice->type);
+        $this->assertEquals(
+            ['opportunity' => 1, 'strife' => 1, 'success' => 0, 'explosion' => 0],
+            (array) $dice->value
+        );
+
+        $dice = Dice::initWithValue(
+            'skill',
+            ['explosion' => 1]
+        );
+        $this->assertEquals('pending', $dice->status);
+        $this->assertEquals('skill', $dice->type);
+        $this->assertEquals(
+            ['opportunity' => 0, 'strife' => 0, 'success' => 0, 'explosion' => 1],
+            (array) $dice->value
+        );
+
+        $dice = Dice::initWithValue(
+            'skill',
+            SkillDiceValue::random()
+        );
+        $this->assertEquals('pending', $dice->status);
+        $this->assertEquals('skill', $dice->type);
+    }
+
     private function assertDiceBalance($type, $expected)
     {
         $total = 100000;

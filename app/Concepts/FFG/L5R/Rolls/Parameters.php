@@ -50,12 +50,11 @@ class Parameters
 
     $channeled = $parameters['channeled'] ?? [];
     Assertion::isArray($channeled);
+    Assertion::allKeyExists($channeled, 'type');
+    Assertion::allKeyExists($channeled, 'value');
     $channeledDices = array_map(
       function(array $data) {
-        return Dice::fromArray(array_merge(
-          ['status' => 'pending'],
-          $data,
-        ));
+        return Dice::initWithValue($data['type'], $data['value']);
       },
       $channeled
     );
