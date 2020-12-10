@@ -911,7 +911,7 @@ class RollTest extends TestCase
         'skill' => 1,
         'modifiers' => [],
         'channeled' => [],
-        'kept' => [],
+        'addkept' => [],
       ],
       'dices' => [
         [
@@ -1195,7 +1195,7 @@ class RollTest extends TestCase
       'parameters' => [
         'ring' => 1,
         'skill' => 1,
-        'kept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
+        'addkept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
       ],
       'dices' => [
         [
@@ -1222,7 +1222,7 @@ class RollTest extends TestCase
       'parameters' => [
         'ring' => 1,
         'skill' => 1,
-        'kept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
+        'addkept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
       ],
       'dices' => [
         [
@@ -1262,7 +1262,7 @@ class RollTest extends TestCase
       'parameters' => [
         'ring' => 1,
         'skill' => 1,
-        'kept' => [['type' => 'skill', 'value' => ['explosion' => 1]]],
+        'addkept' => [['type' => 'skill', 'value' => ['explosion' => 1]]],
       ],
       'dices' => [
         [

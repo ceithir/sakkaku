@@ -116,12 +116,12 @@ class Roll
 
     $extraKeptDices = [];
     if ($noKeptDiceYet) {
-      foreach($this->parameters->kept as $data) {
+      foreach($this->parameters->addkept as $data) {
         $dice = Dice::fromArray([
           'status' => Dice::KEPT,
           'type' => $data['type'],
           'value' => $data['value'],
-          'metadata' => ['source' => 'kept'],
+          'metadata' => ['source' => 'addkept'],
         ]);
         $extraKeptDices[] = $dice;
         for ($j = 0; $j < $dice->value->explosion; $j++) {
@@ -308,7 +308,7 @@ class Roll
       }
     ));
     if ($existingKeptDicesCount > 0) {
-      $existingKeptDicesCount -= count($this->parameters->kept);
+      $existingKeptDicesCount -= count($this->parameters->addkept);
     }
     Assertion::between($existingKeptDicesCount + count($positions), 1, $this->maxKeepable());
   }

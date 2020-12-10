@@ -169,7 +169,7 @@ class ParametersTest extends TestCase
     $parameters = new Parameters([
       'ring' => 1,
       'skill' => 1,
-      'kept' => [
+      'addkept' => [
         ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
       ],
     ]);
@@ -177,7 +177,7 @@ class ParametersTest extends TestCase
       [
         ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
       ],
-      $parameters->kept
+      $parameters->addkept
     );
   }
 
@@ -187,7 +187,7 @@ class ParametersTest extends TestCase
     $parameters = new Parameters([
       'ring' => 1,
       'skill' => 1,
-      'kept' => [
+      'addkept' => [
         ['type' => 'ring', 'value' => ['explosion' => 1, 'strife' => 1]],
       ],
       'modifiers' => ['compromised'],

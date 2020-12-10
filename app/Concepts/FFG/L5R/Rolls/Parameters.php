@@ -18,6 +18,8 @@ class Parameters
 
   public array $channeled;
 
+  public array $addkept;
+
   public function __construct(array $parameters)
   {
     Assertion::keyExists($parameters, 'ring');
@@ -81,10 +83,10 @@ class Parameters
       $skill
     );
 
-    $kept = $parameters['kept'] ?? [];
-    Assertion::isArray($kept);
-    Assertion::allIsArray($kept);
-    foreach($kept as $data) {
+    $addkept = $parameters['addkept'] ?? [];
+    Assertion::isArray($addkept);
+    Assertion::allIsArray($addkept);
+    foreach($addkept as $data) {
       Assertion::keyExists($data, 'type');
       Assertion::keyExists($data, 'value');
       Assertion::string($data['type']);
@@ -101,6 +103,6 @@ class Parameters
     $this->skill = $skill;
     $this->modifiers = $modifiers;
     $this->channeled = $channeled;
-    $this->kept = $kept;
+    $this->addkept = $addkept;
   }
 }
