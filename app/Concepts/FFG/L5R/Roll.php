@@ -153,6 +153,7 @@ class Roll
     Assertion::inArray($modifier, $this->parameters->modifiers);
     Assertion::notInArray($modifier, $this->getRerolls());
 
+    Assertion::allKeyExists($alterations, 'position');
     $positions = array_map(
       function (array $alteration) {
         return $alteration['position'];
@@ -397,6 +398,9 @@ class Roll
     );
     Assertion::true(count($blankDices) === 0 || count($blankDices) === count($chosenDices));
     foreach ($alterations as $alteration) {
+      Assertion::keyExists($alteration, 'value');
+      Assertion::isArray($alteration['value']);
+
       $position = $alteration['position'];
       $value = $alteration['value'];
       $chosenDice = $this->dices[$position];

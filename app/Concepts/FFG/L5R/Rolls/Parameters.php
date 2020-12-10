@@ -50,10 +50,13 @@ class Parameters
 
     $channeled = $parameters['channeled'] ?? [];
     Assertion::isArray($channeled);
-    Assertion::allKeyExists($channeled, 'type');
-    Assertion::allKeyExists($channeled, 'value');
     $channeledDices = array_map(
       function(array $data) {
+        Assertion::keyExists($data, 'type');
+        Assertion::keyExists($data, 'value');
+        Assertion::string($data['type']);
+        Assertion::isArray($data['value']);
+
         return Dice::initWithValue($data['type'], $data['value']);
       },
       $channeled

@@ -71,8 +71,6 @@ class Dice
 
   public static function initWithValue(string $type, $value, array $metadata = array()): Dice
   {
-    Assertion::true($value instanceof DiceValue || is_array($value));
-
     return new Dice(
       $type,
       self::PENDING,
