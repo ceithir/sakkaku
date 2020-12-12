@@ -808,35 +808,6 @@ class RollTest extends TestCase
     $this->assertEquals(['rerolls' => ['ruleless']], $roll->metadata);
   }
 
-  public function testNonManualRerollNeedToHaveBeenDoneBeforeManualOne()
-  {
-    $roll = Roll::fromArray([
-      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
-        'ruleless',
-        'shadow',
-      ]],
-      'dices' => [
-        [
-          'type' => 'ring',
-          'status' => 'pending',
-          'value' => ['success' => 1],
-        ],
-        [
-          'type' => 'skill',
-          'status' => 'pending',
-          'value' => [],
-        ],
-        [
-          'type' => 'skill',
-          'status' => 'pending',
-          'value' => ['success' => 1, 'opportunity' => 1],
-        ],
-      ],
-    ]);
-    $this->expectException(InvalidArgumentException::class);
-    $roll->reroll([0, 1, 2], 'ruleless');
-  }
-
   public function testCanHaveAManualRerollWithAnEnemyTiming()
   {
     $roll = Roll::fromArray([
@@ -1435,5 +1406,63 @@ class RollTest extends TestCase
     ]);
     $this->expectException(InvalidArgumentException::class);
     $roll->reroll([1], 'sailor');
+  }
+
+  public function testCanManualRerollBeforeAlteration()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'ruleless',
+        'ishiken',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1, 'opportunity' => 1],
+        ],
+      ],
+    ]);
+    $roll->reroll([0, 1, 2], 'ruleless');
+    $this->assertEquals(['rerolls' => ['ruleless']], $roll->metadata);
+  }
+
+  public function testCannotRerollDeathdealerBeforeDistinction()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
+        'distinction',
+        'deathdealer',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([0, 2], 'deathdealer');
   }
 }

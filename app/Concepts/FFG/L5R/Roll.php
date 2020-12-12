@@ -379,43 +379,25 @@ class Roll
       }
     }
 
-    if ($modifier === Modifier::TWO_HEAVENS) {
-      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::DEATHDEALER, Modifier::MANIPULATOR] as $mod) {
-        if (in_array($mod, $this->parameters->modifiers)) {
-          Assertion::inArray($mod, $this->getRerolls());
-        }
-      }
-    }
-
-    if ($modifier === Modifier::RUTHLESS) {
-      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::DEATHDEALER, Modifier::MANIPULATOR, Modifier::TWO_HEAVENS] as $mod) {
-        if (in_array($mod, $this->parameters->modifiers)) {
-          Assertion::inArray($mod, $this->getRerolls());
-        }
-      }
-    }
-
     if ($modifier === Modifier::SAILOR && $this->isCompromised()) {
       Assertion::count($positions, 0);
     }
 
-    if (in_array($modifier, Modifier::SCHOOLS)) {
-      foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
-        if (in_array($mod, $this->parameters->modifiers)) {
-          Assertion::inArray($mod, $this->getRerolls());
-        }
-      }
-      if (in_array(Modifier::TWO_HEAVENS, $this->parameters->modifiers) && !in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
-        Assertion::inArray(Modifier::TWO_HEAVENS, $this->getRerolls());
-      }
-      if (in_array(Modifier::RUTHLESS, $this->parameters->modifiers) && !in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
-        Assertion::inArray(Modifier::RUTHLESS, $this->getRerolls());
+    if (in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
+      if (in_array(Modifier::DISTINCTION, $this->parameters->modifiers)) {
+        Assertion::inArray(Modifier::DISTINCTION, $this->getRerolls());
       }
     }
 
-    if ($modifier === Modifier::RULELESS) {
-      foreach($this->parameters->modifiers as $mod) {
-        if (in_array($mod, Modifier::REROLL_ENABLERS) && $mod !== Modifier::RULELESS) {
+    foreach([
+      [Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::DEATHDEALER, Modifier::MANIPULATOR],
+      [Modifier::TWO_HEAVENS, Modifier::RUTHLESS],
+    ] as $mods) {
+      if (in_array($modifier, $mods)) {
+        break;
+      }
+      foreach($mods as $mod) {
+        if (in_array($mod, $this->parameters->modifiers)) {
           Assertion::inArray($mod, $this->getRerolls());
         }
       }
