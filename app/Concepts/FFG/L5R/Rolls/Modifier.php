@@ -17,6 +17,7 @@ class Modifier
   const RULELESS = "ruleless";
   const RUTHLESS = "ruthless";
   const SAILOR = 'sailor';
+  const REASONLESS = 'reasonless';
 
   const LIST = [
     self::DISTINCTION,
@@ -32,6 +33,7 @@ class Modifier
     self::RULELESS,
     self::RUTHLESS,
     self::SAILOR,
+    self::REASONLESS,
   ];
 
   const REROLL_ENABLERS = [
@@ -52,5 +54,10 @@ class Modifier
     self::ISHIKEN,
     self::MANIPULATOR,
     self::SAILOR,
+  ];
+
+  const ALTERATION_ENABLERS = [
+    self::ISHIKEN,
+    self::REASONLESS,
   ];
 }

@@ -1465,4 +1465,48 @@ class RollTest extends TestCase
     $this->expectException(InvalidArgumentException::class);
     $roll->reroll([0, 2], 'deathdealer');
   }
+
+  public function testCanDoWhateverWithManualAlteration()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'tn' => 2,
+        'ring' => 2,
+        'skill' => 1,
+        'modifiers' => ['reasonless'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['explosion' => 1, 'strife' => 1],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $roll->alter(
+      [
+        [
+          'position' => 1,
+          'value' => ['success' => 1],
+        ],
+        [
+          'position' => 2,
+          'value' => [],
+        ],
+      ],
+      'reasonless'
+    );
+    $this->assertEquals(['rerolls' => ['reasonless']], $roll->metadata);
+    $this->assertCount(5, $roll->dices);
+  }
 }

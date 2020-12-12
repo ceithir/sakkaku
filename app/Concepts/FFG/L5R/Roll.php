@@ -171,22 +171,7 @@ class Roll
 
   public function alter(array $alterations, string $modifier): void
   {
-    Assertion::false($this->requiresReroll());
-    Assertion::true($this->requiresAlteration());
-    Assertion::inArray($modifier, $this->parameters->modifiers);
-    Assertion::notInArray($modifier, $this->getRerolls());
-
-    Assertion::allKeyExists($alterations, 'position');
-    $positions = array_map(
-      function (array $alteration) {
-        return $alteration['position'];
-      },
-      $alterations
-    );
-    $this->assertPositions($positions);
-
-    Assertion::eq($modifier, Modifier::ISHIKEN);
-    $this->assertIshiken($alterations);
+    $this->assertAlterable($alterations, $modifier);
 
     $rerolls = [];
     foreach($alterations as $alteration) {
@@ -404,6 +389,38 @@ class Roll
     }
   }
 
+  private function assertAlterable(array $alterations, string $modifier)
+  {
+    Assertion::inArray($modifier, Modifier::ALTERATION_ENABLERS);
+    Assertion::false($this->requiresReroll());
+    Assertion::true($this->requiresAlteration());
+    Assertion::inArray($modifier, $this->parameters->modifiers);
+    Assertion::notInArray($modifier, $this->getRerolls());
+
+    Assertion::allKeyExists($alterations, 'position');
+    $positions = array_map(
+      function (array $alteration) {
+        return $alteration['position'];
+      },
+      $alterations
+    );
+    $this->assertPositions($positions);
+
+    foreach ($alterations as $alteration) {
+      Assertion::keyExists($alteration, 'value');
+      Assertion::isArray($alteration['value']);
+
+      Dice::initWithValue(
+        $this->dices[$alteration['position']]->type,
+        $alteration['value'],
+      );
+    }
+
+    if ($modifier === Modifier::ISHIKEN) {
+      $this->assertIshiken($alterations);
+    }
+  }
+
   private function assertIshiken(array $alterations)
   {
     $positions = array_map(
@@ -421,15 +438,10 @@ class Roll
     );
     Assertion::true(count($blankDices) === 0 || count($blankDices) === count($chosenDices));
     foreach ($alterations as $alteration) {
-      Assertion::keyExists($alteration, 'value');
-      Assertion::isArray($alteration['value']);
-
-      $position = $alteration['position'];
-      $value = $alteration['value'];
-      $chosenDice = $this->dices[$position];
+      $chosenDice = $this->dices[$alteration['position']];
       $alteredDice = Dice::initWithValue(
         $chosenDice->type,
-        $value,
+        $alteration['value'],
       );
       Assertion::true(
         ($chosenDice->isBlank() && !$alteredDice->isBlank()) || (!$chosenDice->isBlank() && $alteredDice->isBlank())
@@ -439,7 +451,15 @@ class Roll
 
   private function requiresAlteration(): bool
   {
-    return in_array(Modifier::ISHIKEN, $this->parameters->modifiers) && !in_array(Modifier::ISHIKEN, $this->getRerolls());
+    foreach(Modifier::ALTERATION_ENABLERS as $modifier) {
+      if (in_array($modifier, $this->parameters->modifiers)) {
+        if (!in_array($modifier, $this->getRerolls())) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   private function appendToRerollMetadata(string $modifier): void
