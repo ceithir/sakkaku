@@ -1367,4 +1367,73 @@ class RollTest extends TestCase
     $roll->reroll([1], 'ruleless');
     $this->assertCount(3, $roll->dices);
   }
+
+  public function testCanRerollWithSailorTechnique()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => ['sailor']],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([1], 'sailor');
+    $this->assertCount(3, $roll->dices);
+  }
+
+  public function testCanRerollNothingWithSailorIfCompromised()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => [
+        'sailor',
+        'compromised',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([], 'sailor');
+    $this->assertCount(2, $roll->dices);
+  }
+
+  public function testCannotRerollAnythingWithSailorIfCompromised()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 1, 'modifiers' => [
+        'sailor',
+        'compromised',
+      ]],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['strife' => 1, 'success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->reroll([1], 'sailor');
+  }
 }

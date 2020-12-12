@@ -395,6 +395,10 @@ class Roll
       }
     }
 
+    if ($modifier === Modifier::SAILOR && $this->isCompromised()) {
+      Assertion::count($positions, 0);
+    }
+
     if (in_array($modifier, Modifier::SCHOOLS)) {
       foreach([Modifier::ADVERSITY, Modifier::DISTINCTION] as $mod) {
         if (in_array($mod, $this->parameters->modifiers)) {

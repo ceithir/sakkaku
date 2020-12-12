@@ -16,6 +16,7 @@ class Modifier
   const TWO_HEAVENS = "2heavens";
   const RULELESS = "ruleless";
   const RUTHLESS = "ruthless";
+  const SAILOR = 'sailor';
 
   const LIST = [
     self::DISTINCTION,
@@ -30,6 +31,7 @@ class Modifier
     self::TWO_HEAVENS,
     self::RULELESS,
     self::RUTHLESS,
+    self::SAILOR,
   ];
 
   const REROLL_ENABLERS = [
@@ -41,6 +43,7 @@ class Modifier
     self::TWO_HEAVENS,
     self::RULELESS,
     self::RUTHLESS,
+    self::SAILOR,
   ];
 
   const SCHOOLS = [
@@ -48,5 +51,6 @@ class Modifier
     self::DEATHDEALER,
     self::ISHIKEN,
     self::MANIPULATOR,
+    self::SAILOR,
   ];
 }
