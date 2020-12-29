@@ -85,6 +85,18 @@ class Parameters
 
     $addkept = $parameters['addkept'] ?? [];
     Assertion::isArray($addkept);
+
+    $this->tn = $tn;
+    $this->ring = $ring;
+    $this->skill = $skill;
+    $this->modifiers = $modifiers;
+    $this->channeled = $channeled;
+
+    $this->setAddKept($addkept);
+  }
+
+  public function setAddKept(array $addkept)
+  {
     Assertion::allIsArray($addkept);
     foreach($addkept as $data) {
       Assertion::keyExists($data, 'type');
@@ -93,16 +105,10 @@ class Parameters
       Assertion::isArray($data['value']);
 
       $dice = Dice::initWithValue($data['type'], $data['value']);
-      if (in_array(Modifier::COMPROMISED, $modifiers)) {
+      if (in_array(Modifier::COMPROMISED, $this->modifiers)) {
         Assertion::false($dice->hasStrife());
       }
     }
-
-    $this->tn = $tn;
-    $this->ring = $ring;
-    $this->skill = $skill;
-    $this->modifiers = $modifiers;
-    $this->channeled = $channeled;
     $this->addkept = $addkept;
   }
 }

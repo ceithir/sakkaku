@@ -1509,4 +1509,76 @@ class RollTest extends TestCase
     $this->assertEquals(['rerolls' => ['reasonless']], $roll->metadata);
     $this->assertCount(5, $roll->dices);
   }
+
+  public function testCanUpdateAddedKeptDice()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->updateParameters([
+      'addkept' => [['type' => 'skill', 'value' => ['success' => 1, 'opportunity' => 1]]],
+    ]);
+    $this->assertEquals(
+      [['type' => 'skill', 'value' => ['success' => 1, 'opportunity' => 1]]],
+      $roll->parameters->addkept
+    );
+  }
+
+  public function testCannotUpdateAddedKeptDiceIfAtLeastOneDiceKeptAlready()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'kept',
+          'value' => ['success' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->updateParameters([
+      'addkept' => [['type' => 'skill', 'value' => ['success' => 1, 'opportunity' => 1]]],
+    ]);
+  }
+
+  public function testCannotUpdateAddedKeptDiceIfRollIsComplete()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['compromised']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'dropped',
+          'value' => ['strife' => 1, 'opportunity' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->updateParameters([
+      'addkept' => [['type' => 'skill', 'value' => ['success' => 1, 'opportunity' => 1]]],
+    ]);
+  }
 }

@@ -92,12 +92,7 @@ class Roll
   public function keep(array $positions): void
   {
     $this->assertKeepable($positions);
-    $noKeptDiceYet = count(array_filter(
-      $this->dices,
-      function (Dice $dice) {
-        return $dice->status ===  Dice::KEPT;
-      }
-    )) === 0;
+    $noKeptDiceYet = $this->hasNoKeptDice();
 
     $explosions = [];
     for ($i=0; $i < count($this->dices); $i++) {
@@ -213,6 +208,19 @@ class Roll
     return false;
   }
 
+  public function updateParameters(array $parameters)
+  {
+    Assertion::false($this->isComplete());
+
+    if (isset($parameters['addkept'])) {
+      Assertion::true($this->hasNoKeptDice());
+
+      $addkept = $parameters['addkept'];
+      Assertion::isArray($addkept);
+      $this->parameters->setAddKept($addkept);
+    }
+  }
+
   public function result(): array
   {
     return array_reduce(
@@ -249,6 +257,16 @@ class Roll
       $this->dices,
       function(Dice $dice) {
         return $dice->isPending();
+      }
+    )) === 0;
+  }
+
+  public function hasNoKeptDice(): bool
+  {
+    return count(array_filter(
+      $this->dices,
+      function (Dice $dice) {
+        return $dice->status ===  Dice::KEPT;
       }
     )) === 0;
   }
