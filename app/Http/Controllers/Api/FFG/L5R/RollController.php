@@ -79,7 +79,7 @@ class RollController extends Controller
     public function stateful($id, $action, Request $request)
     {
       $rollWithContext = ContextualizedRoll::findOrFail($id);
-      if(!in_array($action, ['keep', 'reroll', 'alter'])) {
+      if(!in_array($action, ['keep', 'reroll', 'alter', 'parameters'])) {
         return response(null, 404);
       }
 
@@ -99,6 +99,9 @@ class RollController extends Controller
         }
         if ($action === 'alter') {
           $roll->alter($request->input('alterations'), $request->input('modifier'));
+        }
+        if ($action === 'parameters') {
+          $roll->updateParameters($request->all());
         }
 
         $rollWithContext->setRoll($roll);
