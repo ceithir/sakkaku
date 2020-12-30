@@ -212,6 +212,24 @@ class Roll
   {
     Assertion::false($this->isComplete());
 
+    if (isset($parameters['modifiers'])) {
+      $modifiers = $parameters['modifiers'];
+      Assertion::count(
+        array_diff($this->parameters->modifiers, $modifiers),
+        0,
+        'Can only add modifiers, not remove/change some.'
+      );
+
+      Assertion::true($this->hasNoKeptDice());
+      Assertion::allInArray(
+        array_diff($modifiers, $this->parameters->modifiers),
+        [Modifier::RULELESS],
+        'Can only add base reroll modifier for now.'
+      );
+
+      $this->parameters->setModifiers($modifiers);
+    }
+
     if (isset($parameters['addkept'])) {
       Assertion::true($this->hasNoKeptDice());
 

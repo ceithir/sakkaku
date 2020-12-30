@@ -1581,4 +1581,51 @@ class RollTest extends TestCase
       'addkept' => [['type' => 'skill', 'value' => ['success' => 1, 'opportunity' => 1]]],
     ]);
   }
+
+  public function testCanAddABaseRerollAfterCreation()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['void']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->updateParameters([
+      'modifiers' => ['void', 'ruleless'],
+    ]);
+    $this->assertEquals(
+      ['void', 'ruleless'],
+      $roll->parameters->modifiers
+    );
+  }
+
+  public function testCannotRemoveExistingModifier()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['void', 'compromised'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->updateParameters([
+      'modifiers' => ['void', 'ruleless'],
+    ]);
+  }
 }

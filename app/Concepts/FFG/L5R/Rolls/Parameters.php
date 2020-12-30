@@ -28,17 +28,33 @@ class Parameters
     $tn = $parameters['tn'] ?? null;
     Assertion::nullOrInteger($tn);
     Assertion::nullOrGreaterOrEqualThan($tn, 1);
+    $this->tn = $tn;
 
     $ring = $parameters['ring'];
     Assertion::integer($ring);
     Assertion::between($ring, 1, 5);
+    $this->ring = $ring;
 
     $skill = $parameters['skill'];
     Assertion::integer($skill);
     Assertion::between($skill, 0, 5);
+    $this->skill = $skill;
 
     $modifiers = $parameters['modifiers'] ?? array();
     Assertion::isArray($modifiers);
+    $this->setModifiers($modifiers);
+
+    $channeled = $parameters['channeled'] ?? [];
+    Assertion::isArray($channeled);
+    $this->setChanneled($channeled);
+
+    $addkept = $parameters['addkept'] ?? [];
+    Assertion::isArray($addkept);
+    $this->setAddKept($addkept);
+  }
+
+  public function setModifiers(array $modifiers)
+  {
     Assertion::allInArray($modifiers, Modifier::LIST);
     Assertion::eq(count(array_unique($modifiers)), count($modifiers));
     Assertion::false(
@@ -49,9 +65,11 @@ class Parameters
       count(array_intersect($modifiers, Modifier::SCHOOLS)),
       1
     );
+    $this->modifiers = $modifiers;
+  }
 
-    $channeled = $parameters['channeled'] ?? [];
-    Assertion::isArray($channeled);
+  private function setChanneled(array $channeled)
+  {
     Assertion::allIsArray($channeled);
     $channeledDices = array_map(
       function(array $data) {
@@ -71,7 +89,7 @@ class Parameters
           return $dice->type ==='ring';
         }
       )) ,
-      $ring + (in_array(Modifier::VOID, $modifiers) ? 1 : 0)
+      $this->ring + (in_array(Modifier::VOID, $this->modifiers) ? 1 : 0)
     );
     Assertion::lessOrEqualThan(
       count(array_filter(
@@ -80,19 +98,9 @@ class Parameters
           return $dice->type ==='skill';
         }
       )) ,
-      $skill
+      $this->skill
     );
-
-    $addkept = $parameters['addkept'] ?? [];
-    Assertion::isArray($addkept);
-
-    $this->tn = $tn;
-    $this->ring = $ring;
-    $this->skill = $skill;
-    $this->modifiers = $modifiers;
-    $this->channeled = $channeled;
-
-    $this->setAddKept($addkept);
+    $this->channeled = $channeled;    
   }
 
   public function setAddKept(array $addkept)
