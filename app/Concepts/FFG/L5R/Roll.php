@@ -404,23 +404,35 @@ class Roll
       Assertion::count($positions, 0);
     }
 
+    // Cannot use Scorpion technique if there is an unrerolled distinction
     if (in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
       if (in_array(Modifier::DISTINCTION, $this->parameters->modifiers)) {
         Assertion::inArray(Modifier::DISTINCTION, $this->getRerolls());
       }
     }
 
-    foreach([
-      [Modifier::ADVERSITY, Modifier::DISTINCTION, Modifier::DEATHDEALER, Modifier::MANIPULATOR],
-      [Modifier::TWO_HEAVENS, Modifier::RUTHLESS],
-    ] as $mods) {
-      if (in_array($modifier, $mods)) {
-        break;
+    if (!in_array($modifier, Modifier::ADVANTAGE_REROLLS)) {
+      $this->assertAdvantageRerollsDone();
+      if (!in_array($modifier, Modifier::GM_REROLLS)) {
+        $this->assertGmRerollsDone();
       }
-      foreach($mods as $mod) {
-        if (in_array($mod, $this->parameters->modifiers)) {
-          Assertion::inArray($mod, $this->getRerolls());
-        }
+    }
+  }
+
+  private function assertAdvantageRerollsDone()
+  {
+    foreach(Modifier::ADVANTAGE_REROLLS as $mod) {
+      if (in_array($mod, $this->parameters->modifiers)) {
+        Assertion::inArray($mod, $this->getRerolls());
+      }
+    }
+  }
+
+  private function assertGmRerollsDone()
+  {
+    foreach(Modifier::GM_REROLLS as $mod) {
+      if (in_array($mod, $this->parameters->modifiers)) {
+        Assertion::inArray($mod, $this->getRerolls());
       }
     }
   }
@@ -428,7 +440,8 @@ class Roll
   private function assertAlterable(array $alterations, string $modifier)
   {
     Assertion::inArray($modifier, Modifier::ALTERATION_ENABLERS);
-    Assertion::false($this->requiresReroll());
+    $this->assertAdvantageRerollsDone();
+    $this->assertGmRerollsDone();
     Assertion::true($this->requiresAlteration());
     Assertion::inArray($modifier, $this->parameters->modifiers);
     Assertion::notInArray($modifier, $this->getRerolls());

@@ -1628,4 +1628,64 @@ class RollTest extends TestCase
       'modifiers' => ['void', 'ruleless'],
     ]);
   }
+
+  public function testCanRerollAfterAlterationIfAskedNicely()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['ruleless', 'reasonless']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->alter(
+      [
+        [
+          'position' => 0,
+          'value' => ['success' => 1],
+        ],
+      ],
+      'reasonless'
+    );
+    $this->assertEquals(['rerolls' => ['reasonless']], $roll->metadata);
+    $this->assertCount(2, $roll->dices);
+    $roll->reroll([1], 'ruleless');
+    $this->assertEquals(['rerolls' => ['reasonless', 'ruleless']], $roll->metadata);
+    $this->assertCount(3, $roll->dices);
+  }
+
+  public function testSomeRerollStillNeedsToHappenBeforeAlteration()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['2heavens', 'reasonless']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->alter(
+      [
+        [
+          'position' => 0,
+          'value' => ['success' => 1],
+        ],
+      ],
+      'reasonless'
+    );
+  }
 }

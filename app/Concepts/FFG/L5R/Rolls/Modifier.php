@@ -48,6 +48,18 @@ class Modifier
     self::SAILOR,
   ];
 
+  const ADVANTAGE_REROLLS = [
+    self::ADVERSITY,
+    self::DISTINCTION,
+    self::DEATHDEALER,
+    self::MANIPULATOR
+  ];
+
+  const GM_REROLLS = [
+    self::TWO_HEAVENS,
+    self::RUTHLESS,
+  ];
+
   const SCHOOLS = [
     self::SHADOW,
     self::DEATHDEALER,
