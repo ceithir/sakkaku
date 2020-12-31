@@ -227,7 +227,7 @@ class Roll
         $newModifiers,
         function (string $modifier) {
           Assertion::true(
-            $modifier === Modifier::RULELESS || Modifier::isSpecialReroll($modifier),
+            Modifier::isSpecialReroll($modifier),
             'Can only add specific reroll modifiers for now.'
           );
         }

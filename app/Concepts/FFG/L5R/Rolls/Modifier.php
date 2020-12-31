@@ -14,7 +14,6 @@ class Modifier
   const ISHIKEN = 'ishiken';
   const MANIPULATOR = 'manipulator';
   const TWO_HEAVENS = "2heavens";
-  const RULELESS = "ruleless";
   const RUTHLESS = "ruthless";
   const SAILOR = 'sailor';
   const REASONLESS = 'reasonless';
@@ -30,7 +29,6 @@ class Modifier
     self::ISHIKEN,
     self::MANIPULATOR,
     self::TWO_HEAVENS,
-    self::RULELESS,
     self::RUTHLESS,
     self::SAILOR,
     self::REASONLESS,
@@ -43,7 +41,6 @@ class Modifier
     self::DEATHDEALER,
     self::MANIPULATOR,
     self::TWO_HEAVENS,
-    self::RULELESS,
     self::RUTHLESS,
     self::SAILOR,
   ];
@@ -84,7 +81,7 @@ class Modifier
 
   public static function isSpecialReroll(string $modifier): bool
   {
-    return (bool) preg_match('/^ruleless[0-9]{2}$/', $modifier);
+    return (bool) preg_match('/^ruleless([0-9]{2})?$/', $modifier);
   }
 
   public function isRerollModifier(string $modifier): bool
