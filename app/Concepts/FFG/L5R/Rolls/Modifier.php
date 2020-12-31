@@ -14,7 +14,7 @@ class Modifier
   const ISHIKEN = 'ishiken';
   const MANIPULATOR = 'manipulator';
   const TWO_HEAVENS = "2heavens";
-  const RUTHLESS = "ruthless";
+  const RUTHLESS = "ruthless"; // Custom reroll with a GM-timing. More or less legacy as no actual human will ever use that.
   const SAILOR = 'sailor';
 
   const LIST = [
