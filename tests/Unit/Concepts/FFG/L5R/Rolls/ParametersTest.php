@@ -84,6 +84,17 @@ class ParametersTest extends TestCase
     ]);
   }
 
+  public function testErrorProperlyOnNonExistingModifiers()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'tn' => 3,
+      'ring' => 3,
+      'skill' => 3,
+      'modifiers' => ['toto'],
+    ]);
+  }
+
   public function testCanOnlyHaveOneSchoolModifier()
   {
     $this->expectException(InvalidArgumentException::class);

@@ -55,7 +55,13 @@ class Parameters
 
   public function setModifiers(array $modifiers)
   {
-    Assertion::allInArray($modifiers, Modifier::LIST);
+    Assertion::allString($modifiers);
+    array_walk(
+      $modifiers,
+      function (string $modifier) {
+        Assertion::true(Modifier::isValidModifier($modifier));
+      },
+    );
     Assertion::eq(count(array_unique($modifiers)), count($modifiers));
     Assertion::false(
       in_array(Modifier::ADVERSITY, $modifiers) && in_array(Modifier::DISTINCTION, $modifiers),

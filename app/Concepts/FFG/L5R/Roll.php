@@ -197,8 +197,8 @@ class Roll
 
   public function requiresReroll(): bool
   {
-    foreach(Modifier::REROLL_ENABLERS as $modifier) {
-      if (in_array($modifier, $this->parameters->modifiers)) {
+    foreach ($this->parameters->modifiers as $modifier) {
+      if (Modifier::isRerollModifier($modifier)) {
         if (!in_array($modifier, $this->getRerolls())) {
           return true;
         }
@@ -214,6 +214,7 @@ class Roll
 
     if (isset($parameters['modifiers'])) {
       $modifiers = $parameters['modifiers'];
+      Assertion::allString($modifiers);
       Assertion::count(
         array_diff($this->parameters->modifiers, $modifiers),
         0,
@@ -221,10 +222,15 @@ class Roll
       );
 
       Assertion::true($this->hasNoKeptDice());
-      Assertion::allInArray(
-        array_diff($modifiers, $this->parameters->modifiers),
-        [Modifier::RULELESS],
-        'Can only add base reroll modifier for now.'
+      $newModifiers = array_diff($modifiers, $this->parameters->modifiers);
+      array_walk(
+        $newModifiers,
+        function (string $modifier) {
+          Assertion::true(
+            $modifier === Modifier::RULELESS || Modifier::isSpecialReroll($modifier),
+            'Can only add specific reroll modifiers for now.'
+          );
+        }
       );
 
       $this->parameters->setModifiers($modifiers);
@@ -364,7 +370,7 @@ class Roll
   private function assertRerollable(array $positions, string $modifier)
   {
     Assertion::true($this->requiresReroll());
-    Assertion::inArray($modifier, Modifier::REROLL_ENABLERS);
+    Assertion::true(Modifier::isRerollModifier($modifier));
     Assertion::inArray($modifier, $this->parameters->modifiers);
     Assertion::notInArray($modifier, $this->getRerolls());
     $this->assertPositions($positions);

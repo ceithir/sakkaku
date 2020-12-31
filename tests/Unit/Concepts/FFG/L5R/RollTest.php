@@ -1688,4 +1688,49 @@ class RollTest extends TestCase
       'reasonless'
     );
   }
+
+  public function testCanRerollUpToOneHundredTimesIFWantTo()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['ruleless', 'ruleless00', 'ruleless99']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0], 'ruleless');
+    $roll->reroll([1], 'ruleless00');
+    $roll->reroll([2], 'ruleless99');
+    $this->assertEquals(['rerolls' => ['ruleless', 'ruleless00', 'ruleless99']], $roll->metadata);
+    $this->assertCount(4, $roll->dices);
+  }
+
+  public function testCanAddExtraRerollOnTheFlyIfWantTo()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['ruleless']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0], 'ruleless');
+    $roll->updateParameters(['modifiers' => ['ruleless', 'ruleless00']]);
+    $roll->reroll([1], 'ruleless00');
+    $this->assertEquals(['rerolls' => ['ruleless', 'ruleless00']], $roll->metadata);
+  }
 }

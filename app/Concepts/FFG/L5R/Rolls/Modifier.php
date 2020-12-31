@@ -72,4 +72,27 @@ class Modifier
     self::ISHIKEN,
     self::REASONLESS,
   ];
+
+  public static function isValidModifier(string $modifier): bool
+  {
+    if (self::isSpecialReroll($modifier)) {
+      return true;
+    }
+
+    return in_array($modifier, Modifier::LIST);
+  }
+
+  public static function isSpecialReroll(string $modifier): bool
+  {
+    return (bool) preg_match('/^ruleless[0-9]{2}$/', $modifier);
+  }
+
+  public function isRerollModifier(string $modifier): bool
+  {
+    if (self::isSpecialReroll($modifier)) {
+      return true;
+    }
+
+    return in_array($modifier, self::REROLL_ENABLERS);
+  }
 }
