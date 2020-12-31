@@ -84,7 +84,7 @@ class Modifier
     return (bool) preg_match('/^ruleless([0-9]{2})?$/', $modifier);
   }
 
-  public function isRerollModifier(string $modifier): bool
+  public static function isRerollModifier(string $modifier): bool
   {
     if (self::isSpecialReroll($modifier)) {
       return true;
