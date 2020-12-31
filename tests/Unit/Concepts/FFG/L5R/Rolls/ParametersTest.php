@@ -63,13 +63,13 @@ class ParametersTest extends TestCase
     ]);
   }
 
-  public function testRefuseMoreThanFiveDicesInAGivenCategory()
+  public function testRefuseMoreThanTenDicesInAGivenCategory()
   {
     $this->expectException(InvalidArgumentException::class);
     $parameters = new Parameters([
       'tn' => 3,
       'ring' => 3,
-      'skill' => 6,
+      'skill' => 11,
     ]);
   }
 
