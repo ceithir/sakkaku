@@ -1733,4 +1733,34 @@ class RollTest extends TestCase
     $roll->reroll([1], 'ruleless00');
     $this->assertEquals(['rerolls' => ['ruleless', 'ruleless00']], $roll->metadata);
   }
+
+  public function testCanAlsoAddAlterations()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['ruleless42']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->reroll([0], 'ruleless42');
+    $roll->updateParameters(['modifiers' => ['ruleless42', 'reasonless13']]);
+    $roll->alter(
+      [
+        [
+          'position' => 1,
+          'value' => ['success' => 1],
+        ],
+      ],
+      'reasonless13'
+    );
+    $this->assertEquals(['rerolls' => ['ruleless42', 'reasonless13']], $roll->metadata);
+  }
 }

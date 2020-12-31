@@ -227,7 +227,7 @@ class Roll
         $newModifiers,
         function (string $modifier) {
           Assertion::true(
-            Modifier::isSpecialReroll($modifier),
+            Modifier::isSpecialReroll($modifier) || Modifier::isSpecialAlteration($modifier),
             'Can only add specific reroll modifiers for now.'
           );
         }
@@ -445,7 +445,7 @@ class Roll
 
   private function assertAlterable(array $alterations, string $modifier)
   {
-    Assertion::inArray($modifier, Modifier::ALTERATION_ENABLERS);
+    Assertion::true(Modifier::isAlterationModifier($modifier));
     $this->assertAdvantageRerollsDone();
     $this->assertGmRerollsDone();
     Assertion::true($this->requiresAlteration());
@@ -506,8 +506,8 @@ class Roll
 
   private function requiresAlteration(): bool
   {
-    foreach(Modifier::ALTERATION_ENABLERS as $modifier) {
-      if (in_array($modifier, $this->parameters->modifiers)) {
+    foreach ($this->parameters->modifiers as $modifier) {
+      if (Modifier::isAlterationModifier($modifier)) {
         if (!in_array($modifier, $this->getRerolls())) {
           return true;
         }

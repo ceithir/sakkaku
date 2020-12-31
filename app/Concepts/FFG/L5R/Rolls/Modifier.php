@@ -16,7 +16,6 @@ class Modifier
   const TWO_HEAVENS = "2heavens";
   const RUTHLESS = "ruthless";
   const SAILOR = 'sailor';
-  const REASONLESS = 'reasonless';
 
   const LIST = [
     self::DISTINCTION,
@@ -31,7 +30,6 @@ class Modifier
     self::TWO_HEAVENS,
     self::RUTHLESS,
     self::SAILOR,
-    self::REASONLESS,
   ];
 
   const REROLL_ENABLERS = [
@@ -67,12 +65,11 @@ class Modifier
 
   const ALTERATION_ENABLERS = [
     self::ISHIKEN,
-    self::REASONLESS,
   ];
 
   public static function isValidModifier(string $modifier): bool
   {
-    if (self::isSpecialReroll($modifier)) {
+    if (self::isSpecialReroll($modifier) || self::isSpecialAlteration($modifier)) {
       return true;
     }
 
@@ -91,5 +88,19 @@ class Modifier
     }
 
     return in_array($modifier, self::REROLL_ENABLERS);
+  }
+
+  public static function isSpecialAlteration(string $modifier): bool
+  {
+    return (bool) preg_match('/^reasonless([0-9]{2})?$/', $modifier);
+  }
+
+  public static function isAlterationModifier(string $modifier): bool
+  {
+    if (self::isSpecialAlteration($modifier)) {
+      return true;
+    }
+
+    return in_array($modifier, self::ALTERATION_ENABLERS);
   }
 }
