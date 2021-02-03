@@ -19,13 +19,14 @@ class InheritanceRoll
     $this->metadata = $metadata;
   }
 
-  public static function init(): InheritanceRoll
+  public static function init(array $metadata = array()): InheritanceRoll
   {
     return new InheritanceRoll(
       [
         InheritanceDice::init(),
         InheritanceDice::init(),
-      ]
+      ],
+      $metadata
     );
   }
 

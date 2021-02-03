@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\FFG\L5R\RollController;
 use App\Models\ContextualizedRoll;
+use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,5 @@ Route::middleware('auth:sanctum')->post('/ffg/l5r/rolls/create', [RollController
 Route::middleware('auth:sanctum')
     ->post('/ffg/l5r/rolls/{id}/{action}', [RollController::class, 'stateful'])
     ->where(['id' => '[0-9]+', 'action' => '[a-z]+']);
+
+Route::post('public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollController::class, 'stateless'])->where('action', '[a-z]+');
