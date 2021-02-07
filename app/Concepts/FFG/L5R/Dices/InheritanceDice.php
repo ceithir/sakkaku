@@ -40,6 +40,11 @@ class InheritanceDice
     return $this->status === self::PENDING;
   }
 
+  public function isKept(): bool
+  {
+    return $this->status === self::KEPT;
+  }
+
   public function drop(): void
   {
     $this->status = self::DROPPED;

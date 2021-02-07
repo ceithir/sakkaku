@@ -77,6 +77,30 @@ class InheritanceRollController extends Controller
       return response()->json($this->toJson($this->load($uuid)));
     }
 
+    public function keep(string $uuid, Request $request)
+    {
+      $rollWithContext = $this->load($uuid);
+      if (!$rollWithContext->user_id || $rollWithContext->user_id !== $request->user()->id) {
+        return response(null, 403);
+      }
+
+      try {
+        Assertion::null($rollWithContext->result);
+
+        $roll = $rollWithContext->getRoll();
+        $roll->keep($request->input('position'));
+
+        $rollWithContext->setRoll($roll);
+        $rollWithContext->result = $roll->result();
+
+        $rollWithContext->save();
+        return response()->json($this->toJson($rollWithContext));
+      } catch (InvalidArgumentException $e) {
+        report($e);
+        return response(null, 400);
+      }
+    }
+
     private function load(string $uuid): ContextualizedRoll
     {
       return ContextualizedRoll::where('type', self::ROLL_TYPE)->where('uuid', $uuid)->firstOrFail();

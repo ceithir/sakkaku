@@ -72,4 +72,19 @@ class InheritanceRoll implements RollInterface
   {
     return json_decode(json_encode($this), true);
   }
+
+  public function result(): array
+  {
+    return array_map(
+      function (InheritanceDice $dice) {
+        return $dice->value;
+      },
+      array_filter(
+        $this->dices,
+        function (InheritanceDice $dice) {
+          return $dice->isKept();
+        }
+      )
+    );
+  }
 }

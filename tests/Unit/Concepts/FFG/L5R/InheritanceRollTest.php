@@ -65,4 +65,25 @@ class InheritanceRollTest extends TestCase
     $this->expectException(InvalidArgumentException::class);
     $roll->keep(1);
   }
+
+  public function testResult()
+  {
+    $roll = InheritanceRoll::fromArray([
+      'dices' => [
+        [
+          'status' => 'kept',
+          'value' => 3,
+        ],
+        [
+          'status' => 'kept',
+          'value' => 7,
+        ],
+        [
+          'status' => 'dropped',
+          'value' => 5,
+        ],
+      ],
+    ]);
+    $this->assertEquals([3, 7], $roll->result());
+  }
 }
