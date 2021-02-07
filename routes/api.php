@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     ];
 });
 
+/* Normal rolls */
+
 Route::get('public/ffg/l5r/rolls', [RollController::class, 'index']);
 Route::get('public/ffg/l5r/rolls/{id}', [RollController::class, 'show'])->where('id', '[0-9]+');
 
@@ -43,4 +45,9 @@ Route::middleware('auth:sanctum')
     ->post('/ffg/l5r/rolls/{id}/{action}', [RollController::class, 'stateful'])
     ->where(['id' => '[0-9]+', 'action' => '[a-z]+']);
 
-Route::post('public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollController::class, 'stateless'])->where('action', '[a-z]+');
+/* Heritage rolls */
+
+Route::get('/public/ffg/l5r/heritage-rolls/{uuid}', [InheritanceRollController::class, 'show'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+Route::post('/public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollController::class, 'stateless'])->where('action', '[a-z]+');
+
+Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/create', [InheritanceRollController::class, 'create']);

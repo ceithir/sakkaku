@@ -5,7 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
-use App\Concepts\FFG\L5R\Roll;
+use App\Concepts\Roll;
+use App\Concepts\FFG\L5R\Roll as L5RRoll;
+use App\Concepts\FFG\L5R\InheritanceRoll as L5RHeritageRoll;
 
 class ContextualizedRoll extends Model
 {
@@ -28,6 +30,13 @@ class ContextualizedRoll extends Model
 
     public function getRoll(): Roll
     {
-        return Roll::fromArray($this->roll);
+        switch ($this->type) {
+            case 'FFG-L5R':
+                return L5RRoll::fromArray($this->roll);
+            case 'FFG-L5R-Heritage':
+                return L5RHeritageRoll::fromArray($this->roll);
+            default:
+                throw 'Corrupted roll';
+        }
     }
 }

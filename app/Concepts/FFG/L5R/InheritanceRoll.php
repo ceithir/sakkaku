@@ -4,8 +4,9 @@ namespace App\Concepts\FFG\L5R;
 
 use Assert\Assertion;
 use App\Concepts\FFG\L5R\Dices\InheritanceDice;
+use App\Concepts\Roll as RollInterface;
 
-class InheritanceRoll
+class InheritanceRoll implements RollInterface
 {
   public array $dices;
 
@@ -65,5 +66,10 @@ class InheritanceRoll
     $finalDice = InheritanceDice::init();
     $finalDice->keep();
     $this->dices[] = $finalDice;
+  }
+
+  public function toArray(): array
+  {
+    return json_decode(json_encode($this), true);
   }
 }

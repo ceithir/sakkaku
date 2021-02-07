@@ -6,8 +6,9 @@ use Assert\Assertion;
 use App\Concepts\FFG\L5R\Rolls\Parameters;
 use App\Concepts\FFG\L5R\Dices\Dice;
 use App\Concepts\FFG\L5R\Rolls\Modifier;
+use App\Concepts\Roll as RollInterface;
 
-class Roll
+class Roll implements RollInterface
 {
   public Parameters $parameters;
 
