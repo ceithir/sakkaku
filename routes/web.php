@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/heritage/{uuid?}', function () {
+    return File::get(public_path() . '/react/index.html');
+})->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+
 Route::get('/rolls/{id?}', function () {
     return File::get(public_path() . '/react/index.html');
 })->where('id', '[0-9]+');
