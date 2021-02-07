@@ -11,6 +11,8 @@ use App\Models\ContextualizedRoll;
 
 class RollController extends Controller
 {
+    const ROLL_TYPE = 'FFG-L5R';
+
     public function stateless($action, Request $request)
     {
       if(!in_array($action, ['create', 'keep', 'reroll', 'alter'])) {
@@ -47,7 +49,7 @@ class RollController extends Controller
     {
       try {
         $roll = new ContextualizedRoll();
-        $roll->type = 'FFG-L5R';
+        $roll->type = self::ROLL_TYPE;
         $roll->user_id = $request->user()->id;
 
         $campaign = $request->input('campaign');
@@ -76,9 +78,9 @@ class RollController extends Controller
       }
     }
 
-    public function stateful($id, $action, Request $request)
+    public function stateful(int $id, string $action, Request $request)
     {
-      $rollWithContext = ContextualizedRoll::findOrFail($id);
+      $rollWithContext = $this->loadRoll($id);
       if(!in_array($action, ['keep', 'reroll', 'alter', 'parameters'])) {
         return response(null, 404);
       }
@@ -117,16 +119,14 @@ class RollController extends Controller
       }
     }
 
-    public function show($id)
+    public function show(int $id)
     {
-      $roll = ContextualizedRoll::findOrFail($id);
-
-      return response()->json($this->rollToPublicArray($roll));
+      return response()->json($this->rollToPublicArray($this->loadRoll($id)));
     }
 
     public function index(Request $request)
     {
-      $query = ContextualizedRoll::orderBy('created_at', 'desc');
+      $query = ContextualizedRoll::where('type', self::ROLL_TYPE)->orderBy('created_at', 'desc');
 
       if ($request->input('campaign')) {
         $query->where('campaign', $request->input('campaign'));
@@ -161,6 +161,11 @@ class RollController extends Controller
         'first' => $paginator->firstItem(),
         'last' => $paginator->lastItem(),
       ]);
+    }
+
+    private function loadRoll(int $id): ContextualizedRoll
+    {
+      return ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
     }
 
     private function rollToPublicArray(ContextualizedRoll $roll): array
