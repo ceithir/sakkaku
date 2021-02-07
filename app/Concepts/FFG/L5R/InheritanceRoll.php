@@ -79,12 +79,12 @@ class InheritanceRoll implements RollInterface
       function (InheritanceDice $dice) {
         return $dice->value;
       },
-      array_filter(
+      array_values(array_filter(
         $this->dices,
         function (InheritanceDice $dice) {
           return $dice->isKept();
         }
-      )
+      ))
     );
   }
 }

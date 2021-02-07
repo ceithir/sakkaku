@@ -71,16 +71,16 @@ class InheritanceRollTest extends TestCase
     $roll = InheritanceRoll::fromArray([
       'dices' => [
         [
+          'status' => 'dropped',
+          'value' => 5,
+        ],
+        [
           'status' => 'kept',
           'value' => 3,
         ],
         [
           'status' => 'kept',
           'value' => 7,
-        ],
-        [
-          'status' => 'dropped',
-          'value' => 5,
         ],
       ],
     ]);
