@@ -52,3 +52,4 @@ Route::post('/public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollControlle
 
 Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/create', [InheritanceRollController::class, 'create']);
 Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/{uuid}/keep', [InheritanceRollController::class, 'keep'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+Route::middleware('auth:sanctum')->get('/ffg/l5r/heritage-rolls', [InheritanceRollController::class, 'index']);

@@ -77,6 +77,29 @@ class InheritanceRollController extends Controller
       return response()->json($this->toJson($this->load($uuid)));
     }
 
+    public function index(Request $request)
+    {
+      $query = ContextualizedRoll::where('type', self::ROLL_TYPE)->orderBy('created_at', 'desc');
+
+      $query->where('user', $request->user()->id);
+
+      $paginator = $query
+        ->with('user')
+        ->paginate();
+
+      return response()->json([
+        'items' => $paginator->map(
+          function(ContextualizedRoll $roll) {
+            return $this->toJson($roll);
+          }
+        ),
+        'total' => $paginator->total(),
+        'per_page' => $paginator->perPage(),
+        'first' => $paginator->firstItem(),
+        'last' => $paginator->lastItem(),
+      ]);
+    }
+
     public function keep(string $uuid, Request $request)
     {
       $rollWithContext = $this->load($uuid);
