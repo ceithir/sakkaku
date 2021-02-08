@@ -81,7 +81,7 @@ class InheritanceRollController extends Controller
     {
       $query = ContextualizedRoll::where('type', self::ROLL_TYPE)->orderBy('created_at', 'desc');
 
-      $query->where('user', $request->user()->id);
+      $query->where('user_id', $request->user()->id);
 
       $paginator = $query
         ->with('user')
