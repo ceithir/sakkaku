@@ -9,6 +9,8 @@ use Assert\Assertion;
 use Assert\InvalidArgumentException;
 use Illuminate\Support\Str;
 use App\Models\ContextualizedRoll;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\HeritageRolled;
 
 class InheritanceRollController extends Controller
 {
@@ -51,7 +53,8 @@ class InheritanceRollController extends Controller
         $campaign = $request->input('campaign');
         $character = $request->input('character');
         $description = $request->input('description');
-        Assertion::allNotEmpty([$campaign, $character, $description]);
+        $gmEmail = $request->input('gm_email');
+        Assertion::allNotEmpty([$campaign, $character, $description, $gmEmail]);
 
         $roll->uuid = Str::uuid();
         $roll->campaign = $campaign;
@@ -61,6 +64,8 @@ class InheritanceRollController extends Controller
         $roll->setRoll(InheritanceRoll::init($request->input('metadata', [])));
 
         $roll->save();
+
+        Mail::to($gmEmail)->send(new HeritageRolled($roll));
 
         return response()->json(
           $this->toJson($roll),

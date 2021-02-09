@@ -13,17 +13,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/heritage/{uuid?}', function () {
+Route::get('/heritage/{uuid}', function () {
     return File::get(public_path() . '/react/index.html');
-})->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+})->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')->name('heritage.show');
+
+Route::get('/heritage', function () {
+    return File::get(public_path() . '/react/index.html');
+});
 
 Route::middleware('auth:sanctum')->get('/heritage/list', function () {
     return File::get(public_path() . '/react/index.html');
 });
 
-Route::get('/rolls/{id?}', function () {
+Route::get('/rolls/{id}', function () {
     return File::get(public_path() . '/react/index.html');
 })->where('id', '[0-9]+');
+
+Route::get('/rolls', function () {
+    return File::get(public_path() . '/react/index.html');
+});
 
 Route::get('/', function () {
     return File::get(public_path() . '/react/index.html');
