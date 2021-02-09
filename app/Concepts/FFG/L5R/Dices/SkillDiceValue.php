@@ -49,7 +49,7 @@ class SkillDiceValue extends DiceValue
 
   public static function random(): DiceValue
   {
-    return new self(self::FACETS[array_rand(self::FACETS)]);
+    return new self(self::FACETS[random_int(0, count(self::FACETS)-1)]);
   }
 
   public function getType(): string
