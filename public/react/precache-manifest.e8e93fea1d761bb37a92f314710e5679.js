@@ -1,31 +1,35 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b1877528e432d16a7edbeeb716394c08",
+    "revision": "9cef6bce4042d6fa6e2f34dbb0ebc8bc",
     "url": "/react/index.html"
   },
   {
-    "revision": "0e1eb6cd30ccfa981a24",
+    "revision": "205756da9e39779195d6",
     "url": "/react/static/css/2.027e9bb2.chunk.css"
   },
   {
-    "revision": "37191c1dd945df2ae874",
-    "url": "/react/static/css/main.d8ff338d.chunk.css"
+    "revision": "f2e946bc8d9cc57dcad8",
+    "url": "/react/static/css/main.098415c0.chunk.css"
   },
   {
-    "revision": "0e1eb6cd30ccfa981a24",
-    "url": "/react/static/js/2.a79c125b.chunk.js"
+    "revision": "205756da9e39779195d6",
+    "url": "/react/static/js/2.86f94fd3.chunk.js"
   },
   {
     "revision": "3453b8997016469371284a28c0e873e2",
-    "url": "/react/static/js/2.a79c125b.chunk.js.LICENSE.txt"
+    "url": "/react/static/js/2.86f94fd3.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "37191c1dd945df2ae874",
-    "url": "/react/static/js/main.a4a2462a.chunk.js"
+    "revision": "f2e946bc8d9cc57dcad8",
+    "url": "/react/static/js/main.b6efb806.chunk.js"
   },
   {
     "revision": "9042eeeb25b020189839",
     "url": "/react/static/js/runtime-main.3da33eb3.js"
+  },
+  {
+    "revision": "fcead4bc6102b514a465d68a4fab66b2",
+    "url": "/react/static/media/background.fcead4bc.jpg"
   },
   {
     "revision": "f14fed519865099ad4ff1e021bfc1329",
@@ -52,8 +56,32 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/react/static/media/blackst.3fad8195.png"
   },
   {
+    "revision": "2494825f1fe2cf8ce802b91a86c10034",
+    "url": "/react/static/media/deathdealer.2494825f.jpg"
+  },
+  {
+    "revision": "01a0e421d38ddcbf96e3e7a886c521fb",
+    "url": "/react/static/media/ishiken.01a0e421.jpg"
+  },
+  {
     "revision": "20098cc4f44d9bec8d25044f3428717a",
     "url": "/react/static/media/logo.20098cc4.png"
+  },
+  {
+    "revision": "905b88b2ba3237d90a03a2eaba758e42",
+    "url": "/react/static/media/manipulator.905b88b2.png"
+  },
+  {
+    "revision": "50d8e5b667ada3f081a360e2a9fad463",
+    "url": "/react/static/media/sailor.50d8e5b6.png"
+  },
+  {
+    "revision": "8102a3e0f310b368900ed49d48e999be",
+    "url": "/react/static/media/shadow.8102a3e0.jpg"
+  },
+  {
+    "revision": "5002ad700142009801a6adee9e12806e",
+    "url": "/react/static/media/wandering.5002ad70.jpg"
   },
   {
     "revision": "c24c0c510f833e9e885f3e5410b6ae64",
