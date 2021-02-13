@@ -16,6 +16,7 @@ class Modifier
   const TWO_HEAVENS = "2heavens";
   const RUTHLESS = "ruthless"; // Custom reroll with a GM-timing. More or less legacy as no actual human will ever use that.
   const SAILOR = 'sailor';
+  const WANDERING = 'wandering';
 
   const LIST = [
     self::DISTINCTION,
@@ -30,6 +31,7 @@ class Modifier
     self::TWO_HEAVENS,
     self::RUTHLESS,
     self::SAILOR,
+    self::WANDERING,
   ];
 
   const REROLL_ENABLERS = [
@@ -65,6 +67,7 @@ class Modifier
 
   const ALTERATION_ENABLERS = [
     self::ISHIKEN,
+    self::WANDERING,
   ];
 
   public static function isValidModifier(string $modifier): bool

@@ -95,7 +95,7 @@ class Parameters
           return $dice->type ==='ring';
         }
       )) ,
-      $this->ring + (in_array(Modifier::VOID, $this->modifiers) ? 1 : 0)
+      $this->ringDiceRolled()
     );
     Assertion::lessOrEqualThan(
       count(array_filter(
@@ -104,7 +104,7 @@ class Parameters
           return $dice->type ==='skill';
         }
       )) ,
-      $this->skill
+      $this->skillDiceRolled()
     );
     $this->channeled = $channeled;    
   }
@@ -124,5 +124,27 @@ class Parameters
       }
     }
     $this->addkept = $addkept;
+  }
+
+  public function ringDiceRolled(): int
+  {
+    $total = $this->ring;
+
+    if (in_array(Modifier::VOID, $this->modifiers)) {
+      $total += 1;
+    }
+
+    return $total;
+  }
+
+  public function skillDiceRolled(): int
+  {
+    $total = $this->skill;
+
+    if (in_array(Modifier::WANDERING, $this->modifiers)) {
+      $total += 1;
+    }
+
+    return $total;
   }
 }

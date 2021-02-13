@@ -1763,4 +1763,127 @@ class RollTest extends TestCase
     );
     $this->assertEquals(['rerolls' => ['ruleless42', 'reasonless13']], $roll->metadata);
   }
+
+  public function testWanderingBladeHasAnExtraSkillDie()
+  {
+    $roll = Roll::init([
+      'ring' => 2, 'skill' => 3, 'modifiers' => ['wandering']
+    ]);
+    $this->assertCount(6, $roll->dices);
+    $this->assertCount(
+      2,
+      array_filter(
+        $roll->dices,
+        function($dice) {
+          return $dice->type ==='ring';
+        }
+      )
+    );
+    $this->assertCount(
+      4,
+      array_filter(
+        $roll->dices,
+        function($dice) {
+          return $dice->type ==='skill';
+        }
+      )
+    );
+  }
+
+  public function testWanderingBladeCanAlterTheirDiceToOpportunity()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 2,
+        'modifiers' => ['wandering'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->alter(
+      [
+        [
+          'position' => 0,
+          'value' => ['opportunity' => 1],
+        ],
+        [
+          'position' => 2,
+          'value' => ['opportunity' => 1],
+        ]
+      ],
+      'wandering'
+    );
+    $this->assertEquals(['rerolls' => ['wandering']], $roll->metadata);
+    $this->assertCount(6, $roll->dices);
+    $this->assertEquals(['source' => 'wandering'], $roll->dices[4]->metadata);
+    $this->assertEquals(['opportunity' => 1, 'strife' => 0, 'explosion' => 0, 'success' => 0], (array) $roll->dices[4]->value);
+  }
+
+  public function testWanderingBladeCannotAlterTheirDiceToAnythingElse()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 2,
+        'modifiers' => ['wandering'],
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->alter(
+      [
+        [
+          'position' => 0,
+          'value' => ['success' => 1],
+        ],
+        [
+          'position' => 2,
+          'value' => ['success' => 1],
+        ]
+      ],
+      'wandering'
+    );
+  }
 }

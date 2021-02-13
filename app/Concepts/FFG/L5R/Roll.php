@@ -53,8 +53,7 @@ class Roll implements RollInterface
     foreach($channeledRingDices as $dice) {
       $dices[] = $dice;
     }
-    $ringTotal = $parameters->ring + (in_array(Modifier::VOID, $parameters->modifiers) ? 1 : 0);
-    for ($i = 0; $i < $ringTotal - count($channeledRingDices); $i++) {
+    for ($i = 0; $i < $parameters->ringDiceRolled() - count($channeledRingDices); $i++) {
       $dices[] = Dice::init(Dice::RING);
     }
     $channeledSkillDices = array_filter(
@@ -66,7 +65,7 @@ class Roll implements RollInterface
     foreach($channeledSkillDices as $dice) {
       $dices[] = $dice;
     }
-    for ($i = 0; $i < $parameters->skill - count($channeledSkillDices); $i++) {
+    for ($i = 0; $i < $parameters->skillDiceRolled() - count($channeledSkillDices); $i++) {
       $dices[] = Dice::init(Dice::SKILL);
     }
     return new self(
@@ -343,11 +342,7 @@ class Roll implements RollInterface
 
   private function maxKeepable(): int
   {
-    $total = $this->parameters->ring;
-
-    if (in_array(Modifier::VOID, $this->parameters->modifiers)) {
-      $total += 1;
-    }
+    $total = $this->parameters->ringDiceRolled();
 
     $total += array_reduce(
       $this->dices,
@@ -475,6 +470,9 @@ class Roll implements RollInterface
     if ($modifier === Modifier::ISHIKEN) {
       $this->assertIshiken($alterations);
     }
+    if ($modifier === Modifier::WANDERING) {
+      $this->assertWandering($alterations);
+    }
   }
 
   private function assertIshiken(array $alterations)
@@ -502,6 +500,21 @@ class Roll implements RollInterface
       Assertion::true(
         ($chosenDice->isBlank() && !$alteredDice->isBlank()) || (!$chosenDice->isBlank() && $alteredDice->isBlank())
       );
+    }
+  }
+
+  private function assertWandering(array $alterations)
+  {
+    foreach ($alterations as $alteration) {
+      $chosenDice = $this->dices[$alteration['position']];
+      $alteredDice = Dice::initWithValue(
+        $chosenDice->type,
+        $alteration['value'],
+      );
+      Assertion::eq($alteredDice->value->opportunity, 1);
+      Assertion::eq($alteredDice->value->success, 0);
+      Assertion::eq($alteredDice->value->explosion, 0);
+      Assertion::eq($alteredDice->value->strife, 0);
     }
   }
 
