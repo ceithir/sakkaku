@@ -190,6 +190,24 @@ class Roll implements RollInterface
     $this->appendToRerollMetadata($modifier);
   }
 
+  public function channel(array $positions): void
+  {
+    Assertion::false($this->requiresReroll());
+    Assertion::false($this->requiresAlteration());
+    $this->assertPositions($positions);
+
+    for ($i=0; $i < count($this->dices); $i++) {
+      $dice = $this->dices[$i];
+      if ($dice->isPending()) {
+        if (in_array($i, $positions)) {
+          $dice->channel();
+        } else {
+          $dice->drop();
+        }
+      }
+    }
+  }
+
   public function isCompromised(): bool
   {
     return in_array(Modifier::COMPROMISED, $this->parameters->modifiers);

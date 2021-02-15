@@ -1886,4 +1886,28 @@ class RollTest extends TestCase
       'wandering'
     );
   }
+
+  public function testCanChannelDice()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['ring' => 1, 'skill' => 1],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $roll->channel([1]);
+    $this->assertCount(2, $roll->dices);
+    $this->assertEquals('dropped', $roll->dices[0]->status);
+    $this->assertEquals('channeled', $roll->dices[1]->status);
+    $this->assertTrue($roll->isComplete());
+  }
 }

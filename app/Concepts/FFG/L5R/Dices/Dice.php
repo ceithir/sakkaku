@@ -14,6 +14,7 @@ class Dice
   const DROPPED = 'dropped';
   const KEPT = 'kept';
   const REROLLED = 'rerolled';
+  const CHANNELED = 'channeled';
 
   const RING = 'ring';
   const SKILL = 'skill';
@@ -111,6 +112,12 @@ class Dice
     Assertion::true($this->isPending());
     $this->status = Dice::REROLLED;
     $this->metadata['end'] = $modifier;
+  }
+
+  public function channel(): void
+  {
+    Assertion::true($this->isPending());
+    $this->status = Dice::CHANNELED;
   }
 
   public function isSuccess(): bool
