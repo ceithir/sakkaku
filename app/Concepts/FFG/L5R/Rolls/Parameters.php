@@ -32,7 +32,7 @@ class Parameters
 
     $ring = $parameters['ring'];
     Assertion::integer($ring);
-    Assertion::between($ring, 1, 10);
+    Assertion::between($ring, 0, 10);
     $this->ring = $ring;
 
     $skill = $parameters['skill'];

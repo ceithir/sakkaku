@@ -1931,4 +1931,55 @@ class RollTest extends TestCase
     $this->expectException(InvalidArgumentException::class);
     $roll->channel([2]);
   }
+
+  public function testCanHaveARinglessRoll()
+  {
+    $roll = Roll::init(['ring' => 0, 'skill' => 2]);
+    $this->assertCount(2, $roll->dices);
+  }
+
+  public function testCanChannelARinglessRoll()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['ring' => 0, 'skill' => 2],
+      'dices' => [
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $roll->channel([1]);
+    $this->assertCount(2, $roll->dices);
+    $this->assertEquals('dropped', $roll->dices[0]->status);
+    $this->assertEquals('channeled', $roll->dices[1]->status);
+    $this->assertTrue($roll->isComplete());
+  }
+
+  public function testCannotKeepARinglessRoll()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['ring' => 0, 'skill' => 2],
+      'dices' => [
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->keep([1]);
+  }
 }
