@@ -194,6 +194,7 @@ class Roll implements RollInterface
   {
     Assertion::false($this->requiresReroll());
     Assertion::false($this->requiresAlteration());
+    Assertion::true($this->hasNoKeptDice());
     $this->assertPositions($positions);
 
     for ($i=0; $i < count($this->dices); $i++) {

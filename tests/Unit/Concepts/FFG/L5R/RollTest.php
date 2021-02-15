@@ -1905,4 +1905,30 @@ class RollTest extends TestCase
     $this->assertEquals('channeled', $roll->dices[1]->status);
     $this->assertTrue($roll->isComplete());
   }
+
+  public function testCannotChannelIfAnyDieIsKept()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => ['ring' => 1, 'skill' => 1],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'dropped',
+          'value' => [],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'kept',
+          'value' => ['explosion' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->channel([2]);
+  }
 }
