@@ -72,7 +72,6 @@ class RollTest extends TestCase
     $roll->keep([0]);
     $this->assertCount(1, $roll->dices);
     $this->assertEquals('kept', $roll->dices[0]->status);
-    $this->assertFalse($roll->isSuccess());
     $this->assertEquals(
       ['opportunity' => 0, 'strife' => 0, 'success' => 0],
       $roll->result()
@@ -175,7 +174,6 @@ class RollTest extends TestCase
     $this->assertTrue($roll->dices[3]->isPending());
     $this->assertEquals(['source' => 'explosion'], $roll->dices[3]->metadata);
     $this->assertEquals('ring', $roll->dices[3]->type);
-    $this->assertTrue($roll->isSuccess());
     $this->assertEquals(
       ['opportunity' => 1, 'strife' => 1, 'success' => 2],
       $roll->result()
@@ -200,7 +198,6 @@ class RollTest extends TestCase
       ],
     ]);
     $roll->keep([]);
-    $this->assertFalse($roll->isSuccess());
     $this->assertEquals(
       ['opportunity' => 0, 'strife' => 1, 'success' => 1],
       $roll->result()
@@ -928,7 +925,6 @@ class RollTest extends TestCase
     ]);
     $this->assertFalse($roll->isComplete());
     $roll->keep([0, 2]);
-    $this->assertTrue($roll->isSuccess());
     $this->assertTrue($roll->isComplete());
   }
 
@@ -1002,7 +998,6 @@ class RollTest extends TestCase
     ]);
     $this->assertFalse($roll->isComplete());
     $roll->keep([2]);
-    $this->assertTrue($roll->isSuccess());
     $this->assertTrue($roll->isComplete());
   }
 

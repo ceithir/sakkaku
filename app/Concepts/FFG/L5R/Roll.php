@@ -283,11 +283,6 @@ class Roll implements RollInterface
     );
   }
 
-  public function isSuccess(): bool
-  {
-    return $this->result()['success'] >= $this->parameters->tn;
-  }
-
   public function toArray(): array
   {
     return json_decode(json_encode($this), true);
