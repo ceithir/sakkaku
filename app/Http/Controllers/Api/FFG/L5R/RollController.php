@@ -15,7 +15,7 @@ class RollController extends Controller
 
     public function stateless($action, Request $request)
     {
-      if(!in_array($action, ['create', 'keep', 'reroll', 'alter'])) {
+      if(!in_array($action, ['create', 'keep', 'reroll', 'alter', 'channel'])) {
         return response(null, 404);
       }
 
@@ -36,6 +36,10 @@ class RollController extends Controller
 
         if ($action === 'alter') {
           $roll->alter($request->input('alterations'), $request->input('modifier'));
+        }
+
+        if ($action === 'channel') {
+          $roll->channel($request->input('positions'));
         }
 
         return response()->json($roll);
@@ -81,7 +85,7 @@ class RollController extends Controller
     public function stateful(int $id, string $action, Request $request)
     {
       $rollWithContext = $this->loadRoll($id);
-      if(!in_array($action, ['keep', 'reroll', 'alter', 'parameters'])) {
+      if(!in_array($action, ['keep', 'reroll', 'alter', 'parameters', 'channel'])) {
         return response(null, 404);
       }
 
@@ -104,6 +108,9 @@ class RollController extends Controller
         }
         if ($action === 'parameters') {
           $roll->updateParameters($request->all());
+        }
+        if ($action === 'channel') {
+          $roll->channel($request->input('positions'));
         }
 
         $rollWithContext->setRoll($roll);
