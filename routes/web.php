@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/probabilities', function () {
+    return File::get(public_path() . '/react/index.html');
+});
+
 Route::get('/heritage/{uuid}', function () {
     return File::get(public_path() . '/react/index.html');
 })->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')->name('heritage.show');
