@@ -71,6 +71,19 @@ class Parameters
       count(array_intersect($modifiers, Modifier::SCHOOLS)),
       1
     );
+    Assertion::between(count(array_filter(
+      $modifiers,
+      function (string $modifier) {
+        return Modifier::isUnskilledAssistModifier($modifier);
+      }
+    )), 0, 1);
+    Assertion::between(count(array_filter(
+      $modifiers,
+      function (string $modifier) {
+        return Modifier::isSkilledAssistModifier($modifier);
+      }
+    )), 0, 1);
+
     $this->modifiers = $modifiers;
   }
 
@@ -134,6 +147,8 @@ class Parameters
       $total += 1;
     }
 
+    $total += $this->unskilledAssistCount();
+
     return $total;
   }
 
@@ -145,6 +160,44 @@ class Parameters
       $total += 1;
     }
 
+    $total += $this->skilledAssistCount();
+
     return $total;
+  }
+
+  public function defaultKeepable(): int
+  {
+    $total = $this->ring;
+
+    if (in_array(Modifier::VOID, $this->modifiers)) {
+      $total += 1;
+    }
+
+    $total += $this->unskilledAssistCount();
+    $total += $this->skilledAssistCount();
+
+    return $total;
+  }
+
+  public function skilledAssistCount(): int
+  {
+    foreach ($this->modifiers as $modifier) {
+      if (Modifier::isSkilledAssistModifier($modifier)) {
+        return (int) substr($modifier, -2);
+      }
+    }
+
+    return 0;
+  }
+
+  public function unskilledAssistCount(): int
+  {
+    foreach ($this->modifiers as $modifier) {
+      if (Modifier::isUnskilledAssistModifier($modifier)) {
+        return (int) substr($modifier, -2);
+      }
+    }
+
+    return 0;
   }
 }

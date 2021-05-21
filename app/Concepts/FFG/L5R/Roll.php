@@ -356,7 +356,7 @@ class Roll implements RollInterface
 
   private function maxKeepable(): int
   {
-    $total = $this->parameters->ringDiceRolled();
+    $total = $this->parameters->defaultKeepable();
 
     $total += array_reduce(
       $this->dices,

@@ -204,4 +204,72 @@ class ParametersTest extends TestCase
       'modifiers' => ['compromised'],
     ]);
   }
+
+  public function testAcceptAssistModifiers()
+  {
+    $parameters = new Parameters([
+      'ring' => 1,
+      'skill' => 1,
+      'modifiers' => ['skilledassist01', 'unskilledassist02'],
+    ]);
+
+    $this->assertEquals(
+      ['skilledassist01', 'unskilledassist02'],
+      $parameters->modifiers
+    );
+    $this->assertEquals(
+      3,
+      $parameters->ringDiceRolled()
+    );
+    $this->assertEquals(
+      2,
+      $parameters->skillDiceRolled()
+    );
+    $this->assertEquals(
+      4,
+      $parameters->defaultKeepable()
+    );
+  }
+
+  public function testRefuseDuplicatedSkilledAssistModifiers()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'ring' => 1,
+      'skill' => 1,
+      'modifiers' => ['skilledassist01', 'skilledassist02'],
+    ]);
+  }
+
+  public function testRefuseDuplicatedUnskilledAssistModifiers()
+  {
+    $this->expectException(InvalidArgumentException::class);
+    $parameters = new Parameters([
+      'ring' => 1,
+      'skill' => 1,
+      'modifiers' => ['unskilledassist01', 'unskilledassist02'],
+    ]);
+  }
+
+  public function testChanneledDicesCountAssistProperly()
+  {
+    $parameters = new Parameters([
+      'tn' => 2,
+      'ring' => 1,
+      'skill' => 1,
+      'modifiers' => ['skilledassist01'],
+      'channeled' => [
+        ['type' => 'skill', 'value' => ['explosion' => 1]],
+        ['type' => 'skill', 'value' => ['success' => 1]],
+      ],
+    ]);
+    $this->assertEquals(
+      [
+        ['type' => 'skill', 'value' => ['explosion' => 1]],
+        ['type' => 'skill', 'value' => ['success' => 1]],
+      ],
+      $parameters->channeled
+    );
+  }
+
 }

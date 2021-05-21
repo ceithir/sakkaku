@@ -1982,4 +1982,105 @@ class RollTest extends TestCase
     $this->expectException(InvalidArgumentException::class);
     $roll->keep([1]);
   }
+
+  public function testAssistDiceAreRolled()
+  {
+    $roll = Roll::init([
+      'ring' => 3,
+      'skill' => 2,
+      'modifiers' => ['unskilledassist03', 'skilledassist01'],
+    ]);
+    $this->assertCount(9, $roll->dices);
+    $this->assertCount(
+      6,
+      array_filter(
+        $roll->dices,
+        function($dice) {
+          return $dice->type ==='ring';
+        }
+      )
+    );
+    $this->assertCount(
+      3,
+      array_filter(
+        $roll->dices,
+        function($dice) {
+          return $dice->type ==='skill';
+        }
+      )
+    );
+  }
+
+  public function testAssistDiceCanBeKept()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+        'modifiers' => ['skilledassist02'],
+      ],
+      'dices' => [
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $roll->keep([0, 1, 2]);
+    $this->assertEquals('kept', $roll->dices[0]->status);
+    $this->assertEquals('kept', $roll->dices[1]->status);
+    $this->assertEquals('kept', $roll->dices[2]->status);
+    $this->assertEquals('dropped', $roll->dices[3]->status);
+  }
+
+  public function testAssistDiceStillHaveLimits()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 1,
+        'modifiers' => ['skilledassist02'],
+      ],
+      'dices' => [
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['explosion' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => ['success' => 1],
+        ],
+        [
+          'type' => 'skill',
+          'status' => 'pending',
+          'value' => [],
+        ],
+      ],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->keep([0, 1, 2, 3]);
+  }
 }

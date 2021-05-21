@@ -76,6 +76,10 @@ class Modifier
       return true;
     }
 
+    if (self::isAssistModifier($modifier)) {
+      return true;
+    }
+
     return in_array($modifier, Modifier::LIST);
   }
 
@@ -105,5 +109,20 @@ class Modifier
     }
 
     return in_array($modifier, self::ALTERATION_ENABLERS);
+  }
+
+  public static function isAssistModifier(string $modifier): bool
+  {
+    return self::isSkilledAssistModifier($modifier) || self::isUnskilledAssistModifier($modifier);
+  }
+
+  public static function isSkilledAssistModifier(string $modifier): bool
+  {
+    return (bool) preg_match('/^skilledassist([0-9]{2})$/', $modifier);
+  }
+
+  public static function isUnskilledAssistModifier(string $modifier): bool
+  {
+    return (bool) preg_match('/^unskilledassist([0-9]{2})$/', $modifier);
   }
 }
