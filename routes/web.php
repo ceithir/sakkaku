@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\ContextualizedRoll;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,7 +18,8 @@ Route::get('/probabilities', function () {
     return File::get(public_path() . '/react/index.html');
 });
 
-Route::get('/heritage/{uuid}', function () {
+Route::get('/heritage/{uuid}', function ($uuid) {
+    ContextualizedRoll::where('type', 'FFG-L5R-Heritage')->where('uuid', $uuid)->firstOrFail();
     return File::get(public_path() . '/react/index.html');
 })->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')->name('heritage.show');
 
@@ -29,7 +31,8 @@ Route::middleware('auth:sanctum')->get('/heritage/list', function () {
     return File::get(public_path() . '/react/index.html');
 });
 
-Route::get('/rolls/{id}', function () {
+Route::get('/rolls/{id}', function ($id) {
+    ContextualizedRoll::where('type', 'FFG-L5R')->findOrFail($id);
     return File::get(public_path() . '/react/index.html');
 })->where('id', '[0-9]+');
 
