@@ -1602,28 +1602,6 @@ class RollTest extends TestCase
     );
   }
 
-  public function testCannotRemoveExistingModifier()
-  {
-    $roll = Roll::fromArray([
-      'parameters' => [
-        'ring' => 1,
-        'skill' => 0,
-        'modifiers' => ['void', 'compromised'],
-      ],
-      'dices' => [
-        [
-          'type' => 'ring',
-          'status' => 'pending',
-          'value' => [],
-        ],
-      ],
-    ]);
-    $this->expectException(InvalidArgumentException::class);
-    $roll->updateParameters([
-      'modifiers' => ['void', 'ruleless'],
-    ]);
-  }
-
   public function testCanRerollAfterAlterationIfAskedNicely()
   {
     $roll = Roll::fromArray([
@@ -1757,6 +1735,83 @@ class RollTest extends TestCase
       'reasonless13'
     );
     $this->assertEquals(['rerolls' => ['ruleless42', 'reasonless13']], $roll->metadata);
+  }
+
+  public function testCanRemoveRerollIfNotUsedYet()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['compromised', 'ruleless42', 'void']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['opportunity' => 1],
+        ],
+      ],
+    ]);
+    $roll->updateParameters(['modifiers' => ['compromised', 'void']]);
+    $this->assertEquals(['compromised', 'void'], $roll->parameters->modifiers);
+  }
+
+  public function testCanRemoveARerollAfterItHasBeenUsed()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['compromised', 'ruleless42', 'void']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['opportunity' => 1],
+        ],
+      ],
+      'metadata' => ['rerolls' => ['ruleless42']],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->updateParameters(['modifiers' => ['compromised', 'void']]);
+  }
+
+  public function testCanRemoveNonRerollModifier()
+  {
+    $roll = Roll::fromArray([
+      'parameters' => [
+        'ring' => 1,
+        'skill' => 0,
+        'modifiers' => ['compromised', 'ruleless42', 'void']
+      ],
+      'dices' => [
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => [],
+        ],
+        [
+          'type' => 'ring',
+          'status' => 'pending',
+          'value' => ['opportunity' => 1],
+        ],
+      ],
+      'metadata' => ['rerolls' => ['ruleless42']],
+    ]);
+    $this->expectException(InvalidArgumentException::class);
+    $roll->updateParameters(['modifiers' => ['compromised', 'ruleless42']]);
   }
 
   public function testWanderingBladeHasAnExtraSkillDie()

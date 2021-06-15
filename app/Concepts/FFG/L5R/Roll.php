@@ -234,13 +234,25 @@ class Roll implements RollInterface
     if (isset($parameters['modifiers'])) {
       $modifiers = $parameters['modifiers'];
       Assertion::allString($modifiers);
-      Assertion::count(
-        array_diff($this->parameters->modifiers, $modifiers),
-        0,
-        'Can only add modifiers, not remove/change some.'
-      );
 
       Assertion::true($this->hasNoKeptDice());
+
+      $removedModifiers = array_diff($this->parameters->modifiers, $modifiers);
+      array_walk(
+        $removedModifiers,
+        function (string $modifier) {
+          Assertion::true(
+            Modifier::isRerollModifier($modifier) || Modifier::isAlterationModifier($modifier),
+            'Can only remove reroll/alteration modifiers for now.'
+          );
+          Assertion::notInArray(
+            $modifier,
+            $this->getRerolls(),
+            'Cannot remove reroll/alteration after it has been applied.'
+          );
+        }
+      );
+
       $newModifiers = array_diff($modifiers, $this->parameters->modifiers);
       array_walk(
         $newModifiers,
