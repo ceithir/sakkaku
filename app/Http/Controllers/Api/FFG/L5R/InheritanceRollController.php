@@ -66,7 +66,9 @@ class InheritanceRollController extends Controller
 
         $gmEmail = $request->input('gm_email');
         if ($gmEmail) {
-          Mail::to($gmEmail)->send(new HeritageRolled($roll));
+          Mail::to($gmEmail)
+            ->bcc($request->user()->email)
+            ->send(new HeritageRolled($roll));
         }
 
         return response()->json(
