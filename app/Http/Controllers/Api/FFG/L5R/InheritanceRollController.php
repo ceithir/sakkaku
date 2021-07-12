@@ -53,8 +53,7 @@ class InheritanceRollController extends Controller
         $campaign = $request->input('campaign');
         $character = $request->input('character');
         $description = $request->input('description');
-        $gmEmail = $request->input('gm_email');
-        Assertion::allNotEmpty([$campaign, $character, $description, $gmEmail]);
+        Assertion::allNotEmpty([$campaign, $character, $description]);
 
         $roll->uuid = Str::uuid();
         $roll->campaign = $campaign;
@@ -65,7 +64,10 @@ class InheritanceRollController extends Controller
 
         $roll->save();
 
-        Mail::to($gmEmail)->send(new HeritageRolled($roll));
+        $gmEmail = $request->input('gm_email');
+        if ($gmEmail) {
+          Mail::to($gmEmail)->send(new HeritageRolled($roll));
+        }
 
         return response()->json(
           $this->toJson($roll),
