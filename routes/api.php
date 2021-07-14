@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
+use App\Http\Controllers\Api\FFG\L5R\RollController;
 use App\Models\ContextualizedRoll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,9 +35,15 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     ];
 });
 
-// Normal rolls
+// All rolls
 
-Route::get('public/ffg/l5r/rolls', [CheckRollController::class, 'index']);
+Route::get('/rolls', [RollController::class, 'index']);
+
+// TODO: Clean two following routes once removed from app
+Route::get('public/ffg/l5r/rolls', [RollController::class, 'indexOnlyFFGL5R']);
+Route::middleware('auth:sanctum')->get('/ffg/l5r/heritage-rolls', [RollController::class, 'indexOnlyFFGL5RHeritage']);
+
+// Normal rolls
 Route::get('public/ffg/l5r/rolls/{id}', [CheckRollController::class, 'show'])->where('id', '[0-9]+');
 
 Route::post('public/ffg/l5r/rolls/{action}', [CheckRollController::class, 'stateless'])->where('action', '[a-z]+');
@@ -54,4 +61,3 @@ Route::post('/public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollControlle
 
 Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/create', [InheritanceRollController::class, 'create']);
 Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/{uuid}/keep', [InheritanceRollController::class, 'keep'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
-Route::middleware('auth:sanctum')->get('/ffg/l5r/heritage-rolls', [InheritanceRollController::class, 'index']);

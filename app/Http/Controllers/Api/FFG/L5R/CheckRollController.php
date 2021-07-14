@@ -134,47 +134,6 @@ class CheckRollController extends Controller
         return response()->json($this->rollToPublicArray($this->loadRoll($id)));
     }
 
-    public function index(Request $request)
-    {
-        $query = ContextualizedRoll::where('type', self::ROLL_TYPE)->orderBy('created_at', 'desc');
-
-        if ($request->input('campaign')) {
-            $query->where('campaign', $request->input('campaign'));
-        }
-
-        if ($request->input('character')) {
-            $query->where('character', $request->input('character'));
-        }
-
-        if ($request->input('player')) {
-            try {
-                Assertion::integerish($request->input('player'));
-            } catch (InvalidArgumentException $e) {
-                report($e);
-
-                return response(null, 400);
-            }
-            $query->where('user_id', (int) $request->input('player'));
-        }
-
-        $paginator = $query
-            ->with('user')
-            ->paginate()
-        ;
-
-        return response()->json([
-            'items' => $paginator->map(
-                function (ContextualizedRoll $roll) {
-                    return $this->rollToPublicArray($roll);
-                }
-            ),
-            'total' => $paginator->total(),
-            'per_page' => $paginator->perPage(),
-            'first' => $paginator->firstItem(),
-            'last' => $paginator->lastItem(),
-        ]);
-    }
-
     private function loadRoll(int $id): ContextualizedRoll
     {
         return ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
