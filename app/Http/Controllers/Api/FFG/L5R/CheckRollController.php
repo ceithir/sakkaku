@@ -9,7 +9,7 @@ use Assert\Assertion;
 use Assert\InvalidArgumentException;
 use Illuminate\Http\Request;
 
-class RollController extends Controller
+class CheckRollController extends Controller
 {
     public const ROLL_TYPE = 'FFG-L5R';
 
@@ -72,9 +72,9 @@ class RollController extends Controller
 
             return response()->json(
                 array_merge(
-              ['id' => $roll->id],
-              $roll->roll
-          ),
+                    ['id' => $roll->id],
+                    $roll->roll
+                ),
                 201
             );
         } catch (InvalidArgumentException $e) {
@@ -165,8 +165,8 @@ class RollController extends Controller
         return response()->json([
             'items' => $paginator->map(
                 function (ContextualizedRoll $roll) {
-                  return $this->rollToPublicArray($roll);
-              }
+                    return $this->rollToPublicArray($roll);
+                }
             ),
             'total' => $paginator->total(),
             'per_page' => $paginator->perPage(),

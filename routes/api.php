@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
-use App\Http\Controllers\Api\FFG\L5R\RollController;
 use App\Models\ContextualizedRoll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,14 +36,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 // Normal rolls
 
-Route::get('public/ffg/l5r/rolls', [RollController::class, 'index']);
-Route::get('public/ffg/l5r/rolls/{id}', [RollController::class, 'show'])->where('id', '[0-9]+');
+Route::get('public/ffg/l5r/rolls', [CheckRollController::class, 'index']);
+Route::get('public/ffg/l5r/rolls/{id}', [CheckRollController::class, 'show'])->where('id', '[0-9]+');
 
-Route::post('public/ffg/l5r/rolls/{action}', [RollController::class, 'stateless'])->where('action', '[a-z]+');
+Route::post('public/ffg/l5r/rolls/{action}', [CheckRollController::class, 'stateless'])->where('action', '[a-z]+');
 
-Route::middleware('auth:sanctum')->post('/ffg/l5r/rolls/create', [RollController::class, 'create']);
+Route::middleware('auth:sanctum')->post('/ffg/l5r/rolls/create', [CheckRollController::class, 'create']);
 Route::middleware('auth:sanctum')
-    ->post('/ffg/l5r/rolls/{id}/{action}', [RollController::class, 'stateful'])
+    ->post('/ffg/l5r/rolls/{id}/{action}', [CheckRollController::class, 'stateful'])
     ->where(['id' => '[0-9]+', 'action' => '[a-z]+'])
 ;
 
