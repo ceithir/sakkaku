@@ -28,11 +28,6 @@ Route::get('/heritage', function () {
     return File::get(public_path().'/react/index.html');
 });
 
-// TODO Clean up route eventually
-Route::middleware('auth:sanctum')->get('/heritage/list', function () {
-    return File::get(public_path().'/react/index.html');
-});
-
 Route::get('/rolls/{id}', function ($id) {
     ContextualizedRoll::where('type', 'FFG-L5R')->findOrFail($id);
 
