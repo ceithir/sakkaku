@@ -4,12 +4,10 @@ namespace App\Http\Controllers\Api\FFG\L5R;
 
 use App\Concepts\FFG\L5R\InheritanceRoll;
 use App\Http\Controllers\Controller;
-use App\Mail\HeritageRolled;
 use App\Models\ContextualizedRoll;
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
 class InheritanceRollController extends Controller
@@ -64,14 +62,6 @@ class InheritanceRollController extends Controller
             $roll->setRoll(InheritanceRoll::init($request->input('metadata', [])));
 
             $roll->save();
-
-            $gmEmail = $request->input('gm_email');
-            if ($gmEmail) {
-                Mail::to($gmEmail)
-                    ->bcc($request->user()->email)
-                    ->send(new HeritageRolled($roll))
-                ;
-            }
 
             return response()->json(
                 $this->toJson($roll),
