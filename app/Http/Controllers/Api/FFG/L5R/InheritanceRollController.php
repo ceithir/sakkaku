@@ -52,7 +52,7 @@ class InheritanceRollController extends Controller
             $campaign = $request->input('campaign');
             $character = $request->input('character');
             $description = $request->input('description');
-            Assertion::allNotEmpty([$campaign, $character, $description]);
+            Assertion::allNotEmpty([$campaign, $character]);
 
             $roll->uuid = Str::uuid();
             $roll->campaign = $campaign;
