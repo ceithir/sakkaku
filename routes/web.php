@@ -38,6 +38,10 @@ Route::get('/rolls', function () {
     return File::get(public_path().'/react/index.html');
 });
 
+Route::get('/roll', function () {
+    return File::get(public_path().'/react/index.html');
+});
+
 Route::get('/', function () {
     return File::get(public_path().'/react/index.html');
 });
