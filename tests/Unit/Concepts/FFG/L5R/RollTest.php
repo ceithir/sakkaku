@@ -2142,4 +2142,101 @@ class RollTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $roll->keep([0, 1, 2, 3]);
     }
+
+    public function testCanOnlyRerollBlankWithOffering()
+    {
+        $roll = Roll::fromArray([
+            'parameters' => ['ring' => 1, 'skill' => 1, 'modifiers' => [
+                'offering',
+            ]],
+            'dices' => [
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+                [
+                    'type' => 'skill',
+                    'status' => 'pending',
+                    'value' => ['success' => 1],
+                ],
+            ],
+        ]);
+        $this->expectException(InvalidArgumentException::class);
+        $roll->reroll([1], 'offering');
+    }
+
+    public function testCanOnlyRerollUpToThreeDiceWithOffering()
+    {
+        $roll = Roll::fromArray([
+            'parameters' => ['ring' => 2, 'skill' => 2, 'modifiers' => [
+                'offering',
+            ]],
+            'dices' => [
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+                [
+                    'type' => 'skill',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+                [
+                    'type' => 'skill',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+            ],
+        ]);
+        $this->expectException(InvalidArgumentException::class);
+        $roll->reroll([0, 1, 2, 3], 'offering');
+    }
+
+    public function testCanRerollOfferingBeforeOrAfterDistinction()
+    {
+        $roll = Roll::fromArray([
+            'parameters' => ['ring' => 1, 'skill' => 0, 'modifiers' => [
+                'distinction',
+                'offering',
+            ]],
+            'dices' => [
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+            ],
+        ]);
+        $roll->reroll([0], 'offering');
+        $this->assertEquals(['rerolls' => ['offering']], $roll->metadata);
+
+        $roll = Roll::fromArray([
+            'parameters' => [
+                'ring' => 1,
+                'skill' => 0,
+                'modifiers' => [
+                    'distinction',
+                    'offering',
+                ], ],
+            'dices' => [
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+            ],
+            'metadata' => [
+                'rerolls' => ['distinction'],
+            ],
+        ]);
+        $roll->reroll([0], 'offering');
+        $this->assertEquals(['rerolls' => ['distinction', 'offering']], $roll->metadata);
+    }
 }

@@ -434,6 +434,13 @@ class Roll implements RollInterface
             Assertion::count($positions, 0);
         }
 
+        if (Modifier::OFFERING === $modifier) {
+            Assertion::between(count($positions), 0, 3);
+            foreach ($positions as $position) {
+                Assertion::true($this->dices[$position]->isBlank());
+            }
+        }
+
         // Cannot use Scorpion technique if there is an unrerolled distinction
         if (in_array($modifier, [Modifier::DEATHDEALER, Modifier::MANIPULATOR])) {
             if (in_array(Modifier::DISTINCTION, $this->parameters->modifiers)) {

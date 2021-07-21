@@ -17,6 +17,7 @@ class Modifier
     public const RUTHLESS = 'ruthless'; // Custom reroll with a GM-timing. More or less legacy as no actual human will ever use that.
     public const SAILOR = 'sailor';
     public const WANDERING = 'wandering';
+    public const OFFERING = 'offering';
 
     public const LIST = [
         self::DISTINCTION,
@@ -32,6 +33,7 @@ class Modifier
         self::RUTHLESS,
         self::SAILOR,
         self::WANDERING,
+        self::OFFERING,
     ];
 
     public const REROLL_ENABLERS = [
@@ -43,6 +45,7 @@ class Modifier
         self::TWO_HEAVENS,
         self::RUTHLESS,
         self::SAILOR,
+        self::OFFERING,
     ];
 
     public const ADVANTAGE_REROLLS = [
@@ -50,6 +53,7 @@ class Modifier
         self::DISTINCTION,
         self::DEATHDEALER,
         self::MANIPULATOR,
+        self::OFFERING,
     ];
 
     public const GM_REROLLS = [
