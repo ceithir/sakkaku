@@ -14,7 +14,7 @@ class Modifier
     public const ISHIKEN = 'ishiken';
     public const MANIPULATOR = 'manipulator';
     public const TWO_HEAVENS = '2heavens';
-    public const RUTHLESS = 'ruthless'; // Custom reroll with a GM-timing. More or less legacy as no actual human will ever use that.
+    public const RUTHLESS = 'ruthless';
     public const SAILOR = 'sailor';
     public const WANDERING = 'wandering';
     public const OFFERING = 'offering';
@@ -43,7 +43,6 @@ class Modifier
         self::DEATHDEALER,
         self::MANIPULATOR,
         self::TWO_HEAVENS,
-        self::RUTHLESS,
         self::SAILOR,
         self::OFFERING,
     ];
@@ -58,7 +57,6 @@ class Modifier
 
     public const GM_REROLLS = [
         self::TWO_HEAVENS,
-        self::RUTHLESS,
     ];
 
     public const SCHOOLS = [
@@ -72,6 +70,10 @@ class Modifier
     public const ALTERATION_ENABLERS = [
         self::ISHIKEN,
         self::WANDERING,
+    ];
+
+    public const DEPRECATED_REROLLS = [
+        self::RUTHLESS,
     ];
 
     public static function isValidModifier(string $modifier): bool

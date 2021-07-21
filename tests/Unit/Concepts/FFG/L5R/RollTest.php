@@ -809,7 +809,7 @@ class RollTest extends TestCase
         $this->assertEquals(['rerolls' => ['ruleless']], $roll->metadata);
     }
 
-    public function testCanHaveAManualRerollWithAnEnemyTiming()
+    public function testRuthlessDoesNothing()
     {
         $roll = Roll::fromArray([
             'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
@@ -835,15 +835,14 @@ class RollTest extends TestCase
             ],
         ]);
         $roll->reroll([1], 'ruthless');
-        $this->assertCount(4, $roll->dices);
+        $this->assertCount(3, $roll->dices);
         $this->assertEquals(['rerolls' => ['ruthless']], $roll->metadata);
     }
 
-    public function testManualEnemyRerollHappensBeforeSchool()
+    public function testRuthlessDoesNotPreventFromKeepingDice()
     {
         $roll = Roll::fromArray([
-            'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
-                'shadow',
+            'parameters' => ['ring' => 1, 'skill' => 2, 'modifiers' => [
                 'ruthless',
             ]],
             'dices' => [
@@ -864,8 +863,8 @@ class RollTest extends TestCase
                 ],
             ],
         ]);
-        $this->expectException(InvalidArgumentException::class);
-        $roll->reroll([1], 'shadow');
+        $roll->keep([1]);
+        $this->assertTrue($roll->isComplete());
     }
 
     public function testCannotKeepMoreDicesThanRing()
