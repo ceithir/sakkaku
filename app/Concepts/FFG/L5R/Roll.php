@@ -133,7 +133,7 @@ class Roll implements RollInterface
         ));
     }
 
-    public function reroll(array $positions, string $modifier): void
+    public function reroll(array $positions, string $modifier, string $label = null): void
     {
         $this->assertRerollable($positions, $modifier);
 
@@ -163,9 +163,13 @@ class Roll implements RollInterface
                 $this->appendToRerollMetadata(Modifier::MANIPULATOR);
             }
         }
+
+        if ($label) {
+            $this->addLabel($modifier, $label);
+        }
     }
 
-    public function alter(array $alterations, string $modifier): void
+    public function alter(array $alterations, string $modifier, string $label = null): void
     {
         $this->assertAlterable($alterations, $modifier);
 
@@ -189,6 +193,10 @@ class Roll implements RollInterface
             $rerolls,
         ));
         $this->appendToRerollMetadata($modifier);
+
+        if ($label) {
+            $this->addLabel($modifier, $label);
+        }
     }
 
     public function channel(array $positions): void
@@ -572,5 +580,11 @@ class Roll implements RollInterface
             $this->getRerolls(),
             [$modifier],
         ));
+    }
+
+    private function addLabel(string $modifier, string $label)
+    {
+        Assertion::true(Modifier::isSpecialReroll($modifier) || Modifier::isSpecialAlteration($modifier));
+        $this->metadata['labels'][] = ['key' => $modifier, 'label' => $label];
     }
 }

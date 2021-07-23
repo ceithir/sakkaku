@@ -27,7 +27,7 @@ class CheckRollController extends Controller
             $roll = Roll::fromArray($request->input('roll'));
 
             if ('reroll' === $action) {
-                $roll->reroll($request->input('positions'), $request->input('modifier'));
+                $roll->reroll($request->input('positions'), $request->input('modifier'), $request->input('label'));
             }
 
             if ('keep' === $action) {
@@ -35,7 +35,7 @@ class CheckRollController extends Controller
             }
 
             if ('alter' === $action) {
-                $roll->alter($request->input('alterations'), $request->input('modifier'));
+                $roll->alter($request->input('alterations'), $request->input('modifier'), $request->input('label'));
             }
 
             if ('channel' === $action) {
@@ -100,13 +100,13 @@ class CheckRollController extends Controller
             $roll = $rollWithContext->getRoll();
 
             if ('reroll' === $action) {
-                $roll->reroll($request->input('positions'), $request->input('modifier'));
+                $roll->reroll($request->input('positions'), $request->input('modifier'), $request->input('label'));
             }
             if ('keep' === $action) {
                 $roll->keep($request->input('positions'));
             }
             if ('alter' === $action) {
-                $roll->alter($request->input('alterations'), $request->input('modifier'));
+                $roll->alter($request->input('alterations'), $request->input('modifier'), $request->input('label'));
             }
             if ('parameters' === $action) {
                 $roll->updateParameters($request->all());

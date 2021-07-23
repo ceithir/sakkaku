@@ -2210,4 +2210,46 @@ class RollTest extends TestCase
         $roll->reroll([0], 'offering');
         $this->assertEquals(['rerolls' => ['distinction', 'offering']], $roll->metadata);
     }
+
+    public function testCanLabelManualRerolls()
+    {
+        $roll = Roll::fromArray([
+            'parameters' => ['ring' => 1, 'skill' => 0, 'modifiers' => [
+                'ruleless01',
+                'ruleless02',
+            ]],
+            'dices' => [
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+            ],
+        ]);
+        $roll->reroll([0], 'ruleless01', 'Mirumoto');
+        $this->assertEquals(['rerolls' => ['ruleless01'], 'labels' => [['key' => 'ruleless01', 'label' => 'Mirumoto']]], $roll->metadata);
+        $roll->reroll([1], 'ruleless02', 'Kolat');
+        $this->assertEquals(['rerolls' => ['ruleless01', 'ruleless02'], 'labels' => [
+            ['key' => 'ruleless01', 'label' => 'Mirumoto'],
+            ['key' => 'ruleless02', 'label' => 'Kolat'],
+        ]], $roll->metadata);
+    }
+
+    public function testCannotAutomatedRerolls()
+    {
+        $roll = Roll::fromArray([
+            'parameters' => ['ring' => 1, 'skill' => 0, 'modifiers' => [
+                'distinction',
+            ]],
+            'dices' => [
+                [
+                    'type' => 'ring',
+                    'status' => 'pending',
+                    'value' => [],
+                ],
+            ],
+        ]);
+        $this->expectException(InvalidArgumentException::class);
+        $roll->reroll([0], 'distinction', 'Not a Distinction');
+    }
 }
