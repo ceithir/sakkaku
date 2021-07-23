@@ -39,7 +39,6 @@ class Modifier
     public const REROLL_ENABLERS = [
         self::DISTINCTION,
         self::ADVERSITY,
-        self::SHADOW,
         self::DEATHDEALER,
         self::MANIPULATOR,
         self::TWO_HEAVENS,
@@ -59,7 +58,6 @@ class Modifier
     ];
 
     public const SCHOOLS = [
-        self::SHADOW,
         self::DEATHDEALER,
         self::ISHIKEN,
         self::MANIPULATOR,
@@ -73,6 +71,7 @@ class Modifier
     public const DEPRECATED_REROLLS = [
         self::RUTHLESS,
         self::SAILOR,
+        self::SHADOW,
     ];
 
     public static function isValidModifier(string $modifier): bool

@@ -106,7 +106,7 @@ class ParametersTest extends TestCase
             'tn' => 3,
             'ring' => 3,
             'skill' => 3,
-            'modifiers' => ['shadow', 'deathdealer'],
+            'modifiers' => ['ishiken', 'deathdealer'],
         ]);
     }
 
