@@ -61,6 +61,7 @@ class Modifier
         self::DEATHDEALER,
         self::ISHIKEN,
         self::MANIPULATOR,
+        self::WANDERING,
     ];
 
     public const ALTERATION_ENABLERS = [
