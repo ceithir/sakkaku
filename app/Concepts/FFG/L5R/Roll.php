@@ -438,10 +438,6 @@ class Roll implements RollInterface
             }
         }
 
-        if (Modifier::SAILOR === $modifier && $this->isCompromised()) {
-            Assertion::count($positions, 0);
-        }
-
         if (Modifier::OFFERING === $modifier) {
             Assertion::between(count($positions), 0, 3);
             foreach ($positions as $position) {

@@ -43,7 +43,6 @@ class Modifier
         self::DEATHDEALER,
         self::MANIPULATOR,
         self::TWO_HEAVENS,
-        self::SAILOR,
         self::OFFERING,
     ];
 
@@ -64,7 +63,6 @@ class Modifier
         self::DEATHDEALER,
         self::ISHIKEN,
         self::MANIPULATOR,
-        self::SAILOR,
     ];
 
     public const ALTERATION_ENABLERS = [
@@ -74,6 +72,7 @@ class Modifier
 
     public const DEPRECATED_REROLLS = [
         self::RUTHLESS,
+        self::SAILOR,
     ];
 
     public static function isValidModifier(string $modifier): bool
