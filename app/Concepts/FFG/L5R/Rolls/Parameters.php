@@ -58,8 +58,8 @@ class Parameters
         array_walk(
             $modifiers,
             function (string $modifier) {
-          Assertion::true(Modifier::isValidModifier($modifier));
-      },
+                Assertion::true(Modifier::isValidModifier($modifier));
+            },
         );
         Assertion::eq(count(array_unique($modifiers)), count($modifiers));
         Assertion::false(
@@ -73,14 +73,14 @@ class Parameters
         Assertion::between(count(array_filter(
             $modifiers,
             function (string $modifier) {
-          return Modifier::isUnskilledAssistModifier($modifier);
-      }
+                return Modifier::isUnskilledAssistModifier($modifier);
+            }
         )), 0, 1);
         Assertion::between(count(array_filter(
             $modifiers,
             function (string $modifier) {
-          return Modifier::isSkilledAssistModifier($modifier);
-      }
+                return Modifier::isSkilledAssistModifier($modifier);
+            }
         )), 0, 1);
 
         $this->modifiers = $modifiers;
@@ -170,31 +170,31 @@ class Parameters
         Assertion::allIsArray($channeled);
         $channeledDices = array_map(
             function (array $data) {
-          Assertion::keyExists($data, 'type');
-          Assertion::keyExists($data, 'value');
-          Assertion::string($data['type']);
-          Assertion::isArray($data['value']);
+                Assertion::keyExists($data, 'type');
+                Assertion::keyExists($data, 'value');
+                Assertion::string($data['type']);
+                Assertion::isArray($data['value']);
 
-          return Dice::initWithValue($data['type'], $data['value']);
-      },
+                return Dice::initWithValue($data['type'], $data['value']);
+            },
             $channeled
         );
         Assertion::lessOrEqualThan(
             count(array_filter(
-          $channeledDices,
-          function (Dice $dice) {
-            return 'ring' === $dice->type;
-        }
-      )),
+                $channeledDices,
+                function (Dice $dice) {
+                    return 'ring' === $dice->type;
+                }
+            )),
             $this->ringDiceRolled()
         );
         Assertion::lessOrEqualThan(
             count(array_filter(
-          $channeledDices,
-          function (Dice $dice) {
-            return 'skill' === $dice->type;
-        }
-      )),
+                $channeledDices,
+                function (Dice $dice) {
+                    return 'skill' === $dice->type;
+                }
+            )),
             $this->skillDiceRolled()
         );
         $this->channeled = $channeled;
