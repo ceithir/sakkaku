@@ -91,7 +91,7 @@ class Modifier
 
     public static function isSpecialReroll(string $modifier): bool
     {
-        return (bool) preg_match('/^ruleless([0-9]{2})?$/', $modifier);
+        return (bool) preg_match('/^ruleless([0-9]{2})?$/', $modifier) || in_array($modifier, self::DEPRECATED_REROLLS);
     }
 
     public static function isRerollModifier(string $modifier): bool

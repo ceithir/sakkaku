@@ -809,7 +809,7 @@ class RollTest extends TestCase
         $this->assertEquals(['rerolls' => ['ruleless']], $roll->metadata);
     }
 
-    public function testRuthlessDoesNothing()
+    public function testRuthlessIsJustAnotherSpecialReroll()
     {
         $roll = Roll::fromArray([
             'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
@@ -835,36 +835,8 @@ class RollTest extends TestCase
             ],
         ]);
         $roll->reroll([1], 'ruthless');
-        $this->assertCount(3, $roll->dices);
+        $this->assertCount(4, $roll->dices);
         $this->assertEquals(['rerolls' => ['ruthless']], $roll->metadata);
-    }
-
-    public function testRuthlessDoesNotPreventFromKeepingDice()
-    {
-        $roll = Roll::fromArray([
-            'parameters' => ['ring' => 1, 'skill' => 2, 'modifiers' => [
-                'ruthless',
-            ]],
-            'dices' => [
-                [
-                    'type' => 'ring',
-                    'status' => 'pending',
-                    'value' => ['success' => 1, 'strife' => 1],
-                ],
-                [
-                    'type' => 'skill',
-                    'status' => 'pending',
-                    'value' => [],
-                ],
-                [
-                    'type' => 'skill',
-                    'status' => 'pending',
-                    'value' => ['success' => 1],
-                ],
-            ],
-        ]);
-        $roll->keep([1]);
-        $this->assertTrue($roll->isComplete());
     }
 
     public function testCannotKeepMoreDicesThanRing()

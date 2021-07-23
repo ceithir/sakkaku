@@ -135,12 +135,6 @@ class Roll implements RollInterface
 
     public function reroll(array $positions, string $modifier): void
     {
-        if (in_array($modifier, Modifier::DEPRECATED_REROLLS)) {
-            $this->appendToRerollMetadata($modifier);
-
-            return;
-        }
-
         $this->assertRerollable($positions, $modifier);
 
         $rerolls = [];
