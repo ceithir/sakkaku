@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/resources/rokugan-map', function () {
+    return File::get(public_path().'/react/index.html');
+});
+
 Route::get('/probabilities', function () {
     return File::get(public_path().'/react/index.html');
 });
