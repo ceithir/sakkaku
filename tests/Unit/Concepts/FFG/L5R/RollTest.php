@@ -2204,4 +2204,66 @@ class RollTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $roll->reroll([0], 'distinction', 'Not a Distinction');
     }
+
+    public function testCanHaveSomeMetadataAtInit()
+    {
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'modifiers' => [
+                'ruleless05',
+            ],
+            'metadata' => [
+                'labels' => [['label' => 'New Otomo School', 'key' => 'ruleless05']],
+            ],
+        ]);
+        $this->assertEquals(['labels' => [
+            ['label' => 'New Otomo School', 'key' => 'ruleless05'],
+        ]], $roll->metadata);
+    }
+
+    public function testCannotHaveMostLabelsAtInit()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'modifiers' => [
+                'distinction',
+            ],
+            'metadata' => [
+                'rerolls' => [],
+            ],
+        ]);
+    }
+
+    public function testCanOnlySetLabelsForDefinedRerolls()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'modifiers' => [
+                'distinction',
+            ],
+            'metadata' => [
+                'labels' => [['label' => 'Super Custom School', 'key' => 'ruleless05']],
+            ],
+        ]);
+    }
+
+    public function testCanOnlySetLabelsForSpecialRerolls()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'modifiers' => [
+                'distinction',
+            ],
+            'metadata' => [
+                'labels' => [['label' => 'Super Custom School', 'key' => 'distinction']],
+            ],
+        ]);
+    }
 }

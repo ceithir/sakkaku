@@ -69,9 +69,29 @@ class Roll implements RollInterface
             $dices[] = Dice::init(Dice::SKILL);
         }
 
+        $metadata = $data['metadata'] ?? [];
+        Assertion::isArray($metadata);
+        if (!empty($metadata)) {
+            foreach (array_keys($metadata) as $key) {
+                // As of now, we only accept a few subsets of metadata at creation
+                Assertion::inArray($key, ['labels']);
+            }
+            if (isset($metadata['labels'])) {
+                foreach ($metadata['labels'] as $label) {
+                    Assertion::isArray($label);
+                    Assertion::count($label, 2);
+                    Assertion::string($label['label']);
+                    $key = $label['key'];
+                    Assertion::inArray($key, $parameters->modifiers);
+                    Assertion::true(Modifier::isSpecialReroll($key) || Modifier::isSpecialAlteration($key));
+                }
+            }
+        }
+
         return new self(
             $parameters,
-            $dices
+            $dices,
+            $metadata
         );
     }
 
