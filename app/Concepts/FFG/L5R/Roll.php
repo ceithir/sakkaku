@@ -82,8 +82,14 @@ class Roll implements RollInterface
                     Assertion::count($label, 2);
                     Assertion::string($label['label']);
                     $key = $label['key'];
-                    Assertion::inArray($key, $parameters->modifiers);
-                    Assertion::true(Modifier::isSpecialReroll($key) || Modifier::isSpecialAlteration($key));
+                    if ('addkept' === $key) {
+                        Assertion::notEmpty($parameters->addkept);
+                    } else {
+                        Assertion::inArray($key, $parameters->modifiers);
+                        Assertion::true(
+                            Modifier::isSpecialReroll($key) || Modifier::isSpecialAlteration($key)
+                        );
+                    }
                 }
             }
         }

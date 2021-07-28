@@ -2266,4 +2266,19 @@ class RollTest extends TestCase
             ],
         ]);
     }
+
+    public function testCanSetAddkeptLabel()
+    {
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'addkept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
+            'metadata' => [
+                'labels' => [['label' => 'Asahina Artificer', 'key' => 'addkept']],
+            ],
+        ]);
+        $this->assertEquals(['labels' => [
+            ['label' => 'Asahina Artificer', 'key' => 'addkept'],
+        ]], $roll->metadata);
+    }
 }
