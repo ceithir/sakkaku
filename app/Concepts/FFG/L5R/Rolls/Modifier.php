@@ -25,13 +25,10 @@ class Modifier
         self::COMPROMISED,
         self::VOID,
         self::STIRRING,
-        self::SHADOW,
         self::DEATHDEALER,
         self::ISHIKEN,
         self::MANIPULATOR,
         self::TWO_HEAVENS,
-        self::RUTHLESS,
-        self::SAILOR,
         self::WANDERING,
         self::OFFERING,
     ];
