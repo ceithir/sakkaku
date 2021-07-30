@@ -39,10 +39,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/rolls', [RollController::class, 'index']);
 
-// TODO: Clean two following routes once removed from app
-Route::get('public/ffg/l5r/rolls', [RollController::class, 'indexOnlyFFGL5R']);
-Route::middleware('auth:sanctum')->get('/ffg/l5r/heritage-rolls', [RollController::class, 'indexOnlyFFGL5RHeritage']);
-
 // Normal rolls
 Route::get('public/ffg/l5r/rolls/{id}', [CheckRollController::class, 'show'])->where('id', '[0-9]+');
 
