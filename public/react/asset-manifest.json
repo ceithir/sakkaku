@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/react/static/css/main.a22382bf.chunk.css",
-    "main.js": "/react/static/js/main.9c4816ae.chunk.js",
-    "main.js.map": "/react/static/js/main.9c4816ae.chunk.js.map",
+    "main.css": "/react/static/css/main.bd61d018.chunk.css",
+    "main.js": "/react/static/js/main.9474d4a2.chunk.js",
+    "main.js.map": "/react/static/js/main.9474d4a2.chunk.js.map",
     "runtime-main.js": "/react/static/js/runtime-main.b125670b.js",
     "runtime-main.js.map": "/react/static/js/runtime-main.b125670b.js.map",
-    "static/js/2.78430f0d.chunk.js": "/react/static/js/2.78430f0d.chunk.js",
-    "static/js/2.78430f0d.chunk.js.map": "/react/static/js/2.78430f0d.chunk.js.map",
+    "static/js/2.bd3e6fbb.chunk.js": "/react/static/js/2.bd3e6fbb.chunk.js",
+    "static/js/2.bd3e6fbb.chunk.js.map": "/react/static/js/2.bd3e6fbb.chunk.js.map",
     "56a38b40267532b9c1b4.worker.js": "/react/56a38b40267532b9c1b4.worker.js",
     "56a38b40267532b9c1b4.worker.js.map": "/react/56a38b40267532b9c1b4.worker.js.map",
     "index.html": "/react/index.html",
-    "static/css/main.a22382bf.chunk.css.map": "/react/static/css/main.a22382bf.chunk.css.map",
-    "static/js/2.78430f0d.chunk.js.LICENSE.txt": "/react/static/js/2.78430f0d.chunk.js.LICENSE.txt",
-    "static/media/background.306835b0.jpg": "/react/static/media/background.306835b0.jpg",
+    "static/css/main.bd61d018.chunk.css.map": "/react/static/css/main.bd61d018.chunk.css.map",
+    "static/js/2.bd3e6fbb.chunk.js.LICENSE.txt": "/react/static/js/2.bd3e6fbb.chunk.js.LICENSE.txt",
+    "static/media/background.jpg": "/react/static/media/background.306835b0.jpg",
     "static/media/deathdealer.94edce4a.jpg": "/react/static/media/deathdealer.94edce4a.jpg",
     "static/media/explosion.ca7a29ce.svg": "/react/static/media/explosion.ca7a29ce.svg",
     "static/media/external-link.7808b7fb.svg": "/react/static/media/external-link.7808b7fb.svg",
@@ -22,6 +22,7 @@
     "static/media/manipulator-240w.e8c0df70.png": "/react/static/media/manipulator-240w.e8c0df70.png",
     "static/media/manipulator.0ef16af0.png": "/react/static/media/manipulator.0ef16af0.png",
     "static/media/opportunity.23b6aa99.svg": "/react/static/media/opportunity.23b6aa99.svg",
+    "static/media/rokugan-map-1800.05a263da.jpg": "/react/static/media/rokugan-map-1800.05a263da.jpg",
     "static/media/strife.750ffe33.svg": "/react/static/media/strife.750ffe33.svg",
     "static/media/success.529356f0.svg": "/react/static/media/success.529356f0.svg",
     "static/media/wandering-240w.19ed4c0f.jpg": "/react/static/media/wandering-240w.19ed4c0f.jpg",
@@ -29,8 +30,8 @@
   },
   "entrypoints": [
     "static/js/runtime-main.b125670b.js",
-    "static/js/2.78430f0d.chunk.js",
-    "static/css/main.a22382bf.chunk.css",
-    "static/js/main.9c4816ae.chunk.js"
+    "static/js/2.bd3e6fbb.chunk.js",
+    "static/css/main.bd61d018.chunk.css",
+    "static/js/main.9474d4a2.chunk.js"
   ]
 }
