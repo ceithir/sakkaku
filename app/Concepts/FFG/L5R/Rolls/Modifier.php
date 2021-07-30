@@ -9,13 +9,10 @@ class Modifier
     public const COMPROMISED = 'compromised';
     public const VOID = 'void';
     public const STIRRING = 'stirring';
-    public const SHADOW = 'shadow';
     public const DEATHDEALER = 'deathdealer';
     public const ISHIKEN = 'ishiken';
     public const MANIPULATOR = 'manipulator';
     public const TWO_HEAVENS = '2heavens';
-    public const RUTHLESS = 'ruthless';
-    public const SAILOR = 'sailor';
     public const WANDERING = 'wandering';
     public const OFFERING = 'offering';
 
@@ -66,10 +63,10 @@ class Modifier
         self::WANDERING,
     ];
 
-    public const DEPRECATED_REROLLS = [
-        self::RUTHLESS,
-        self::SAILOR,
-        self::SHADOW,
+    private const DEPRECATED_REROLLS = [
+        'ruthless',
+        'sailor',
+        'shadow',
     ];
 
     public static function isValidModifier(string $modifier): bool
