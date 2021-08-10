@@ -204,8 +204,12 @@ class Roll implements RollInterface
             $position = $alteration['position'];
             $value = $alteration['value'];
             $originalDice = $this->dices[$position];
+            $type = $originalDice->type;
+            if ($this->isUnrestricted() && isset($alteration['type'])) {
+                $type = $alteration['type'];
+            }
             $alteredDice = Dice::initWithValue(
-                $originalDice->type,
+                $type,
                 $value,
                 ['source' => $modifier],
             );
@@ -356,6 +360,11 @@ class Roll implements RollInterface
         ));
     }
 
+    public function isUnrestricted(): bool
+    {
+        return in_array(Modifier::UNRESTRICTED, $this->parameters->modifiers);
+    }
+
     private function assertPositions(array $positions): void
     {
         Assertion::allInteger($positions);
@@ -372,7 +381,7 @@ class Roll implements RollInterface
         Assertion::false($this->requiresAlteration());
         $this->assertPositions($positions);
 
-        if (in_array(Modifier::UNRESTRICTED, $this->parameters->modifiers)) {
+        if ($this->isUnrestricted()) {
             return;
         }
 
@@ -530,8 +539,13 @@ class Roll implements RollInterface
             Assertion::keyExists($alteration, 'value');
             Assertion::isArray($alteration['value']);
 
+            $type = $this->dices[$alteration['position']]->type;
+            if ($this->isUnrestricted() && isset($alteration['type'])) {
+                $type = $alteration['type'];
+            }
+
             Dice::initWithValue(
-                $this->dices[$alteration['position']]->type,
+                $type,
                 $alteration['value'],
             );
         }

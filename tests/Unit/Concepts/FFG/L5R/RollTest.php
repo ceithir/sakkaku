@@ -2319,4 +2319,25 @@ class RollTest extends TestCase
             )
         );
     }
+
+    public function testCanChangeDiceTypeInUnrestrictedMode()
+    {
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'modifiers' => ['unrestricted', 'reasonless'],
+        ]);
+        $roll->alter(
+            [
+                [
+                    'position' => 0,
+                    'value' => ['explosion' => 1],
+                    'type' => 'skill',
+                ],
+            ],
+            'reasonless'
+        );
+        $this->assertEquals('pending', $roll->dices[1]->status);
+        $this->assertEquals('skill', $roll->dices[1]->type);
+    }
 }
