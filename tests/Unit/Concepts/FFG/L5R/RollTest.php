@@ -2281,4 +2281,42 @@ class RollTest extends TestCase
             ['label' => 'Asahina Artificer', 'key' => 'addkept'],
         ]], $roll->metadata);
     }
+
+    public function testCanKeepAllDiceInAnUnrestrictedRoll()
+    {
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 5,
+            'modifiers' => ['unrestricted'],
+        ]);
+        $roll->keep([0, 1, 2, 3, 4, 5]);
+        $this->assertCount(
+            6,
+            array_filter(
+                $roll->dices,
+                function ($dice) {
+                    return 'kept' === $dice->status;
+                }
+            )
+        );
+    }
+
+    public function testCanKeepNoDiceInAnUnrestrictedRoll()
+    {
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 5,
+            'modifiers' => ['unrestricted'],
+        ]);
+        $roll->keep([]);
+        $this->assertCount(
+            6,
+            array_filter(
+                $roll->dices,
+                function ($dice) {
+                    return 'dropped' === $dice->status;
+                }
+            )
+        );
+    }
 }

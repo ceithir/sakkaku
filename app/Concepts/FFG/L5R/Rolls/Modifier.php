@@ -15,6 +15,7 @@ class Modifier
     public const TWO_HEAVENS = '2heavens';
     public const WANDERING = 'wandering';
     public const OFFERING = 'offering';
+    public const UNRESTRICTED = 'unrestricted';
 
     public const LIST = [
         self::DISTINCTION,
@@ -28,6 +29,7 @@ class Modifier
         self::TWO_HEAVENS,
         self::WANDERING,
         self::OFFERING,
+        self::UNRESTRICTED,
     ];
 
     public const REROLL_ENABLERS = [

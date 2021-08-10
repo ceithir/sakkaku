@@ -372,6 +372,10 @@ class Roll implements RollInterface
         Assertion::false($this->requiresAlteration());
         $this->assertPositions($positions);
 
+        if (in_array(Modifier::UNRESTRICTED, $this->parameters->modifiers)) {
+            return;
+        }
+
         if ($this->isCompromised()) {
             foreach ($positions as $position) {
                 Assertion::false($this->dices[$position]->hasStrife());
