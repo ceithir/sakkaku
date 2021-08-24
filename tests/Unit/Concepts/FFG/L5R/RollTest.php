@@ -2340,4 +2340,14 @@ class RollTest extends TestCase
         $this->assertEquals('pending', $roll->dices[1]->status);
         $this->assertEquals('skill', $roll->dices[1]->type);
     }
+
+    public function testCanSpecifyAppraoch()
+    {
+        $roll = Roll::init([
+            'ring' => 1,
+            'skill' => 0,
+            'metadata' => ['approach' => 'Air|Meditation'],
+        ]);
+        $this->assertEquals(['approach' => 'Air|Meditation'], $roll->metadata);
+    }
 }
