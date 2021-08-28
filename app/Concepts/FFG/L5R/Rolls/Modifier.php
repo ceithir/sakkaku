@@ -46,9 +46,6 @@ class Modifier
         self::OFFERING,
     ];
 
-    public const GM_REROLLS = [
-    ];
-
     public const SCHOOLS = [
         self::DEATHDEALER,
         self::ISHIKEN,

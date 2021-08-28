@@ -490,9 +490,6 @@ class Roll implements RollInterface
 
         if (!in_array($modifier, Modifier::ADVANTAGE_REROLLS)) {
             $this->assertAdvantageRerollsDone();
-            if (!in_array($modifier, Modifier::GM_REROLLS)) {
-                $this->assertGmRerollsDone();
-            }
         }
     }
 
@@ -505,20 +502,10 @@ class Roll implements RollInterface
         }
     }
 
-    private function assertGmRerollsDone()
-    {
-        foreach (Modifier::GM_REROLLS as $mod) {
-            if (in_array($mod, $this->parameters->modifiers)) {
-                Assertion::inArray($mod, $this->getRerolls());
-            }
-        }
-    }
-
     private function assertAlterable(array $alterations, string $modifier)
     {
         Assertion::true(Modifier::isAlterationModifier($modifier));
         $this->assertAdvantageRerollsDone();
-        $this->assertGmRerollsDone();
         Assertion::true($this->requiresAlteration());
         Assertion::inArray($modifier, $this->parameters->modifiers);
         Assertion::notInArray($modifier, $this->getRerolls());
