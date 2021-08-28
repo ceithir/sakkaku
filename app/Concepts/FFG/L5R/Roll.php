@@ -446,7 +446,7 @@ class Roll implements RollInterface
         Assertion::notInArray($modifier, $this->getRerolls());
         $this->assertPositions($positions);
 
-        if (in_array($modifier, [Modifier::ADVERSITY, Modifier::TWO_HEAVENS])) {
+        if (in_array($modifier, [Modifier::ADVERSITY])) {
             foreach ($positions as $position) {
                 Assertion::true($this->dices[$position]->isSuccess());
             }
@@ -459,9 +459,6 @@ class Roll implements RollInterface
             );
             if (Modifier::ADVERSITY === $modifier) {
                 Assertion::eq(count($positions), min(2, count($successDices)));
-            }
-            if (Modifier::TWO_HEAVENS === $modifier) {
-                Assertion::greaterOrEqualThan(count($positions), min(1, count($successDices)));
             }
         }
 

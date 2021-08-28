@@ -12,7 +12,6 @@ class Modifier
     public const DEATHDEALER = 'deathdealer';
     public const ISHIKEN = 'ishiken';
     public const MANIPULATOR = 'manipulator';
-    public const TWO_HEAVENS = '2heavens';
     public const WANDERING = 'wandering';
     public const OFFERING = 'offering';
     public const UNRESTRICTED = 'unrestricted';
@@ -26,7 +25,6 @@ class Modifier
         self::DEATHDEALER,
         self::ISHIKEN,
         self::MANIPULATOR,
-        self::TWO_HEAVENS,
         self::WANDERING,
         self::OFFERING,
         self::UNRESTRICTED,
@@ -37,7 +35,6 @@ class Modifier
         self::ADVERSITY,
         self::DEATHDEALER,
         self::MANIPULATOR,
-        self::TWO_HEAVENS,
         self::OFFERING,
     ];
 
@@ -50,7 +47,6 @@ class Modifier
     ];
 
     public const GM_REROLLS = [
-        self::TWO_HEAVENS,
     ];
 
     public const SCHOOLS = [
@@ -69,6 +65,7 @@ class Modifier
         'ruthless',
         'sailor',
         'shadow',
+        '2heavens',
     ];
 
     public static function isValidModifier(string $modifier): bool

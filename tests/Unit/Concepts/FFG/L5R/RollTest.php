@@ -638,34 +638,6 @@ class RollTest extends TestCase
         $this->assertEquals(['rerolls' => ['2heavens']], $roll->metadata);
     }
 
-    public function testCanOnlyRerollSuccessWithMirumotoWarding()
-    {
-        $roll = Roll::fromArray([
-            'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
-                '2heavens',
-            ]],
-            'dices' => [
-                [
-                    'type' => 'ring',
-                    'status' => 'pending',
-                    'value' => ['success' => 1, 'strife' => 1],
-                ],
-                [
-                    'type' => 'skill',
-                    'status' => 'pending',
-                    'value' => [],
-                ],
-                [
-                    'type' => 'skill',
-                    'status' => 'pending',
-                    'value' => ['success' => 1],
-                ],
-            ],
-        ]);
-        $this->expectException(InvalidArgumentException::class);
-        $roll->reroll([1], '2heavens');
-    }
-
     public function testMustRerollDistinctionBeforeWarding()
     {
         $roll = Roll::fromArray([
@@ -693,35 +665,6 @@ class RollTest extends TestCase
         ]);
         $this->expectException(InvalidArgumentException::class);
         $roll->reroll([0], '2heavens');
-    }
-
-    public function testMustRerollWardingBeforeSchool()
-    {
-        $roll = Roll::fromArray([
-            'parameters' => ['tn' => 2, 'ring' => 1, 'skill' => 2, 'modifiers' => [
-                'shadow',
-                '2heavens',
-            ]],
-            'dices' => [
-                [
-                    'type' => 'ring',
-                    'status' => 'pending',
-                    'value' => ['success' => 1, 'strife' => 1],
-                ],
-                [
-                    'type' => 'skill',
-                    'status' => 'pending',
-                    'value' => [],
-                ],
-                [
-                    'type' => 'skill',
-                    'status' => 'pending',
-                    'value' => ['success' => 1],
-                ],
-            ],
-        ]);
-        $this->expectException(InvalidArgumentException::class);
-        $roll->reroll([0], 'shadow');
     }
 
     public function testWardingActuallyHappensAfterDeathdealer()
@@ -1567,7 +1510,7 @@ class RollTest extends TestCase
             'parameters' => [
                 'ring' => 1,
                 'skill' => 0,
-                'modifiers' => ['2heavens', 'reasonless'],
+                'modifiers' => ['adversity', 'reasonless'],
             ],
             'dices' => [
                 [
