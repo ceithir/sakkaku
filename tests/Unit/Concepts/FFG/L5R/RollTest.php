@@ -2263,12 +2263,12 @@ class RollTest extends TestCase
         );
     }
 
-    public function testCanChangeDiceTypeInUnrestrictedMode()
+    public function testCanChangeDiceTypeWithCustomAlteration()
     {
         $roll = Roll::init([
             'ring' => 1,
             'skill' => 0,
-            'modifiers' => ['unrestricted', 'reasonless'],
+            'modifiers' => ['reasonless'],
         ]);
         $roll->alter(
             [

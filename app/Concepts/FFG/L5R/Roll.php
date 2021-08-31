@@ -205,7 +205,7 @@ class Roll implements RollInterface
             $value = $alteration['value'];
             $originalDice = $this->dices[$position];
             $type = $originalDice->type;
-            if ($this->isUnrestricted() && isset($alteration['type'])) {
+            if (Modifier::isSpecialAlteration($modifier) && isset($alteration['type'])) {
                 $type = $alteration['type'];
             }
             $alteredDice = Dice::initWithValue(
@@ -524,7 +524,7 @@ class Roll implements RollInterface
             Assertion::isArray($alteration['value']);
 
             $type = $this->dices[$alteration['position']]->type;
-            if ($this->isUnrestricted() && isset($alteration['type'])) {
+            if (Modifier::isSpecialAlteration($modifier) && isset($alteration['type'])) {
                 $type = $alteration['type'];
             }
 
