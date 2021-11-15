@@ -74,7 +74,7 @@ class Roll implements RollInterface
         if (!empty($metadata)) {
             foreach (array_keys($metadata) as $key) {
                 // As of now, we only accept a few subsets of metadata at creation
-                Assertion::inArray($key, ['labels', 'approach']);
+                Assertion::inArray($key, ['labels', 'approach', 'advantages']);
             }
             if (isset($metadata['labels'])) {
                 foreach ($metadata['labels'] as $label) {
@@ -91,6 +91,10 @@ class Roll implements RollInterface
                         );
                     }
                 }
+            }
+            if (isset($metadata['advantages'])) {
+                Assertion::isArray($metadata['advantages']);
+                Assertion::allString($metadata['advantages']);
             }
         }
 
