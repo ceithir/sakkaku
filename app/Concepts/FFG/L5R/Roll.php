@@ -92,6 +92,9 @@ class Roll implements RollInterface
                     }
                 }
             }
+            if (isset($metadata['approach'])) {
+                Assertion::string($metadata['approach']);
+            }
             if (isset($metadata['advantages'])) {
                 Assertion::isArray($metadata['advantages']);
                 Assertion::allString($metadata['advantages']);
