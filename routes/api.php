@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
-use App\Http\Controllers\Api\FFG\L5R\RollController;
+use App\Http\Controllers\Api\RollController;
 use App\Models\ContextualizedRoll;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

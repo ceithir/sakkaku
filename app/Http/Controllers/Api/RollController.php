@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\FFG\L5R;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\ContextualizedRoll;
