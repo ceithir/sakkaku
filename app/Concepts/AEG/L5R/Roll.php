@@ -37,6 +37,25 @@ class Roll
         $this->dice = $dice;
     }
 
+    public function result(): array
+    {
+        $total = array_reduce(
+            $this->dice,
+            function (int $carry, array $die) {
+                if ('kept' !== $die['status']) {
+                    return $carry;
+                }
+
+                return $carry + $die['value'];
+            },
+            0
+        ) + $this->parameters->modifier;
+
+        return [
+            'total' => $total,
+        ];
+    }
+
     private function rollOneDie()
     {
         $die = 0;

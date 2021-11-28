@@ -24,6 +24,7 @@ class RollTest extends TestCase
         $this->assertCount(2, array_filter($dice, function ($die) {
             return 'kept' === $die['status'];
         }));
+        $this->assertEquals(['total' => 13], $roll->result());
     }
 
     public function testDiceCanExplodeSeveralTimes()
@@ -32,6 +33,7 @@ class RollTest extends TestCase
 
         $roll = new Roll(['roll' => 2, 'keep' => 1, 'explosions' => [10]]);
         $this->assertEquals(23, $roll->dice[0]['value']);
+        $this->assertEquals(['total' => 23], $roll->result());
     }
 
     public function testDiceCanBeRerolledOnce()
@@ -48,6 +50,15 @@ class RollTest extends TestCase
             ],
             $roll->dice
         );
+        $this->assertEquals(['total' => 6], $roll->result());
+    }
+
+    public function testResultIncludesModifier()
+    {
+        $this->stubRandInt(9, 7, 2);
+
+        $roll = new Roll(['roll' => 3, 'keep' => 2, 'modifier' => -3]);
+        $this->assertEquals(['total' => 13], $roll->result());
     }
 
     private function stubRandInt(...$params)
