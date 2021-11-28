@@ -46,6 +46,10 @@ Route::get('/roll-advanced', function () {
     return File::get(public_path().'/react/index.html');
 });
 
+Route::get('/roll-d10', function () {
+    return File::get(public_path().'/react/index.html');
+});
+
 Route::get('/roll', function () {
     return File::get(public_path().'/react/index.html');
 });
