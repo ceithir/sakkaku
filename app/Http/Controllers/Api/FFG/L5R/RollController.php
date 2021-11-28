@@ -55,21 +55,6 @@ class RollController extends Controller
         ]);
     }
 
-    //TODO Clean two following methods once removed from routes
-    public function indexOnlyFFGL5R(Request $request)
-    {
-        $request->merge(['type' => 'FFG-L5R']);
-
-        return $this->index($request);
-    }
-
-    public function indexOnlyFFGL5RHeritage(Request $request)
-    {
-        $request->merge(['type' => 'FFG-L5R-Heritage']);
-
-        return $this->index($request);
-    }
-
     private function rollToPublicArray(ContextualizedRoll $roll): array
     {
         return [
