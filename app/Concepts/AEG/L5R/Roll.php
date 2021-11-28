@@ -8,7 +8,7 @@ class Roll
 
     public array $dice;
 
-    public function __construct(array $parameters)
+    public function __construct(array $parameters, array $metadata = [])
     {
         $this->parameters = new Parameters($parameters);
 
@@ -35,6 +35,8 @@ class Roll
         }
 
         $this->dice = $dice;
+
+        $this->metadata = $metadata;
     }
 
     public function result(): array
