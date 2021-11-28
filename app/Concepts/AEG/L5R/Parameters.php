@@ -10,6 +10,8 @@ class Parameters
 
     public int $keep;
 
+    public int $modifier;
+
     public ?int $tn;
 
     public array $explosions;
@@ -28,6 +30,9 @@ class Parameters
         Assertion::allBetween([$roll, $keep], 1, 10);
         Assertion::greaterOrEqualThan($roll, $keep);
 
+        $modifier = $parameters['modifier'] ?? 0;
+        Assertion::integer($modifier);
+
         $tn = $parameters['tn'] ?? null;
         Assertion::nullOrInteger($tn);
 
@@ -43,6 +48,7 @@ class Parameters
 
         $this->roll = $roll;
         $this->keep = $keep;
+        $this->modifier = $modifier;
         $this->tn = $tn;
         $this->explosions = $explosions;
         $this->rerolls = $rerolls;

@@ -15,7 +15,7 @@ class ParametersTest extends TestCase
     public function testStandardCase()
     {
         $this->assertEquals(
-            ['roll' => 3, 'keep' => 2, 'tn' => null, 'explosions' => [], 'rerolls' => []],
+            ['roll' => 3, 'keep' => 2, 'tn' => null, 'explosions' => [], 'rerolls' => [], 'modifier' => 0],
             (array) new Parameters(['roll' => 3, 'keep' => 2])
         );
     }
@@ -30,5 +30,13 @@ class ParametersTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         new Parameters(['roll' => 3, 'keep' => 4]);
+    }
+
+    public function testAcceptModifier()
+    {
+        $this->assertEquals(
+            ['roll' => 3, 'keep' => 3, 'tn' => null, 'explosions' => [], 'rerolls' => [], 'modifier' => 5],
+            (array) new Parameters(['roll' => 3, 'keep' => 3, 'modifier' => 5])
+        );
     }
 }
