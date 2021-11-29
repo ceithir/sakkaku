@@ -50,6 +50,12 @@ Route::get('/roll-d10', function () {
     return File::get(public_path().'/react/index.html');
 });
 
+Route::get('/d10-rolls/{id}', function ($id) {
+    ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
+
+    return File::get(public_path().'/react/index.html');
+})->where('id', '[0-9]+');
+
 Route::get('/roll', function () {
     return File::get(public_path().'/react/index.html');
 });
