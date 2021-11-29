@@ -2,7 +2,9 @@
 
 namespace App\Concepts\AEG\L5R;
 
-class Roll
+use App\Concepts\Roll as RollInterface;
+
+class Roll implements RollInterface
 {
     public Parameters $parameters;
 
@@ -56,6 +58,16 @@ class Roll
         return [
             'total' => $total,
         ];
+    }
+
+    public static function fromArray(array $data): Roll
+    {
+        return new self($data['parameters'], $data['metadata'] ?? []);
+    }
+
+    public function toArray(): array
+    {
+        return json_decode(json_encode($this), true);
     }
 
     private function rollOneDie()

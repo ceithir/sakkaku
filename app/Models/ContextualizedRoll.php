@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Concepts\AEG\L5R\Roll as L5RD10Roll;
 use App\Concepts\FFG\L5R\InheritanceRoll as L5RHeritageRoll;
 use App\Concepts\FFG\L5R\Roll as L5RRoll;
 use App\Concepts\Roll;
@@ -35,6 +36,9 @@ class ContextualizedRoll extends Model
 
             case 'FFG-L5R-Heritage':
                 return L5RHeritageRoll::fromArray($this->roll);
+
+            case 'AEG-L5R':
+                return L5RD10Roll::fromArray($this->roll);
 
             default:
                 throw 'Corrupted roll';
