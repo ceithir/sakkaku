@@ -46,7 +46,7 @@ class D10RollAndKeepController extends Controller
             $roll->result = $roll->getRoll()->result();
             $roll->save();
 
-            return response()->json($roll->getRoll());
+            return response()->json($this->toJson($roll));
         } catch (InvalidArgumentException $e) {
             report($e);
 
@@ -58,7 +58,12 @@ class D10RollAndKeepController extends Controller
     {
         $roll = ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
 
-        return response()->json([
+        return response()->json($this->toJson($roll));
+    }
+
+    private function toJson(ContextualizedRoll $roll): array
+    {
+        return [
             'id' => $roll->id,
             'user' => $roll->user_id ? [
                 'id' => $roll->user->id,
@@ -71,6 +76,6 @@ class D10RollAndKeepController extends Controller
             'description' => $roll->description,
             'roll' => $roll->roll,
             'result' => $roll->result,
-        ]);
+        ];
     }
 }
