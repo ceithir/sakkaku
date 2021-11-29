@@ -53,4 +53,24 @@ class D10RollAndKeepController extends Controller
             return response(null, 400);
         }
     }
+
+    public function show(int $id)
+    {
+        $roll = ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
+
+        return response()->json([
+            'id' => $roll->id,
+            'user' => $roll->user_id ? [
+                'id' => $roll->user->id,
+                'name' => $roll->user->name,
+            ] : null,
+            'created_at' => $roll->created_at,
+            'updated_at' => $roll->updated_at,
+            'campaign' => $roll->campaign,
+            'character' => $roll->character,
+            'description' => $roll->description,
+            'roll' => $roll->roll,
+            'result' => $roll->result,
+        ]);
+    }
 }

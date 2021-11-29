@@ -61,5 +61,6 @@ Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/{uuid}/keep', [
 
 // D10 rolls
 
+Route::get('/public/aeg/l5r/rolls/{id}', [D10RollAndKeepController::class, 'show'])->where('id', '[0-9]+');
 Route::post('/public/aeg/l5r/rolls/create', [D10RollAndKeepController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/aeg/l5r/rolls/create', [D10RollAndKeepController::class, 'statefulCreate']);
