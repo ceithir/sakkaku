@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/react/static/css/main.88494466.chunk.css",
-    "main.js": "/react/static/js/main.e223050c.chunk.js",
-    "main.js.map": "/react/static/js/main.e223050c.chunk.js.map",
+    "main.css": "/react/static/css/main.c5f04481.chunk.css",
+    "main.js": "/react/static/js/main.d4c04c98.chunk.js",
+    "main.js.map": "/react/static/js/main.d4c04c98.chunk.js.map",
     "runtime-main.js": "/react/static/js/runtime-main.b125670b.js",
     "runtime-main.js.map": "/react/static/js/runtime-main.b125670b.js.map",
-    "static/css/2.f24d81e1.chunk.css": "/react/static/css/2.f24d81e1.chunk.css",
-    "static/js/2.c08125b6.chunk.js": "/react/static/js/2.c08125b6.chunk.js",
-    "static/js/2.c08125b6.chunk.js.map": "/react/static/js/2.c08125b6.chunk.js.map",
+    "static/css/2.a54ba996.chunk.css": "/react/static/css/2.a54ba996.chunk.css",
+    "static/js/2.55e8c592.chunk.js": "/react/static/js/2.55e8c592.chunk.js",
+    "static/js/2.55e8c592.chunk.js.map": "/react/static/js/2.55e8c592.chunk.js.map",
     "56a38b40267532b9c1b4.worker.js": "/react/56a38b40267532b9c1b4.worker.js",
     "56a38b40267532b9c1b4.worker.js.map": "/react/56a38b40267532b9c1b4.worker.js.map",
     "index.html": "/react/index.html",
-    "static/css/2.f24d81e1.chunk.css.map": "/react/static/css/2.f24d81e1.chunk.css.map",
-    "static/css/main.88494466.chunk.css.map": "/react/static/css/main.88494466.chunk.css.map",
-    "static/js/2.c08125b6.chunk.js.LICENSE.txt": "/react/static/js/2.c08125b6.chunk.js.LICENSE.txt",
+    "static/css/2.a54ba996.chunk.css.map": "/react/static/css/2.a54ba996.chunk.css.map",
+    "static/css/main.c5f04481.chunk.css.map": "/react/static/css/main.c5f04481.chunk.css.map",
+    "static/js/2.55e8c592.chunk.js.LICENSE.txt": "/react/static/js/2.55e8c592.chunk.js.LICENSE.txt",
     "static/media/background.jpg": "/react/static/media/background.306835b0.jpg",
     "static/media/deathdealer.94edce4a.jpg": "/react/static/media/deathdealer.94edce4a.jpg",
     "static/media/explosion.ac152c03.svg": "/react/static/media/explosion.ac152c03.svg",
@@ -32,9 +32,9 @@
   },
   "entrypoints": [
     "static/js/runtime-main.b125670b.js",
-    "static/css/2.f24d81e1.chunk.css",
-    "static/js/2.c08125b6.chunk.js",
-    "static/css/main.88494466.chunk.css",
-    "static/js/main.e223050c.chunk.js"
+    "static/css/2.a54ba996.chunk.css",
+    "static/js/2.55e8c592.chunk.js",
+    "static/css/main.c5f04481.chunk.css",
+    "static/js/main.d4c04c98.chunk.js"
   ]
 }
