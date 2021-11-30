@@ -10,34 +10,10 @@ class Roll implements RollInterface
 
     public array $dice;
 
-    public function __construct(array $parameters, array $metadata = [])
+    public function __construct(array $parameters, array $metadata = [], array $dice = null)
     {
         $this->parameters = new Parameters($parameters);
-
-        $dice = [];
-        for ($i = 0; $i < $this->parameters->roll; ++$i) {
-            $value = $this->rollOneDie();
-            if (in_array($value, $this->parameters->rerolls)) {
-                $dice[] = ['value' => $value, 'status' => 'rerolled'];
-                $dice[] = ['value' => $this->rollOneDie(), 'status' => 'pending'];
-            } else {
-                $dice[] = ['value' => $value, 'status' => 'pending'];
-            }
-        }
-
-        $best = $this->best($dice);
-        for ($i = 0; $i < count($dice); ++$i) {
-            if ('pending' === $dice[$i]['status']) {
-                if (in_array($i, $best)) {
-                    $dice[$i]['status'] = 'kept';
-                } else {
-                    $dice[$i]['status'] = 'dropped';
-                }
-            }
-        }
-
-        $this->dice = $dice;
-
+        $this->dice = $dice ?? $this->rollDice();
         $this->metadata = $metadata;
     }
 
@@ -62,12 +38,40 @@ class Roll implements RollInterface
 
     public static function fromArray(array $data): Roll
     {
-        return new self($data['parameters'], $data['metadata'] ?? []);
+        return new self($data['parameters'], dice: $data['dice'], metadata: $data['metadata'] ?? []);
     }
 
     public function toArray(): array
     {
         return json_decode(json_encode($this), true);
+    }
+
+    private function rollDice(): array
+    {
+        $dice = [];
+
+        for ($i = 0; $i < $this->parameters->roll; ++$i) {
+            $value = $this->rollOneDie();
+            if (in_array($value, $this->parameters->rerolls)) {
+                $dice[] = ['value' => $value, 'status' => 'rerolled'];
+                $dice[] = ['value' => $this->rollOneDie(), 'status' => 'pending'];
+            } else {
+                $dice[] = ['value' => $value, 'status' => 'pending'];
+            }
+        }
+
+        $best = $this->best($dice);
+        for ($i = 0; $i < count($dice); ++$i) {
+            if ('pending' === $dice[$i]['status']) {
+                if (in_array($i, $best)) {
+                    $dice[$i]['status'] = 'kept';
+                } else {
+                    $dice[$i]['status'] = 'dropped';
+                }
+            }
+        }
+
+        return $dice;
     }
 
     private function rollOneDie()

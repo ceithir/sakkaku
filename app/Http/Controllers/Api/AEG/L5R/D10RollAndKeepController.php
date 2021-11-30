@@ -15,7 +15,7 @@ class D10RollAndKeepController extends Controller
     public function statelessCreate(Request $request)
     {
         try {
-            $roll = new Roll($request->input('parameters'), $request->input('metadata', []));
+            $roll = new Roll($request->input('parameters'), metadata: $request->input('metadata', []));
 
             return response()->json($roll);
         } catch (InvalidArgumentException $e) {
@@ -42,7 +42,7 @@ class D10RollAndKeepController extends Controller
             $roll->campaign = $request->input('campaign');
             $roll->character = $request->input('character');
             $roll->description = $request->input('description');
-            $roll->setRoll(new Roll($request->input('parameters'), $request->input('metadata', [])));
+            $roll->setRoll(new Roll($request->input('parameters'), metadata: $request->input('metadata', [])));
             $roll->result = $roll->getRoll()->result();
             $roll->save();
 

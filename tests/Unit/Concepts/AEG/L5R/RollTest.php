@@ -61,6 +61,15 @@ class RollTest extends TestCase
         $this->assertEquals(['total' => 13], $roll->result());
     }
 
+    public function testFromArray()
+    {
+        $roll = Roll::fromArray([
+            'parameters' => ['roll' => 3, 'keep' => 2],
+            'dice' => [['value' => 6, 'status' => 'kept'], ['value' => 3, 'status' => 'dropped'], ['value' => 8, 'status' => 'kept']],
+        ]);
+        $this->assertEquals(['total' => 14], $roll->result());
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\AEG\L5R', 'random_int');
