@@ -70,3 +70,4 @@ Route::middleware('auth:sanctum')->post('/aeg/l5r/rolls/create', [D10RollAndKeep
 
 Route::post('/public/dnd/rolls/create', [DnDRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/dnd/rolls/create', [DnDRollController::class, 'statefulCreate']);
+Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where('id', '[0-9]+');

@@ -58,6 +58,12 @@ Route::get('/roll-dnd', function () {
     return File::get(public_path().'/react/index.html');
 });
 
+Route::get('/dnd-rolls/{id}', function ($id) {
+    ContextualizedRoll::where('type', 'DnD')->findOrFail($id);
+
+    return File::get(public_path().'/react/index.html');
+})->where('id', '[0-9]+');
+
 Route::get('/d10-rolls/{id}', function ($id) {
     ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
 
