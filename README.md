@@ -37,15 +37,22 @@ Note: The command `php artisan config:cache` is missing from the deployment proc
 1. Install PHP 8.0, Composer and run `composer install`
 2. Install PostgreSQL 12 and setup a database
 3. Create a .env file with:
-- APP_ENV=local
-- APP_DEBUG=true
-- DB_CONNECTION=pgsql
-- MAIL_MAILER=log
-- The RDS_* variables set to your database's identifiers (see `config/database.php`)
+
+-   APP_ENV=local
+-   APP_DEBUG=true
+-   DB_CONNECTION=pgsql
+-   MAIL_MAILER=log
+-   The RDS\_\* variables set to your database's identifiers (see `config/database.php`)
+
 4. Run `php artisan key:generate`
 5. Run `php artisan migrate`
 
 You should then be able to run the server with:
+
 ```
 php artisan serve
 ```
+
+### Code style
+
+php cs fixer with the [@PhpCsFixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/doc/ruleSets/PhpCsFixer.rst) rule set
