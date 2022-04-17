@@ -45,7 +45,7 @@ class ContextualizedRoll extends Model
                 return DnDRoll::fromArray($this->roll);
 
             default:
-                throw 'Corrupted roll';
+                throw new \Exception('Corrupted roll');
         }
     }
 }
