@@ -69,3 +69,4 @@ Route::middleware('auth:sanctum')->post('/aeg/l5r/rolls/create', [D10RollAndKeep
 // DnD rolls
 
 Route::post('/public/dnd/rolls/create', [DnDRollController::class, 'statelessCreate']);
+Route::middleware('auth:sanctum')->post('/dnd/rolls/create', [DnDRollController::class, 'statefulCreate']);
