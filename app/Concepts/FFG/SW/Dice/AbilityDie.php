@@ -27,7 +27,7 @@ class AbilityDie extends BaseDie
         Assertion::eq($value->despair, 0);
 
         Assertion::true(
-            0 === $value->success && $value->advantage >= 0 && ($value->success + $value->advantage <= 2)
+            $value->success >= 0 && $value->advantage >= 0 && ($value->success + $value->advantage <= 2)
         );
 
         $this->type = self::TYPE;
