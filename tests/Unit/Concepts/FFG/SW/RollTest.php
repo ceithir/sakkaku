@@ -43,4 +43,11 @@ class RollTest extends TestCase
         );
         $this->assertCount(6, $roll->dice);
     }
+
+    public function testCanRollForceDie()
+    {
+        $roll = Roll::init(['force' => 1]);
+        $result = $roll->result();
+        $this->assertTrue($result['dark'] > 0 || $result['light'] > 0);
+    }
 }

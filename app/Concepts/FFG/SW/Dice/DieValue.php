@@ -16,6 +16,10 @@ class DieValue
 
     public int $despair;
 
+    public int $light;
+
+    public int $dark;
+
     public function __construct(array $data)
     {
         $this->success = $data['success'] ?? 0;
@@ -24,5 +28,7 @@ class DieValue
         $this->failure = $data['failure'] ?? 0;
         $this->threat = $data['threat'] ?? 0;
         $this->despair = $data['despair'] ?? 0;
+        $this->light = $data['light'] ?? 0;
+        $this->dark = $data['dark'] ?? 0;
     }
 }

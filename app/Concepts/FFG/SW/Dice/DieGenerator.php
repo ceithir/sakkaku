@@ -34,6 +34,7 @@ class DieGenerator
         foreach ([
             BoostDie::class, AbilityDie::class, ProficiencyDie::class,
             SetbackDie::class, DifficultyDie::class, ChallengeDie::class,
+            ForceDie::class,
         ] as $className) {
             if ($className::TYPE === $type) {
                 return $className;

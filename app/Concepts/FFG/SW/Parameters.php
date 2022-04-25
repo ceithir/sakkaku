@@ -28,8 +28,7 @@ class Parameters
         $difficulty = $parameters['difficulty'] ?? 0;
         $proficiency = $parameters['proficiency'] ?? 0;
         $setback = $parameters['setback'] ?? 0;
-        // TODO
-        $force = 0;
+        $force = $parameters['force'] ?? 0;
 
         $allDice = [$ability, $boost, $challenge, $difficulty, $proficiency, $setback, $force];
 

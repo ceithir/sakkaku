@@ -7,6 +7,7 @@ use App\Concepts\FFG\SW\Dice\BoostDie;
 use App\Concepts\FFG\SW\Dice\ChallengeDie;
 use App\Concepts\FFG\SW\Dice\DieGenerator;
 use App\Concepts\FFG\SW\Dice\DifficultyDie;
+use App\Concepts\FFG\SW\Dice\ForceDie;
 use App\Concepts\FFG\SW\Dice\ProficiencyDie;
 use App\Concepts\FFG\SW\Dice\SetbackDie;
 use App\Concepts\Roll as RollInterface;
@@ -43,6 +44,8 @@ class Roll implements RollInterface
         $failure = 0;
         $threat = 0;
         $despair = 0;
+        $light = 0;
+        $dark = 0;
 
         foreach ($this->dice as $die) {
             $value = $die->value;
@@ -52,6 +55,8 @@ class Roll implements RollInterface
             $failure += $value->failure;
             $threat += $value->threat;
             $despair += $value->despair;
+            $light += $value->light;
+            $dark += $value->dark;
         }
 
         return [
@@ -61,9 +66,8 @@ class Roll implements RollInterface
             'failure' => $failure,
             'threat' => $threat,
             'despair' => $despair,
-            // TODO
-            'light' => 0,
-            'dark' => 0,
+            'light' => $light,
+            'dark' => $dark,
         ];
     }
 
@@ -93,6 +97,7 @@ class Roll implements RollInterface
         foreach ([
             AbilityDie::TYPE, BoostDie::TYPE, ChallengeDie::TYPE,
             DifficultyDie::TYPE, ProficiencyDie::TYPE, SetbackDie::TYPE,
+            ForceDie::TYPE,
         ] as $type) {
             for ($i = 0; $i < $parameters->{$type}; ++$i) {
                 $d[] = DieGenerator::roll($type);

@@ -15,7 +15,10 @@ class DiceTest extends TestCase
     {
         $boostDie = DieGenerator::load(['type' => 'boost', 'value' => ['success' => 1]]);
         $this->assertEquals('boost', $boostDie->type);
-        $this->assertEquals(['success' => 1, 'advantage' => 0, 'triumph' => 0, 'failure' => 0, 'threat' => 0, 'despair' => 0], (array) $boostDie->value);
+        $this->assertEquals(
+            ['success' => 1, 'advantage' => 0, 'triumph' => 0, 'failure' => 0, 'threat' => 0, 'despair' => 0, 'light' => 0, 'dark' => 0],
+            (array) $boostDie->value
+        );
     }
 
     public function testCanInitBoostDiceFromType()
