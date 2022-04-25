@@ -32,7 +32,7 @@ class DieGenerator
     private static function getClassName(string $type): string
     {
         foreach ([
-            BoostDie::class, AdvantageDie::class, ProficiencyDie::class,
+            BoostDie::class, AbilityDie::class, ProficiencyDie::class,
             SetbackDie::class, DifficultyDie::class, ChallengeDie::class,
         ] as $className) {
             if ($className::TYPE === $type) {
@@ -40,6 +40,6 @@ class DieGenerator
             }
         }
 
-        throw new \Exception('Unrecognized type');
+        throw new \Exception(sprintf('Unrecognized type: %s', $type));
     }
 }

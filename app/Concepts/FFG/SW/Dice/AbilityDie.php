@@ -4,9 +4,9 @@ namespace App\Concepts\FFG\SW\Dice;
 
 use Assert\Assertion;
 
-class AdvantageDie extends BaseDie
+class AbilityDie extends BaseDie
 {
-    public const TYPE = 'advantage';
+    public const TYPE = 'ability';
 
     public const VALUES = [
         [],
