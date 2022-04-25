@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AEG\L5R\D10RollAndKeepController;
 use App\Http\Controllers\Api\DnD\RollController as DnDRollController;
 use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
+use App\Http\Controllers\Api\FFG\SW\RollController as FFGSWRollController;
 use App\Http\Controllers\Api\RollController;
 use App\Models\ContextualizedRoll;
 use Illuminate\Http\Request;
@@ -71,3 +72,7 @@ Route::middleware('auth:sanctum')->post('/aeg/l5r/rolls/create', [D10RollAndKeep
 Route::post('/public/dnd/rolls/create', [DnDRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/dnd/rolls/create', [DnDRollController::class, 'statefulCreate']);
 Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where('id', '[0-9]+');
+
+// FFG-SW rolls
+
+Route::post('/public/ffg/sw/rolls/create', [FFGSWRollController::class, 'statelessCreate']);
