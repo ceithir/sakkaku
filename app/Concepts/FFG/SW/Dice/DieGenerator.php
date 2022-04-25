@@ -31,12 +31,15 @@ class DieGenerator
 
     private static function getClassName(string $type): string
     {
-        switch ($type) {
-            case BoostDie::TYPE:
-                return BoostDie::class;
-
-            default:
-                throw new \Exception('Unrecognized type');
+        foreach ([
+            BoostDie::class, AdvantageDie::class, ProficiencyDie::class,
+            SetbackDie::class, DifficultyDie::class, ChallengeDie::class,
+        ] as $className) {
+            if ($className::TYPE === $type) {
+                return $className;
             }
+        }
+
+        throw new \Exception('Unrecognized type');
     }
 }
