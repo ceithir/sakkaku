@@ -77,3 +77,4 @@ Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where(
 
 Route::post('/public/ffg/sw/rolls/create', [FFGSWRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/ffg/sw/rolls/create', [FFGSWRollController::class, 'statefulCreate']);
+Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->where('id', '[0-9]+');
