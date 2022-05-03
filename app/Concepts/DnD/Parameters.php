@@ -16,8 +16,7 @@ class Parameters
     {
         Assertion::keyExists($parameters, 'dices');
         Assertion::isArray($parameters['dices']);
-        // TODO: Refusing to mix dice for now, to be improved upon later
-        Assertion::count($parameters['dices'], 1);
+        Assertion::notEmpty($parameters['dices']);
 
         $modifier = $parameters['modifier'] ?? 0;
         Assertion::integer($modifier);

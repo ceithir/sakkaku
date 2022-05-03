@@ -3,7 +3,6 @@
 namespace Tests\Unit\Concepts\DnD\L5R;
 
 use App\Concepts\DnD\Roll;
-use Assert\InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -63,15 +62,16 @@ class RollTest extends TestCase
         $this->assertEquals(5, $roll->result()['total']);
     }
 
-    public function testNoMixedDiceForNow()
+    public function testCanMixDice()
     {
-        $this->expectException(InvalidArgumentException::class);
-        Roll::init([
+        $this->stubRandInt(7, 12, 3);
+        $roll = Roll::init([
             'dices' => [
                 ['number' => 2, 'sides' => 20],
                 ['number' => 1, 'sides' => 10],
             ],
         ]);
+        $this->assertEquals(22, $roll->result()['total']);
     }
 
     private function stubRandInt(...$params)
