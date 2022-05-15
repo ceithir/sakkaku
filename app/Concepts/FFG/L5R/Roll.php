@@ -74,23 +74,7 @@ class Roll implements RollInterface
         if (!empty($metadata)) {
             foreach (array_keys($metadata) as $key) {
                 // As of now, we only accept a few subsets of metadata at creation
-                Assertion::inArray($key, ['labels', 'approach', 'advantages']);
-            }
-            if (isset($metadata['labels'])) {
-                foreach ($metadata['labels'] as $label) {
-                    Assertion::isArray($label);
-                    Assertion::count($label, 2);
-                    Assertion::string($label['label']);
-                    $key = $label['key'];
-                    if ('addkept' === $key) {
-                        Assertion::notEmpty($parameters->addkept);
-                    } else {
-                        Assertion::inArray($key, $parameters->modifiers);
-                        Assertion::true(
-                            Modifier::isSpecialReroll($key) || Modifier::isSpecialAlteration($key)
-                        );
-                    }
-                }
+                Assertion::inArray($key, ['approach', 'advantages']);
             }
             if (isset($metadata['approach'])) {
                 Assertion::string($metadata['approach']);

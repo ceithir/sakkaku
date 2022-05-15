@@ -2157,12 +2157,10 @@ class RollTest extends TestCase
                 'ruleless05',
             ],
             'metadata' => [
-                'labels' => [['label' => 'New Otomo School', 'key' => 'ruleless05']],
+                'approach' => 'Fire|Perform',
             ],
         ]);
-        $this->assertEquals(['labels' => [
-            ['label' => 'New Otomo School', 'key' => 'ruleless05'],
-        ]], $roll->metadata);
+        $this->assertEquals(['approach' => 'Fire|Perform'], $roll->metadata);
     }
 
     public function testCannotHaveMostLabelsAtInit()
@@ -2178,51 +2176,6 @@ class RollTest extends TestCase
                 'rerolls' => [],
             ],
         ]);
-    }
-
-    public function testCanOnlySetLabelsForDefinedRerolls()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $roll = Roll::init([
-            'ring' => 1,
-            'skill' => 0,
-            'modifiers' => [
-                'distinction',
-            ],
-            'metadata' => [
-                'labels' => [['label' => 'Super Custom School', 'key' => 'ruleless05']],
-            ],
-        ]);
-    }
-
-    public function testCanOnlySetLabelsForSpecialRerolls()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        $roll = Roll::init([
-            'ring' => 1,
-            'skill' => 0,
-            'modifiers' => [
-                'distinction',
-            ],
-            'metadata' => [
-                'labels' => [['label' => 'Super Custom School', 'key' => 'distinction']],
-            ],
-        ]);
-    }
-
-    public function testCanSetAddkeptLabel()
-    {
-        $roll = Roll::init([
-            'ring' => 1,
-            'skill' => 0,
-            'addkept' => [['type' => 'ring', 'value' => ['opportunity' => 1]]],
-            'metadata' => [
-                'labels' => [['label' => 'Asahina Artificer', 'key' => 'addkept']],
-            ],
-        ]);
-        $this->assertEquals(['labels' => [
-            ['label' => 'Asahina Artificer', 'key' => 'addkept'],
-        ]], $roll->metadata);
     }
 
     public function testCanKeepAllDiceInAnUnrestrictedRoll()
