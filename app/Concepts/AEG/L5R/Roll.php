@@ -89,18 +89,20 @@ class Roll implements RollInterface
 
     private function best(array $dice)
     {
+        $selectSwitch = ('low' === $this->parameters->select) ? -1 : 1;
+
         $toSortArray = [];
         for ($i = 0; $i < count($dice); ++$i) {
             if ('pending' === $dice[$i]['status']) {
                 $toSortArray[] = ['index' => $i, 'value' => $dice[$i]['value']];
             }
         }
-        usort($toSortArray, function ($a, $b) {
+        usort($toSortArray, function ($a, $b) use ($selectSwitch) {
             if ($a['value'] == $b['value']) {
                 return 0;
             }
 
-            return ($a['value'] > $b['value']) ? -1 : 1;
+            return (($a['value'] > $b['value']) ? -1 : 1) * $selectSwitch;
         });
 
         return array_map(function ($a) {

@@ -70,6 +70,14 @@ class RollTest extends TestCase
         $this->assertEquals(['total' => 14], $roll->result());
     }
 
+    public function testCanKeepLow()
+    {
+        $this->stubRandInt(9, 2, 5, 8);
+
+        $roll = new Roll(['roll' => 4, 'keep' => 2, 'select' => 'low']);
+        $this->assertEquals(['total' => 7], $roll->result());
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\AEG\L5R', 'random_int');

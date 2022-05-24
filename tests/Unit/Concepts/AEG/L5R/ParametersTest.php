@@ -15,7 +15,7 @@ class ParametersTest extends TestCase
     public function testStandardCase()
     {
         $this->assertEquals(
-            ['roll' => 3, 'keep' => 2, 'tn' => null, 'explosions' => [], 'rerolls' => [], 'modifier' => 0],
+            ['roll' => 3, 'keep' => 2, 'tn' => null, 'explosions' => [], 'rerolls' => [], 'modifier' => 0, 'select' => 'high'],
             (array) new Parameters(['roll' => 3, 'keep' => 2])
         );
     }
@@ -35,7 +35,7 @@ class ParametersTest extends TestCase
     public function testAcceptModifier()
     {
         $this->assertEquals(
-            ['roll' => 3, 'keep' => 3, 'tn' => null, 'explosions' => [], 'rerolls' => [], 'modifier' => 5],
+            ['roll' => 3, 'keep' => 3, 'tn' => null, 'explosions' => [], 'rerolls' => [], 'modifier' => 5, 'select' => 'high'],
             (array) new Parameters(['roll' => 3, 'keep' => 3, 'modifier' => 5])
         );
     }

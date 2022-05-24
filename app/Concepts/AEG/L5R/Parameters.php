@@ -18,6 +18,8 @@ class Parameters
 
     public array $rerolls;
 
+    public string $select;
+
     public function __construct(array $parameters)
     {
         Assertion::keyExists($parameters, 'roll');
@@ -46,11 +48,15 @@ class Parameters
         Assertion::allInteger($rerolls);
         Assertion::allBetween($rerolls, 1, 3);
 
+        $select = $parameters['select'] ?? 'high';
+        Assertion::inArray($select, ['high', 'low']);
+
         $this->roll = $roll;
         $this->keep = $keep;
         $this->modifier = $modifier;
         $this->tn = $tn;
         $this->explosions = $explosions;
         $this->rerolls = $rerolls;
+        $this->select = $select;
     }
 }
