@@ -29,7 +29,12 @@ class Parameters
             Assertion::keyExists($dice, 'number');
             Assertion::keyExists($dice, 'sides');
 
-            return new Dice(sides: $dice['sides'], number: $dice['number']);
+            return new Dice(
+                sides: $dice['sides'],
+                number: $dice['number'],
+                keepNumber: $dice['keepNumber'] ?? $dice['number'],
+                keepCriteria: $dice['keepCriteria'] ?? 'highest',
+            );
         }, $parameters['dices']);
         $this->modifier = $modifier;
         $this->tn = $tn;

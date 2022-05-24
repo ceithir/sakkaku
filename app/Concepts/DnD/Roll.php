@@ -66,16 +66,42 @@ class Roll implements RollInterface
         $d = [];
 
         foreach ($parameters->dices as $dice) {
+            $dd = [];
             for ($i = 0; $i < $dice->number; ++$i) {
-                $d[] = [
+                $dd[] = [
                     'type' => 'd'.$dice->sides,
                     'value' => random_int(1, $dice->sides),
-                    // All dice are kept as of now
-                    'status' => 'kept',
                 ];
             }
+            $best = self::best($dd, $dice->keepNumber, $dice->keepCriteria);
+            for ($i = 0; $i < $dice->number; ++$i) {
+                $dd[$i]['status'] = in_array($i, $best) ? 'kept' : 'dropped';
+            }
+            $d = array_merge($d, $dd);
         }
 
         return $d;
+    }
+
+    private static function best(array $dice, int $keepNumber, string $keepCriteria)
+    {
+        $selectSwitch = ('lowest' === $keepCriteria) ? -1 : 1;
+
+        $toSortArray = [];
+        for ($i = 0; $i < count($dice); ++$i) {
+            $toSortArray[] = ['index' => $i, 'value' => $dice[$i]['value']];
+        }
+
+        usort($toSortArray, function ($a, $b) use ($selectSwitch) {
+            if ($a['value'] == $b['value']) {
+                return 0;
+            }
+
+            return (($a['value'] > $b['value']) ? -1 : 1) * $selectSwitch;
+        });
+
+        return array_map(function ($a) {
+            return $a['index'];
+        }, array_slice($toSortArray, 0, $keepNumber));
     }
 }

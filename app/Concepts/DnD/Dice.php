@@ -10,12 +10,20 @@ class Dice
 
     public int $number;
 
-    public function __construct(int $sides, int $number)
+    public int $keepNumber;
+
+    public string $keepCriteria;
+
+    public function __construct(int $sides, int $number, int $keepNumber, string $keepCriteria)
     {
         Assertion::between($sides, 1, 999);
         Assertion::between($number, 1, 99);
+        Assertion::between($keepNumber, 1, $number);
+        Assertion::inArray($keepCriteria, ['highest', 'lowest']);
 
         $this->sides = $sides;
         $this->number = $number;
+        $this->keepNumber = $keepNumber;
+        $this->keepCriteria = $keepCriteria;
     }
 }

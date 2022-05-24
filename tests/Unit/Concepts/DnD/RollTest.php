@@ -74,6 +74,77 @@ class RollTest extends TestCase
         $this->assertEquals(22, $roll->result()['total']);
     }
 
+    public function testRoll2D20KeepLowest()
+    {
+        $this->stubRandInt(15, 8);
+
+        $roll = Roll::init([
+            'dices' => [
+                [
+                    'number' => 2,
+                    'sides' => 20,
+                    'keepNumber' => 1,
+                    'keepCriteria' => 'lowest',
+                ],
+            ],
+        ]);
+
+        $this->assertEquals(
+            [
+                [
+                    'status' => 'dropped',
+                    'type' => 'd20',
+                    'value' => 15,
+                ],
+                [
+                    'status' => 'kept',
+                    'type' => 'd20',
+                    'value' => 8,
+                ],
+            ],
+            (array) $roll->dice,
+        );
+        $this->assertEquals(['total' => 8], $roll->result());
+    }
+
+    public function testRoll3D6Plus1KeepTwoBest()
+    {
+        $this->stubRandInt(4, 5, 3);
+
+        $roll = Roll::init([
+            'dices' => [
+                [
+                    'number' => 3,
+                    'sides' => 6,
+                    'keepNumber' => 2,
+                ],
+            ],
+            'modifier' => 1,
+        ]);
+
+        $this->assertEquals(
+            [
+                [
+                    'status' => 'kept',
+                    'type' => 'd6',
+                    'value' => 4,
+                ],
+                [
+                    'status' => 'kept',
+                    'type' => 'd6',
+                    'value' => 5,
+                ],
+                [
+                    'status' => 'dropped',
+                    'type' => 'd6',
+                    'value' => 3,
+                ],
+            ],
+            (array) $roll->dice,
+        );
+        $this->assertEquals(['total' => 10], $roll->result());
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\DnD', 'random_int');
