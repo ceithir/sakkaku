@@ -1,12 +1,13 @@
 <?php
 
-namespace Tests\Unit\Concepts\DnD\L5R;
+namespace Tests\Unit\Concepts\DnD;
 
 use App\Concepts\DnD\Roll;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @internal
+ *
  * @coversNothing
  */
 class RollTest extends TestCase
