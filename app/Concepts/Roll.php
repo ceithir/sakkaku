@@ -7,4 +7,6 @@ interface Roll
     public static function fromArray(array $data): Roll;
 
     public function toArray(): array;
+
+    public function result(): array;
 }

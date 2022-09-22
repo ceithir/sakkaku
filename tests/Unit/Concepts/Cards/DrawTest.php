@@ -49,6 +49,15 @@ class RollTest extends TestCase
         $draw = Draw::init(['deck' => [1, 5], 'hand' => 3]);
     }
 
+    public function testCanPackAndUnpackItself()
+    {
+        $draw = Draw::init(['deck' => [1, 2, 3, 4, 5], 'hand' => 2]);
+        $this->assertEquals(
+            $draw->toArray(),
+            Draw::fromArray($draw->toArray())->toArray()
+        );
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\Cards', 'random_int');

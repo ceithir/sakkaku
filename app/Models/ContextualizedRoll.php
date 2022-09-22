@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Concepts\AEG\L5R\Roll as L5RD10Roll;
+use App\Concepts\Cards\Draw;
 use App\Concepts\DnD\Roll as DnDRoll;
 use App\Concepts\FFG\L5R\InheritanceRoll as L5RHeritageRoll;
 use App\Concepts\FFG\L5R\Roll as L5RRoll;
@@ -47,6 +48,9 @@ class ContextualizedRoll extends Model
 
             case 'FFG-SW':
                 return FFGSWRoll::fromArray($this->roll);
+
+            case 'card':
+                return Draw::fromArray($this->roll);
 
             default:
                 throw new \Exception('Corrupted roll');

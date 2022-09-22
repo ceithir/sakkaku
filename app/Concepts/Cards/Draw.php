@@ -2,7 +2,9 @@
 
 namespace App\Concepts\Cards;
 
-class Draw
+use App\Concepts\Roll;
+
+class Draw implements Roll
 {
     public Parameters $parameters;
 
@@ -24,6 +26,34 @@ class Draw
             self::draw($params),
             $metadata,
         );
+    }
+
+    public function result(): array
+    {
+        return [
+            'hand' => $this->hand,
+        ];
+    }
+
+    public static function fromArray(array $data): Roll
+    {
+        return new self(
+            new Parameters($data['parameters']),
+            $data['hand'],
+            $data['metadata'] ?? []
+        );
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'parameters' => [
+                'deck' => $this->parameters->deck->toArray(),
+                'hand' => $this->parameters->hand,
+            ],
+            'hand' => $this->hand,
+            'metadata' => $this->metadata,
+        ];
     }
 
     private static function draw(Parameters $parameters)

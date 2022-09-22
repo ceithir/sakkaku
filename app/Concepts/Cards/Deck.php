@@ -22,4 +22,9 @@ class Deck
     {
         return count($this->cards);
     }
+
+    public function toArray(): array
+    {
+        return $this->cards;
+    }
 }
