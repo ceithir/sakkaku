@@ -84,3 +84,4 @@ Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->w
 Route::post('/public/cards/draw', [DrawController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/cards/draw', [DrawController::class, 'statefulCreate']);
 Route::get('/public/cards/draws/{id}', [DrawController::class, 'show'])->where('id', '[0-9]+');
+Route::middleware('auth:sanctum')->post('/cards/decks/create', [DrawController::class, 'createDeck']);

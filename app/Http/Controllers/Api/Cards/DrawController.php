@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Api\Cards;
 
+use App\Concepts\Cards\Deck as DeckConcept;
 use App\Concepts\Cards\Draw;
 use App\Http\Controllers\Controller;
 use App\Models\ContextualizedRoll;
+use App\Models\Deck;
 use Assert\InvalidArgumentException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class DrawController extends Controller
 {
@@ -65,6 +68,35 @@ class DrawController extends Controller
         $roll = ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
 
         return response()->json($this->toJson($roll));
+    }
+
+    public function createDeck(Request $request)
+    {
+        $request->validate([
+            'description' => 'required|string',
+            'deck' => 'required|array',
+        ]);
+
+        try {
+            $cards = (new DeckConcept($request->input('deck')))->toArray();
+
+            $deck = new Deck();
+            $deck->state = [
+                'initial' => $cards,
+                'current' => $cards,
+                'draws' => [],
+            ];
+            $deck->user_id = $request->user()->id;
+            $deck->description = $request->input('description');
+            $deck->uuid = Str::uuid();
+            $deck->save();
+
+            return response()->json($deck);
+        } catch (InvalidArgumentException $e) {
+            report($e);
+
+            return response(null, 400);
+        }
     }
 
     private function toJson(ContextualizedRoll $roll): array
