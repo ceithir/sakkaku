@@ -60,6 +60,13 @@ class DrawController extends Controller
         }
     }
 
+    public function show(int $id)
+    {
+        $roll = ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
+
+        return response()->json($this->toJson($roll));
+    }
+
     private function toJson(ContextualizedRoll $roll): array
     {
         return [
