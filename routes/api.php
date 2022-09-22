@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AEG\L5R\D10RollAndKeepController;
+use App\Http\Controllers\Api\Cards\DrawController;
 use App\Http\Controllers\Api\DnD\RollController as DnDRollController;
 use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
@@ -78,3 +79,6 @@ Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where(
 Route::post('/public/ffg/sw/rolls/create', [FFGSWRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/ffg/sw/rolls/create', [FFGSWRollController::class, 'statefulCreate']);
 Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->where('id', '[0-9]+');
+
+// Cards
+Route::post('/public/cards/draw', [DrawController::class, 'statelessCreate']);
