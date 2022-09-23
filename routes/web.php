@@ -14,9 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/resources/rokugan-map', function () {
+Route::get('/draw-cards', function () {
     return File::get(public_path().'/react/index.html');
 });
+
+Route::get('/build-deck', function () {
+    return File::get(public_path().'/react/index.html');
+});
+
+Route::get('/draws/{id}', function ($id) {
+    ContextualizedRoll::where('type', 'card')->findOrFail($id);
+
+    return File::get(public_path().'/react/index.html');
+})->where('id', '[0-9]+');
 
 Route::get('/probabilities', function () {
     return File::get(public_path().'/react/index.html');
