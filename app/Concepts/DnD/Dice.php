@@ -14,7 +14,9 @@ class Dice
 
     public string $keepCriteria;
 
-    public function __construct(int $sides, int $number, int $keepNumber, string $keepCriteria)
+    public bool $explode;
+
+    public function __construct(int $sides, int $number, int $keepNumber, string $keepCriteria, bool $explode)
     {
         Assertion::between($sides, 1, 999);
         Assertion::between($number, 1, 99);
@@ -25,5 +27,6 @@ class Dice
         $this->number = $number;
         $this->keepNumber = $keepNumber;
         $this->keepCriteria = $keepCriteria;
+        $this->explode = $explode;
     }
 }

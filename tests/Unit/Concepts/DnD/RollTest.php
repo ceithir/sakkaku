@@ -146,6 +146,44 @@ class RollTest extends TestCase
         $this->assertEquals(['total' => 10], $roll->result());
     }
 
+    public function testExplodingDice()
+    {
+        $this->stubRandInt(4, 6, 6, 3, 6, 2);
+
+        $roll = Roll::init([
+            'dices' => [
+                [
+                    'number' => 3,
+                    'sides' => 6,
+                    'explode' => true,
+                    'keepNumber' => 1,
+                ],
+            ],
+        ]);
+
+        $this->assertEquals(
+            [
+                [
+                    'status' => 'dropped',
+                    'type' => 'd6',
+                    'value' => 4,
+                ],
+                [
+                    'status' => 'kept',
+                    'type' => 'd6',
+                    'value' => 15,
+                ],
+                [
+                    'status' => 'dropped',
+                    'type' => 'd6',
+                    'value' => 8,
+                ],
+            ],
+            (array) $roll->dice,
+        );
+        $this->assertEquals(['total' => 15], $roll->result());
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\DnD', 'random_int');

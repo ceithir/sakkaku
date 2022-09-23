@@ -68,9 +68,17 @@ class Roll implements RollInterface
         foreach ($parameters->dices as $dice) {
             $dd = [];
             for ($i = 0; $i < $dice->number; ++$i) {
+                $value = random_int(1, $dice->sides);
+                if ($dice->explode) {
+                    $v = $value;
+                    while ($v === $dice->sides) {
+                        $v = random_int(1, $dice->sides);
+                        $value += $v;
+                    }
+                }
                 $dd[] = [
                     'type' => 'd'.$dice->sides,
-                    'value' => random_int(1, $dice->sides),
+                    'value' => $value,
                 ];
             }
             $best = self::best($dd, $dice->keepNumber, $dice->keepCriteria);

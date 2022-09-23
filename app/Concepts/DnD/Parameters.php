@@ -34,6 +34,7 @@ class Parameters
                 number: $dice['number'],
                 keepNumber: $dice['keepNumber'] ?? $dice['number'],
                 keepCriteria: $dice['keepCriteria'] ?? 'highest',
+                explode: $dice['explode'] ?? false,
             );
         }, $parameters['dices']);
         $this->modifier = $modifier;
