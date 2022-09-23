@@ -23,7 +23,7 @@ class DrawController extends Controller
                 metadata: $request->input('metadata', [])
             );
 
-            return response()->json($roll);
+            return response()->json($roll->toArray());
         } catch (InvalidArgumentException $e) {
             report($e);
 
