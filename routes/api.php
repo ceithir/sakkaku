@@ -85,3 +85,4 @@ Route::post('/public/cards/draw', [DrawController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/cards/draw', [DrawController::class, 'statefulCreate']);
 Route::get('/public/cards/draws/{id}', [DrawController::class, 'show'])->where('id', '[0-9]+');
 Route::middleware('auth:sanctum')->post('/cards/decks/create', [DrawController::class, 'createDeck']);
+Route::get('/public/cards/decks/{uuid}', [DrawController::class, 'showDeck'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');

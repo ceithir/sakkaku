@@ -99,6 +99,11 @@ class DrawController extends Controller
         }
     }
 
+    public function showDeck(string $uuid)
+    {
+        return response()->json(Deck::where('uuid', $uuid)->firstOrFail());
+    }
+
     private function toJson(ContextualizedRoll $roll): array
     {
         return [
