@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\DnD\RollController as DnDRollController;
 use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
 use App\Http\Controllers\Api\FFG\SW\RollController as FFGSWRollController;
+use App\Http\Controllers\Api\Licensed\Cyberpunk\RollController as CyberpunkRollController;
 use App\Http\Controllers\Api\RollController;
 use App\Models\ContextualizedRoll;
 use Illuminate\Http\Request;
@@ -86,3 +87,7 @@ Route::middleware('auth:sanctum')->post('/cards/draw', [DrawController::class, '
 Route::get('/public/cards/draws/{id}', [DrawController::class, 'show'])->where('id', '[0-9]+');
 Route::middleware('auth:sanctum')->post('/cards/decks/create', [DrawController::class, 'createDeck']);
 Route::get('/public/cards/decks/{uuid}', [DrawController::class, 'showDeck'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
+
+// Cyberpunk
+
+Route::post('/public/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statelessCreate']);
