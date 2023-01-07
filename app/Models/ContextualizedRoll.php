@@ -8,6 +8,7 @@ use App\Concepts\DnD\Roll as DnDRoll;
 use App\Concepts\FFG\L5R\InheritanceRoll as L5RHeritageRoll;
 use App\Concepts\FFG\L5R\Roll as L5RRoll;
 use App\Concepts\FFG\SW\Roll as FFGSWRoll;
+use App\Concepts\Licensed\Cyberpunk\Roll as CyberpunkRoll;
 use App\Concepts\Roll;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +52,9 @@ class ContextualizedRoll extends Model
 
             case 'card':
                 return Draw::fromArray($this->roll);
+
+            case 'Cyberpunk-RED':
+                return CyberpunkRoll::fromArray($this->roll);
 
             default:
                 throw new \Exception('Corrupted roll');
