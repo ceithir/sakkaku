@@ -14,6 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/cyberpunk/roll', function () {
+    return File::get(public_path().'/react/index.html');
+});
+
+Route::get('/cyberpunk/rolls/{id}', function ($id) {
+    ContextualizedRoll::where('type', 'Cyberpunk-RED')->findOrFail($id);
+
+    return File::get(public_path().'/react/index.html');
+})->where('id', '[0-9]+');
+
 Route::get('/draw-cards', function () {
     return File::get(public_path().'/react/index.html');
 });
