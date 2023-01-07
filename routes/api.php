@@ -92,3 +92,4 @@ Route::get('/public/cards/decks/{uuid}', [DrawController::class, 'showDeck'])->w
 
 Route::post('/public/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statefulCreate']);
+Route::get('/public/cyberpunk/rolls/{id}', [CyberpunkRollController::class, 'show'])->where('id', '[0-9]+');
