@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/gm/prefiller', function () {
+    return File::get(public_path().'/react/index.html');
+});
+
 Route::get('/cyberpunk/roll', function () {
     return File::get(public_path().'/react/index.html');
 });
