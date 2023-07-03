@@ -57,4 +57,9 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function isSuperAdmin()
+    {
+        return (bool) env('SUPERADMIN_EMAIL') && $this->email === env('SUPERADMIN_EMAIL');
+    }
 }

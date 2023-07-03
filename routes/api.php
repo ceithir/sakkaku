@@ -26,18 +26,21 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     $user = $request->user();
 
-    return [
-        'id' => $user->id,
-        'name' => $user->name,
-        'campaigns' => ContextualizedRoll::select('campaign')
-            ->where('user_id', $user->id)
-            ->distinct()
-            ->pluck('campaign'),
-        'characters' => ContextualizedRoll::select('character')
-            ->where('user_id', $user->id)
-            ->distinct()
-            ->pluck('character'),
-    ];
+    return array_merge(
+        [
+            'id' => $user->id,
+            'name' => $user->name,
+            'campaigns' => ContextualizedRoll::select('campaign')
+                ->where('user_id', $user->id)
+                ->distinct()
+                ->pluck('campaign'),
+            'characters' => ContextualizedRoll::select('character')
+                ->where('user_id', $user->id)
+                ->distinct()
+                ->pluck('character'),
+        ],
+        $user->isSuperAdmin() ? ['superadmin' => true] : []
+    );
 });
 
 // All rolls
