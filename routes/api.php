@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // All rolls
 
 Route::get('/rolls', [RollController::class, 'index']);
+Route::middleware(['auth:sanctum', 'superadmin'])->delete('/admin/rolls/{id}', [RollController::class, 'delete'])->where(['id' => '[0-9]+']);
 
 // Normal rolls
 Route::get('public/ffg/l5r/rolls/{id}', [CheckRollController::class, 'show'])->where('id', '[0-9]+');

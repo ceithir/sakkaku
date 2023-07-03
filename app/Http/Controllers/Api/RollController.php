@@ -55,6 +55,14 @@ class RollController extends Controller
         ]);
     }
 
+    public function delete(int $id)
+    {
+        $roll = ContextualizedRoll::findOrFail($id);
+        $roll->delete();
+
+        return response()->noContent();
+    }
+
     private function rollToPublicArray(ContextualizedRoll $roll): array
     {
         return [
