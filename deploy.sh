@@ -9,6 +9,6 @@ cd ..
 git add .
 git commit -m "Pre-release commit"
 git push origin release
+eb deploy
 git checkout main
-eb deploy --source=release
 
