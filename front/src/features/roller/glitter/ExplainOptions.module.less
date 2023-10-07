@@ -1,0 +1,21 @@
+@import (reference) "common.less";
+
+.container {
+  background-color: white;
+  border: 1px solid fade(black, 25%);
+  padding: 12px;
+
+  & > *:last-child {
+    margin-bottom: 0;
+  }
+
+  dl {
+    dt:before {
+      content: "💮 ";
+    }
+
+    dd:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}

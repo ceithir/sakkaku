@@ -1,0 +1,30 @@
+@import (reference) "common.less";
+
+.container {
+  display: flex;
+  justify-content: center;
+  margin: 0 12px;
+
+  .column {
+    max-width: @screen-lg;
+    display: flex;
+    flex-direction: column;
+
+    .box {
+      .torii-box();
+    }
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+
+  & > * {
+    margin-right: 12px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

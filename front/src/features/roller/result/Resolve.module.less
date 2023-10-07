@@ -1,0 +1,26 @@
+@import (reference) "../../../common.less";
+
+.container {
+  max-width: @screen-sm;
+  margin: 0 auto;
+}
+
+.content {
+  .torii-box();
+  padding-top: 8px;
+  padding-bottom: 0;
+  margin-bottom: 24px;
+}
+
+.channel-text {
+  text-align: center;
+}
+
+.set-die {
+  &:after {
+    content: "*";
+    position: absolute;
+    margin-top: -8px;
+    color: @text-color-secondary;
+  }
+}

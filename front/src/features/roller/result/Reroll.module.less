@@ -1,0 +1,57 @@
+@import (reference) "../../../common.less";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.title {
+  text-align: center;
+}
+
+.arrow-right,
+.arrow-down {
+  font-size: 48px;
+}
+
+.arrow-right {
+  display: none;
+}
+
+.arrow-down {
+  margin-bottom: 24px;
+}
+
+@media (min-width: @screen-xl) {
+  .container {
+    flex-direction: row;
+  }
+
+  .arrow-right {
+    display: block;
+    margin: 0 36px;
+  }
+
+  .arrow-down {
+    display: none;
+  }
+}
+
+.empty {
+  text-align: center;
+}
+
+.dices {
+  margin: 16px;
+}
+
+.box {
+  .torii-box();
+  max-width: none !important;
+}
+
+.selected {
+  background-color: @reroll-die-color;
+}

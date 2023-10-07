@@ -1,0 +1,57 @@
+@import (reference) "../../common.less";
+
+@underline-color: #778771; //TODO: More consistent color with rest of site
+
+.container {
+  dl,
+  dt,
+  dd {
+    margin: 0;
+  }
+
+  & > dl {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    & > div {
+      padding-left: 12px;
+      padding-right: 12px;
+
+      & > dt {
+        .block-title();
+        padding-right: 24px;
+      }
+
+      & > dd {
+        margin: 12px 0;
+      }
+
+      & > dd > dl {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex-wrap: wrap;
+
+        & > div {
+          display: flex;
+          flex-direction: column-reverse;
+          padding: 0 12px;
+
+          & > dt {
+            font-weight: normal;
+            padding-right: 12px;
+            font-size: 90%;
+            border-top: 1px solid @underline-color;
+            color: @underline-color;
+          }
+
+          & > dd {
+            text-align: center;
+            padding: 0 12px;
+          }
+        }
+      }
+    }
+  }
+}

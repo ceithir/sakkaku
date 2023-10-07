@@ -1,0 +1,92 @@
+@import (reference) "common.less";
+
+.form {
+  margin: 0 auto;
+  max-width: @screen-md;
+  .torii-box();
+  padding-bottom: 0;
+
+  h2 {
+    .red-title();
+    text-align: center;
+  }
+
+  label[for="testMode"] {
+    margin-bottom: 12px;
+  }
+}
+
+.dice-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+
+  & > * {
+    margin-bottom: 12px;
+    margin-right: 8px;
+    a:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.undefined-die {
+  position: relative;
+
+  &:after {
+    position: absolute;
+    top: 18px;
+    left: 26px;
+    font-size: 18px;
+    content: "?";
+  }
+}
+
+.undefined-ring-die {
+  .undefined-die();
+
+  &:after {
+    color: white;
+  }
+}
+
+.undefined-skill-die {
+  .undefined-die();
+
+  &:after {
+    color: black;
+  }
+}
+
+.channeled {
+  :global(.ant-row.ant-form-item):first-child
+    :global(.ant-form-item-control-input-content) {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.buttons {
+  display: flex;
+  justify-content: right;
+  margin-bottom: 18px;
+
+  & > * {
+    margin-right: 24px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.warning {
+  margin-bottom: 24px;
+}
+
+fieldset.set-dice {
+  & > * {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

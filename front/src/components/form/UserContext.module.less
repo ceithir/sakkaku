@@ -1,0 +1,41 @@
+.test-mode {
+  float: right;
+  margin-bottom: 0;
+
+  &:global(.ant-form-item) {
+    flex-direction: row;
+    align-items: baseline;
+
+    :global(.ant-form-item-label) {
+      padding: 0;
+      margin-right: 8px;
+    }
+  }
+}
+
+.clear {
+  clear: both;
+}
+
+.identifiers {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  & > * {
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  :global(.ant-select-auto-complete) {
+    min-width: 240px;
+  }
+}
+
+.anonymous-alert {
+  margin-bottom: 24px;
+
+  .button-wrapper {
+    text-align: center;
+  }
+}

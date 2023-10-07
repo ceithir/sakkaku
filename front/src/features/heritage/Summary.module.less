@@ -1,0 +1,56 @@
+@import (reference) "common.less";
+
+@label-background-color: #f0efed;
+
+.container {
+  :global(.ant-descriptions-header) {
+    margin-bottom: 12px;
+  }
+
+  :global(.ant-descriptions-title) {
+    .block-title();
+    padding-left: 8px;
+    font-size: 18px;
+  }
+
+  :global(.ant-descriptions-item-content) {
+    word-break: normal;
+    vertical-align: top;
+  }
+
+  :global(.ant-descriptions-item-label) {
+    color: @text-green;
+  }
+
+  :global(.ant-descriptions-item-content),
+  :global(.ant-descriptions-item-content) :global(.ant-typography) {
+    color: @torii-text-color;
+  }
+
+  :global(.ant-descriptions-item-label) {
+    background-color: @label-background-color;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  :global(.ant-descriptions-item-content) {
+    background-color: @torii-background-color;
+  }
+
+  :global(.ant-descriptions-item-label),
+  :global(.ant-descriptions-item-content),
+  :global(.ant-descriptions-bordered)
+    :global(.ant-descriptions-item-label:last-child),
+  :global(.ant-descriptions-bordered)
+    :global(.ant-descriptions-item-content:last-child) {
+    border: 1px solid @border-green;
+  }
+
+  :global(.ant-descriptions-view) tbody > tr:first-child {
+    border-top: 4px double @border-green;
+  }
+
+  :global(.ant-descriptions-view) tbody > tr:last-child {
+    border-bottom: 4px double @border-green;
+  }
+}

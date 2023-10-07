@@ -1,0 +1,28 @@
+@import (reference) "common.less";
+
+.container {
+  .torii-box();
+  max-width: @screen-md;
+  margin: 0 auto;
+
+  h3 {
+    text-align: center;
+  }
+}
+
+.arrow {
+  text-align: center;
+  font-size: 48px;
+  margin-top: -24px;
+}
+
+.altered-dice {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  & > * {
+    margin: 0 6px;
+    margin-bottom: 16px;
+  }
+}

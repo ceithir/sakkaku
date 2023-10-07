@@ -1,0 +1,25 @@
+@import (reference) "common.less";
+
+.form {
+  .torii-box();
+  max-width: @screen-md;
+  margin: 0 auto;
+}
+
+.footer {
+  margin-bottom: 0;
+
+  :global(.ant-form-item-control-input-content) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+
+  :global(.ant-form-item-control-input-content) > * {
+    margin-right: 24px;
+  }
+
+  :global(.ant-form-item-control-input-content) > *:last-child {
+    margin-right: 0;
+  }
+}

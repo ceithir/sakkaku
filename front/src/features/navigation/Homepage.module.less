@@ -1,0 +1,47 @@
+@import (reference) "../../common.less";
+
+.container {
+  background-color: @default-background-color;
+
+  & > * {
+    max-width: @screen-lg;
+    margin: 24px auto;
+    padding: 0 12px;
+  }
+
+  & > h1 {
+    max-width: 100%;
+    padding: 16px;
+  }
+}
+
+.section {
+  h2 {
+    .red-title();
+    margin-bottom: 4px;
+
+    .anchor {
+      float: right;
+    }
+  }
+
+  .content {
+    .torii-box();
+  }
+}
+
+.dice {
+  img {
+    width: 30px;
+  }
+}
+
+.links {
+  & > * {
+    margin-bottom: 12px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

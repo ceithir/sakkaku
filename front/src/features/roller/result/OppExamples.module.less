@@ -1,0 +1,17 @@
+@import (reference) "common.less";
+
+.container {
+  .torii-box();
+  margin-bottom: 24px;
+
+  ul {
+    padding-left: 24px;
+  }
+
+  @media (min-width: @screen-lg) {
+    @extra-width: (@screen-lg - @screen-md)/2;
+
+    margin-left: -@extra-width;
+    margin-right: -@extra-width;
+  }
+}

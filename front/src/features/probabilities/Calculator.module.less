@@ -1,0 +1,29 @@
+@import (reference) "common.less";
+
+.layout {
+  .paper-background();
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.form {
+  .torii-box();
+  margin: 0 12px;
+  margin-bottom: 24px;
+  max-width: @screen-md;
+  justify-content: center;
+
+  &:global(.ant-form-inline) :global(.ant-form-item) {
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: @screen-sm) {
+    justify-content: space-between;
+  }
+
+  output {
+    text-align: center;
+  }
+}

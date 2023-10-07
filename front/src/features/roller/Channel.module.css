@@ -1,0 +1,12 @@
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttons > * {
+  margin-right: 24px;
+}
+
+.buttons > *:last-child {
+  margin-right: 0;
+}

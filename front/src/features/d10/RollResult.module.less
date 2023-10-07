@@ -1,0 +1,29 @@
+@import (reference) "common.less";
+
+.result {
+  .dice {
+    border: 1px solid black;
+    padding: 6px 12px;
+
+    & > * {
+      margin-right: 12px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+
+      &.reroll-arrow {
+        margin-left: -12px;
+        margin-right: 4px;
+      }
+    }
+  }
+
+  .separator {
+    margin: 0 12px;
+  }
+
+  .modifier {
+    margin-left: 12px;
+  }
+}

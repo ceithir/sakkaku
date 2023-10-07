@@ -1,0 +1,47 @@
+@import (reference) "common.less";
+
+.background {
+  .paper-background();
+  flex: 1;
+}
+
+.container {
+  max-width: @screen-lg;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+.context {
+  margin-bottom: 24px;
+  .torii-box();
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+
+  & > * {
+    margin-right: 24px;
+    margin-bottom: 24px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+@media (max-width: @screen-sm) {
+  .container {
+    padding: 0;
+  }
+
+  .buttons {
+    justify-content: center;
+
+    & > * {
+      margin-left: 12px;
+      margin-right: 12px;
+    }
+  }
+}

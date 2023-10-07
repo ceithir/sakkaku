@@ -1,0 +1,48 @@
+@import (reference) "../../common.less";
+
+.dices {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 16px auto 24px auto;
+
+  & > .dice {
+    padding: 4px !important;
+    margin-right: 4px;
+    margin-bottom: 8px !important;
+
+    img {
+      width: 60px;
+      height: 60px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.selectable {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+
+  input {
+    margin: 6px auto 4px auto;
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: #69c0ff;
+  }
+}
+
+.selected {
+  background-color: #91d5ff;
+}
+
+.unselectable {
+  opacity: 0.5;
+  background-color: #bfbfbf;
+}

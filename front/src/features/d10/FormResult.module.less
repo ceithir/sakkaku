@@ -1,0 +1,25 @@
+@import (reference) "common.less";
+
+.result {
+  .torii-box();
+  margin: 0 auto 24px;
+  text-align: center;
+  max-width: @screen-md;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+
+  & > * {
+    margin-right: 12px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  a {
+    line-height: 32px;
+  }
+}

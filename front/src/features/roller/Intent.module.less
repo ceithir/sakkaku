@@ -1,0 +1,165 @@
+@import (reference) "common.less";
+
+.form {
+  margin: 0 auto;
+  max-width: @screen-md;
+  .torii-box();
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 0;
+
+  @media (min-width: @screen-md) {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media (min-width: @screen-lg) {
+    @extra-space: 32;
+
+    max-width: @screen-md + 2 * @extra-space;
+    padding-left: 24px + @extra-space;
+    padding-right: 24px + @extra-space;
+  }
+
+  @media (max-width: @screen-sm) {
+    :global(.ant-form-item) {
+      flex-direction: row;
+    }
+  }
+
+  fieldset {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    & > * {
+      margin-left: 12px;
+      margin-right: 12px;
+    }
+  }
+
+  fieldset + :global(.ant-divider),
+  :global(.ant-collapse) + :global(.ant-divider) {
+    margin-top: 0;
+  }
+
+  .checkboxes {
+    :global(.ant-form-item-control-input-content) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .addkept {
+    button {
+      display: block;
+      margin: 0 auto;
+    }
+
+    :global(.ant-row) {
+      margin-bottom: 24px;
+    }
+
+    & > :global(.ant-row) {
+      margin-bottom: 0;
+    }
+  }
+
+  .assist-container {
+    :global(.ant-form-item-control-input-content) {
+      display: flex;
+      justify-content: center;
+    }
+  }
+
+  .addkept-summary {
+    text-align: center;
+    img {
+      height: 48px;
+      margin-left: 8px;
+    }
+  }
+
+  :global(.ant-form-item-has-error)
+    + :global(.ant-collapse)
+    > :global(.ant-collapse-item.ant-collapse-no-arrow)
+    > :global(.ant-collapse-header) {
+    margin-top: 0;
+  }
+
+  .school {
+    margin-bottom: 24px;
+
+    @media (max-width: @screen-sm) {
+      margin-left: -36px;
+      margin-right: -36px;
+    }
+  }
+
+  .custom-school {
+    margin-bottom: 12px;
+
+    :global(.ant-alert-description) {
+      p:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .advanced-button {
+    button {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  .advanced-explanation {
+    p,
+    ul {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.plus :global(.ant-form-item-control-input-content):after {
+  color: @text-color-secondary;
+  margin-left: 12px;
+}
+
+// Okay, _maybe_ there is a better way to do that
+.plus-01 :global(.ant-form-item-control-input-content):after {
+  content: "+1";
+}
+.plus-02 :global(.ant-form-item-control-input-content):after {
+  content: "+2";
+}
+.plus-03 :global(.ant-form-item-control-input-content):after {
+  content: "+3";
+}
+.plus-04 :global(.ant-form-item-control-input-content):after {
+  content: "+4";
+}
+.plus-05 :global(.ant-form-item-control-input-content):after {
+  content: "+5";
+}
+.plus-06 :global(.ant-form-item-control-input-content):after {
+  content: "+6";
+}
+.plus-07 :global(.ant-form-item-control-input-content):after {
+  content: "+7";
+}
+.plus-08 :global(.ant-form-item-control-input-content):after {
+  content: "+8";
+}
+.plus-09 :global(.ant-form-item-control-input-content):after {
+  content: "+9";
+}
+.plus-10 :global(.ant-form-item-control-input-content):after {
+  content: "+10";
+}
+.plus-11 :global(.ant-form-item-control-input-content):after {
+  content: "+11";
+}
+.plus-12 :global(.ant-form-item-control-input-content):after {
+  content: "+12";
+}

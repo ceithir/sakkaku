@@ -1,0 +1,53 @@
+@import (reference) "common.less";
+
+.form-container {
+  .torii-box();
+  margin: 0 auto;
+  max-width: @screen-md;
+
+  .submit {
+    margin-bottom: 0;
+
+    button {
+      float: right;
+    }
+  }
+}
+
+.cards {
+  & > * {
+    margin: 4px;
+  }
+}
+
+.copy-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 24px;
+
+  & > * {
+    margin-right: 12px;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.remaining {
+  margin-bottom: 24px;
+}
+
+.alert-need-log {
+  margin-bottom: 24px;
+}
+
+.preconf {
+  .torii-box-light();
+  margin-bottom: 24px;
+
+  .description {
+    padding: 16px;
+    background: #f0f0f0;
+    border-radius: 4px;
+  }
+}

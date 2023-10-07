@@ -1,0 +1,9 @@
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+
+.buttons > * {
+  margin-bottom: 16px;
+}

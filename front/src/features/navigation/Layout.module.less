@@ -1,0 +1,22 @@
+@import (reference) "~antd/dist/antd.less";
+
+.layout {
+  min-height: 100vh;
+  background-color: @background-color-base;
+
+  /* Allow to strech direct children height with instructions like flex: 1 */
+  :global(.ant-layout-content) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.footer {
+  text-align: center;
+}
+
+@media (max-width: @screen-sm) {
+  .layout > header {
+    padding: 0;
+  }
+}

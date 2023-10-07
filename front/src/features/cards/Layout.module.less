@@ -1,0 +1,18 @@
+@import (reference) "common.less";
+
+.container {
+  flex: 1;
+  .paper-background();
+
+  .breadcrumb {
+    padding-left: 8px;
+    background: #ffffff;
+  }
+
+  .body {
+    @media (min-width: @screen-sm) {
+      margin-top: 24px;
+      margin-bottom: 24px;
+    }
+  }
+}

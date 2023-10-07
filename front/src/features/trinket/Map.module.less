@@ -1,0 +1,54 @@
+@import (reference) "~antd/dist/antd.less";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: calc(~"100vh - 64px");
+}
+
+.text {
+  padding: 24px;
+}
+
+.scroll-container {
+  cursor: grab;
+  flex: 1;
+
+  &:global(.indiana-scroll-container--dragging) {
+    cursor: grabbing;
+  }
+}
+
+.search {
+  display: flex;
+  align-items: center;
+
+  :global(.ant-select) {
+    margin-right: 18px;
+  }
+
+  span:global(.ant-typography) {
+    display: none;
+
+    @media (min-width: @screen-sm) {
+      display: inline;
+      margin-top: 0;
+    }
+  }
+}
+
+.fixed-bar {
+  position: fixed;
+  background-color: #fa8c16;
+  opacity: 0.5;
+}
+
+.horizontal-bar {
+  .fixed-bar();
+  height: 16px;
+}
+
+.vertical-bar {
+  .fixed-bar();
+  width: 16px;
+}

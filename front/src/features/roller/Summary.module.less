@@ -1,0 +1,31 @@
+@import (reference) "../../common.less";
+
+.container {
+  .torii-box();
+}
+
+.dices {
+  display: flex;
+
+  & > * {
+    margin-right: 16px;
+  }
+
+  img {
+    height: 48px;
+  }
+}
+
+.center {
+  display: block;
+  text-align: center;
+}
+
+.other-modifiers {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > * {
+    margin-left: 24px;
+  }
+}

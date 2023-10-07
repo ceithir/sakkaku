@@ -1,0 +1,31 @@
+@import (reference) "common.less";
+
+.deck-builder {
+  background-color: white;
+  border: 1px solid fade(black, 25%);
+  padding: 12px;
+
+  display: flex;
+  flex-direction: column;
+
+  :global(.ant-form-item-label) {
+    text-align: left;
+  }
+
+  :global(.ant-checkbox-group) {
+    display: flex;
+    flex-wrap: wrap;
+
+    img {
+      max-width: 30px;
+    }
+
+    & > label {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+
+      margin: 0;
+    }
+  }
+}

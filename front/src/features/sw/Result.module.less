@@ -1,0 +1,27 @@
+.dice {
+  & > * {
+    margin: 2px;
+  }
+}
+
+.summary {
+  margin-top: 24px;
+
+  .additions,
+  .force {
+    display: flex;
+    flex-wrap: wrap;
+
+    & > * {
+      padding: 12px;
+    }
+  }
+
+  .additions {
+    justify-content: space-around;
+  }
+
+  .force {
+    justify-content: center;
+  }
+}
