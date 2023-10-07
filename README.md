@@ -10,6 +10,12 @@ Virtually no change from default.
 
 ### Commands
 
+Move within the folder first:
+
+```
+cd front
+```
+
 Run dev server:
 
 ```
