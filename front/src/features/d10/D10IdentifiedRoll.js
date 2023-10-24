@@ -10,7 +10,6 @@ import Title from "./Title";
 import Description from "features/trinket/Description";
 import { stringify } from "./formula";
 import CopyButtons from "components/aftermath/CopyButtons";
-import { Helmet } from "react-helmet";
 
 export const link = (id) => !!id && `${window.location.origin}/d10-rolls/${id}`;
 export const bbMessage = ({ description, roll }) => {
@@ -25,17 +24,6 @@ export const bbMessage = ({ description, roll }) => {
     `${description} | ${stringify(parameters)} ⇒ [b]${total}[/b]` +
     (!!tn ? ` (TN: ${tn})` : "")
   );
-};
-
-const rollSummary = (roll) => {
-  const { parameters, dice } = roll;
-  const { tn } = parameters;
-  const total =
-    dice
-      .filter(({ status }) => status === "kept")
-      .reduce((acc, { value }) => acc + value, 0) + (parameters.modifier || 0);
-
-  return `${stringify(parameters)} ⇒ ${total}` + (!!tn ? ` (TN: ${tn})` : "");
 };
 
 const D10IdentifiedRoll = () => {
@@ -123,32 +111,24 @@ const D10IdentifiedRoll = () => {
   ].filter(Boolean);
 
   return (
-    <>
-      <div className={styles.background}>
-        <Title />
-        <div className={styles.container}>
-          <div className={styles.context}>
-            <CharacterSheet
-              identity={{ character, campaign, player }}
-              data={organizedData}
-            />
-          </div>
+    <div className={styles.background}>
+      <Title />
+      <div className={styles.container}>
+        <div className={styles.context}>
+          <CharacterSheet
+            identity={{ character, campaign, player }}
+            data={organizedData}
+          />
+        </div>
 
-          <div className={styles.buttons}>
-            <CopyButtons
-              link={link(id)}
-              bbMessage={bbMessage({ description, roll })}
-            />
-          </div>
+        <div className={styles.buttons}>
+          <CopyButtons
+            link={link(id)}
+            bbMessage={bbMessage({ description, roll })}
+          />
         </div>
       </div>
-      <Helmet>
-        <meta property="og:title" content={`Sakkaku – ${campaign}`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content={`https://sakkaku.org/logo.png`} />
-        <meta property="og:description" content={rollSummary(roll)} />
-      </Helmet>
-    </>
+    </div>
   );
 };
 
