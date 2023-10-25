@@ -11,7 +11,7 @@ class RollRenderController extends Controller
         $roll = ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
 
         $r = $roll->getRoll();
-        $description = "{$roll->campaign} – {$roll->character} – ";
+        $description = "{$roll->campaign} 💮 {$roll->character} 💮 ";
         $description .= "{$r->parameters->roll}k{$r->parameters->keep} => {$r->result()['total']}";
         if ($r->parameters->tn) {
             $description .= ' '."(TN: {$r->parameters->tn})";
