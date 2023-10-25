@@ -7,7 +7,7 @@ import Description from "features/trinket/Description";
 import { stringify } from "./formula";
 import CopyButtons from "components/aftermath/CopyButtons";
 
-export const link = (id) => !!id && `${window.location.origin}/d10-rolls/${id}`;
+export const link = (id) => !!id && `${window.location.origin}/r/${id}`;
 export const bbMessage = ({ description, roll }) => {
   const { parameters, dice } = roll;
   const { tn } = parameters;

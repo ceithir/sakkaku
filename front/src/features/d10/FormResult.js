@@ -25,9 +25,7 @@ const ScrollForm = ({ result, context }) => {
             roll: result,
           })}
         />
-        {!!context?.id && (
-          <Link to={`/d10-rolls/${context.id}`}>{`Go to page`}</Link>
-        )}
+        {!!context?.id && <Link to={`/r/${context.id}`}>{`Go to page`}</Link>}
       </div>
     </div>
   );

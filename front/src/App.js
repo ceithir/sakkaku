@@ -70,9 +70,6 @@ const App = () => {
 
             <AdvancedRoller />
           </Route>
-          <Route path="/d10-rolls/:id" exact>
-            <Show />
-          </Route>
           <Route path="/roll-dnd" exact>
             <DnDRoller />
           </Route>
