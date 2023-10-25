@@ -81,7 +81,7 @@ Route::get('/roll-dnd', function () {
     return File::get(public_path().'/react/index.html');
 });
 
-Route::get('/dnd-rolls/{id}', [RollRenderController::class, 'showStandardRoll'])->where('id', '[0-9]+');
+Route::permanentRedirect('/dnd-rolls/{id}', '/r/{id}');
 
 Route::get('/roll-ffg-sw', function () {
     return File::get(public_path().'/react/index.html');
@@ -98,6 +98,8 @@ Route::get('/d10-rolls/{id}', [RollRenderController::class, 'showL5RAEGRoll'])->
 Route::get('/roll', function () {
     return File::get(public_path().'/react/index.html');
 });
+
+Route::get('/r/{id}', [RollRenderController::class, 'show'])->where('id', '[0-9]+');
 
 Route::get('/', function () {
     return File::get(public_path().'/react/index.html');
