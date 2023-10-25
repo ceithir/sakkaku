@@ -81,11 +81,7 @@ Route::get('/roll-dnd', function () {
     return File::get(public_path().'/react/index.html');
 });
 
-Route::get('/dnd-rolls/{id}', function ($id) {
-    ContextualizedRoll::where('type', 'DnD')->findOrFail($id);
-
-    return File::get(public_path().'/react/index.html');
-})->where('id', '[0-9]+');
+Route::get('/dnd-rolls/{id}', [RollRenderController::class, 'showStandardRoll'])->where('id', '[0-9]+');
 
 Route::get('/roll-ffg-sw', function () {
     return File::get(public_path().'/react/index.html');
