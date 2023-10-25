@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AEG\L5R\D10RollAndKeepController;
-use App\Http\Controllers\Api\Cards\DrawController;
 use App\Http\Controllers\Api\DnD\RollController as DnDRollController;
 use App\Http\Controllers\Api\FFG\L5R\CheckRollController;
 use App\Http\Controllers\Api\FFG\L5R\InheritanceRollController;
@@ -83,13 +82,6 @@ Route::middleware('auth:sanctum')->post('/dnd/rolls/create', [DnDRollController:
 Route::post('/public/ffg/sw/rolls/create', [FFGSWRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/ffg/sw/rolls/create', [FFGSWRollController::class, 'statefulCreate']);
 Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->where('id', '[0-9]+');
-
-// Cards
-Route::post('/public/cards/draw', [DrawController::class, 'statelessCreate']);
-Route::middleware('auth:sanctum')->post('/cards/draw', [DrawController::class, 'statefulCreate']);
-Route::get('/public/cards/draws/{id}', [DrawController::class, 'show'])->where('id', '[0-9]+');
-Route::middleware('auth:sanctum')->post('/cards/decks/create', [DrawController::class, 'createDeck']);
-Route::get('/public/cards/decks/{uuid}', [DrawController::class, 'showDeck'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 
 // Cyberpunk
 

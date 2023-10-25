@@ -20,10 +20,6 @@ import ReconnectionModal from "features/user/ReconnectionModal";
 import DnDRoller from "features/dnd/Roller";
 import FFGSWRoller from "features/sw/Roller";
 import FFGSWRoll from "features/sw/Roll";
-import DrawCards from "features/cards/Draw";
-import IdDraw from "features/cards/IdDraw";
-import DeckBuilder from "features/cards/DeckBuilder";
-import CardSubmenu from "features/navigation/CardSubmenu";
 import CyberpunkRoller from "features/cyberpunk/Roller";
 import CyberpunkRoll from "features/cyberpunk/Roll";
 import Prefiller from "features/gm/Prefiller";
@@ -89,17 +85,6 @@ const App = () => {
           </Route>
           <Route path="/ffg-sw-rolls/:id" exact>
             <FFGSWRoll />
-          </Route>
-          <Route path="/draw-cards" exact>
-            <CardSubmenu />
-            <DrawCards />
-          </Route>
-          <Route path="/build-deck" exact>
-            <CardSubmenu />
-            <DeckBuilder />
-          </Route>
-          <Route path="/draws/:id" exact>
-            <IdDraw />
           </Route>
           <Route path="/cyberpunk/roll" exact>
             <CyberpunkRoller />

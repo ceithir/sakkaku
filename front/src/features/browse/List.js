@@ -16,7 +16,6 @@ import { stringify as aegStringify } from "features/d10/formula";
 import FFGSWResult from "./FFGSWResult";
 import { isAForceRoll, netSuccesses } from "features/sw/Result";
 import { stringify as dndStringify } from "features/dnd/formula";
-import CardResult from "./CardResult";
 import { selectUser } from "features/user/reducer";
 import { useSelector } from "react-redux";
 
@@ -93,7 +92,7 @@ const defaultColumns = [
         return <>{aegStringify(roll.parameters)}</>;
       }
 
-      if (["FFG-L5R-Heritage", "card"].includes(type)) {
+      if (["FFG-L5R-Heritage"].includes(type)) {
         return `—`;
       }
 
@@ -140,10 +139,6 @@ const defaultColumns = [
 
       if (type === "FFG-SW") {
         return <FFGSWResult parameters={parameters} result={result} />;
-      }
-
-      if (type === "card") {
-        return <CardResult result={result} />;
       }
 
       return null;
@@ -211,10 +206,6 @@ const defaultColumns = [
 
         if (type === "FFG-SW") {
           return `/ffg-sw-rolls/${id}`;
-        }
-
-        if (type === "card") {
-          return `/draws/${id}`;
         }
 
         if (type === "Cyberpunk-RED") {
