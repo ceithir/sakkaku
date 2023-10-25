@@ -4,7 +4,7 @@ import TextResult from "./TextResult";
 import ResultBox from "components/aftermath/ResultBox";
 import { stringify } from "./formula";
 
-export const link = (id) => !!id && `${window.location.origin}/dnd-rolls/${id}`;
+export const link = (id) => !!id && `${window.location.origin}/r/${id}`;
 export const bbMessage = ({ description, total, parameters }) =>
   `${description} | ${stringify(parameters)} ⇒ [b]${total}[/b]`;
 

@@ -210,7 +210,7 @@ const defaultColumns = [
         }
 
         if (type === "DnD") {
-          return `/dnd-rolls/${id}`;
+          return `/r/${id}`;
         }
 
         if (type === "FFG-SW") {

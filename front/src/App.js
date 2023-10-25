@@ -76,7 +76,7 @@ const App = () => {
           <Route path="/roll-dnd" exact>
             <DnDRoller />
           </Route>
-          <Route path="/dnd-rolls/:id" exact>
+          <Route path="/r/:id" exact>
             <Show />
           </Route>
           <Route path="/roll-d10" exact>
