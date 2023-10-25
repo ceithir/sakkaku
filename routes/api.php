@@ -47,8 +47,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/rolls', [RollController::class, 'index']);
 Route::middleware(['auth:sanctum', 'superadmin'])->delete('/admin/rolls/{id}', [RollController::class, 'delete'])->where(['id' => '[0-9]+']);
+Route::get('/rolls/{id}', [RollController::class, 'show'])->where(['id' => '[0-9]+']);
 
-// Normal rolls
+// L5R FFG rolls
 Route::get('public/ffg/l5r/rolls/{id}', [CheckRollController::class, 'show'])->where('id', '[0-9]+');
 
 Route::post('public/ffg/l5r/rolls/{action}', [CheckRollController::class, 'stateless'])->where('action', '[a-z]+');
@@ -59,7 +60,7 @@ Route::middleware('auth:sanctum')
     ->where(['id' => '[0-9]+', 'action' => '[a-z]+'])
 ;
 
-// Heritage rolls
+// L5R FFG Heritage rolls
 
 Route::get('/public/ffg/l5r/heritage-rolls/{uuid}', [InheritanceRollController::class, 'show'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 Route::post('/public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollController::class, 'stateless'])->where('action', '[a-z]+');
@@ -67,9 +68,8 @@ Route::post('/public/ffg/l5r/heritage-rolls/{action}', [InheritanceRollControlle
 Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/create', [InheritanceRollController::class, 'create']);
 Route::middleware('auth:sanctum')->post('/ffg/l5r/heritage-rolls/{uuid}/keep', [InheritanceRollController::class, 'keep'])->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}');
 
-// D10 rolls
+// L5R AEG rolls
 
-Route::get('/public/aeg/l5r/rolls/{id}', [D10RollAndKeepController::class, 'show'])->where('id', '[0-9]+');
 Route::post('/public/aeg/l5r/rolls/create', [D10RollAndKeepController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/aeg/l5r/rolls/create', [D10RollAndKeepController::class, 'statefulCreate']);
 
@@ -77,7 +77,6 @@ Route::middleware('auth:sanctum')->post('/aeg/l5r/rolls/create', [D10RollAndKeep
 
 Route::post('/public/dnd/rolls/create', [DnDRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/dnd/rolls/create', [DnDRollController::class, 'statefulCreate']);
-Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where('id', '[0-9]+');
 
 // FFG-SW rolls
 
@@ -97,3 +96,7 @@ Route::get('/public/cards/decks/{uuid}', [DrawController::class, 'showDeck'])->w
 Route::post('/public/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statefulCreate']);
 Route::get('/public/cyberpunk/rolls/{id}', [CyberpunkRollController::class, 'show'])->where('id', '[0-9]+');
+
+// TODO Deprecated routes, to be removed eventually
+Route::get('/public/aeg/l5r/rolls/{id}', [D10RollAndKeepController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where('id', '[0-9]+');
