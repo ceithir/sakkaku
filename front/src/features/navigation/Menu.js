@@ -35,10 +35,6 @@ const CustomMenu = () => {
         return "ffg-sw";
       }
 
-      if (["/draw-cards", "/build-deck"].includes(pathname)) {
-        return "cards";
-      }
-
       if (["/cyberpunk/roll"].includes(pathname)) {
         return "cyberpunk";
       }
@@ -107,16 +103,6 @@ const CustomMenu = () => {
             {
               key: "ffg-sw",
               label: <Link to="/roll-ffg-sw">{`FFG custom dice`}</Link>,
-            },
-          ],
-        },
-        {
-          type: "group",
-          label: `Cards`,
-          children: [
-            {
-              key: "cards",
-              label: <Link to="/draw-cards">{`Standard 52-card deck`}</Link>,
             },
           ],
         },
