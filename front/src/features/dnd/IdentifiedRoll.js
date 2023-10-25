@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import DefaultErrorMessage from "DefaultErrorMessage";
-import { getOnServer } from "server";
-import Loader from "features/navigation/Loader";
+import React from "react";
 import Layout from "./Layout";
 import TextResult from "./TextResult";
 import ResultBox from "components/aftermath/ResultBox";
@@ -12,40 +8,15 @@ export const link = (id) => !!id && `${window.location.origin}/dnd-rolls/${id}`;
 export const bbMessage = ({ description, total, parameters }) =>
   `${description} | ${stringify(parameters)} ⇒ [b]${total}[/b]`;
 
-const D10IdentifiedRoll = () => {
-  const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    setLoading(true);
-    getOnServer({
-      uri: `/rolls/${id}`,
-      success: (data) => {
-        setData(data);
-        setLoading(false);
-      },
-      error: () => {
-        setError(true);
-        setLoading(false);
-      },
-    });
-  }, [id]);
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <DefaultErrorMessage />;
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  const { character, campaign, user: player, description, roll, result } = data;
+const D10IdentifiedRoll = ({
+  id,
+  character,
+  campaign,
+  player,
+  description,
+  roll,
+  result,
+}) => {
   const { parameters, metadata } = roll;
   const { tn } = parameters;
 
