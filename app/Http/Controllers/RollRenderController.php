@@ -9,18 +9,19 @@ class RollRenderController extends Controller
     public function show(int $id): string
     {
         // TODO: Extend as more types become supported
-        $roll = ContextualizedRoll::whereIn('type', ['DnD'])->findOrFail($id);
+        $roll = ContextualizedRoll::whereIn('type', ['DnD', 'AEG-L5R'])->findOrFail($id);
 
         switch ($roll->type) {
             case 'DnD':
                 return $this->showStandardRoll($roll);
+
+            case 'AEG-L5R':
+                return $this->showL5RAEGRoll($roll);
         }
     }
 
-    public function showL5RAEGRoll(int $id): string
+    private function showL5RAEGRoll(ContextualizedRoll $roll): string
     {
-        $roll = ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
-
         $r = $roll->getRoll();
         $description = "{$r->parameters->roll}k{$r->parameters->keep} => {$r->result()['total']}";
         if ($r->parameters->tn) {

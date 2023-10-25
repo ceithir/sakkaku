@@ -93,7 +93,7 @@ Route::get('/ffg-sw-rolls/{id}', function ($id) {
     return File::get(public_path().'/react/index.html');
 })->where('id', '[0-9]+');
 
-Route::get('/d10-rolls/{id}', [RollRenderController::class, 'showL5RAEGRoll'])->where('id', '[0-9]+');
+Route::permanentRedirect('/d10-rolls/{id}', '/r/{id}');
 
 Route::get('/roll', function () {
     return File::get(public_path().'/react/index.html');
