@@ -35,7 +35,7 @@ const D10IdentifiedRoll = () => {
   useEffect(() => {
     setLoading(true);
     getOnServer({
-      uri: `/public/aeg/l5r/rolls/${id}`,
+      uri: `/rolls/${id}`,
       success: (data) => {
         setData(data);
         setLoading(false);

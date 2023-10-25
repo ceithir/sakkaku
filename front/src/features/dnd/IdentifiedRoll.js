@@ -21,7 +21,7 @@ const D10IdentifiedRoll = () => {
   useEffect(() => {
     setLoading(true);
     getOnServer({
-      uri: `/public/dnd/rolls/${id}`,
+      uri: `/rolls/${id}`,
       success: (data) => {
         setData(data);
         setLoading(false);
