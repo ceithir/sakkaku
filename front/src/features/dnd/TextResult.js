@@ -48,14 +48,18 @@ const TextResult = ({ parameters, dice }) => {
     <>
       <>
         {groupDice(dice).map(({ type, values }, index) => (
-          <>
+          <React.Fragment key={index.toString()}>
             {index > 0 && ` + `}
             <span className={styles["dice-group"]}>
               <span className={styles.values}>
                 {values.map(({ value, status }, index) => {
                   const dropped = status === "dropped";
                   return (
-                    <Text delete={dropped} type={dropped && "secondary"}>
+                    <Text
+                      delete={dropped}
+                      type={dropped && "secondary"}
+                      key={index.toString()}
+                    >
                       {index > 0 && `+`}
                       {value}
                     </Text>
@@ -64,7 +68,7 @@ const TextResult = ({ parameters, dice }) => {
               </span>
               <span className={styles.type}>{type}</span>
             </span>
-          </>
+          </React.Fragment>
         ))}
         {!!modifier && <>{modifier > 0 ? ` +${modifier}` : ` ${modifier}`}</>}
         {` ⇒ `}

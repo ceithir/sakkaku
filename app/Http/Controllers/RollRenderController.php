@@ -6,25 +6,35 @@ use App\Models\ContextualizedRoll;
 
 class RollRenderController extends Controller
 {
-    public function showStandardRoll(int $id): string
+    public function show(int $id): string
     {
-        $roll = ContextualizedRoll::where('type', 'DnD')->findOrFail($id);
+        // TODO: Extend as more types become supported
+        $roll = ContextualizedRoll::whereIn('type', ['DnD', 'AEG-L5R'])->findOrFail($id);
 
-        $r = $roll->getRoll();
-        $description = "{$r->parameters->formula()} => {$r->result()['total']}";
+        switch ($roll->type) {
+            case 'DnD':
+                return $this->showStandardRoll($roll);
 
-        return $this->renderSPAWithMetadata($roll, $description);
+            case 'AEG-L5R':
+                return $this->showL5RAEGRoll($roll);
+        }
     }
 
-    public function showL5RAEGRoll(int $id): string
+    private function showL5RAEGRoll(ContextualizedRoll $roll): string
     {
-        $roll = ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
-
         $r = $roll->getRoll();
         $description = "{$r->parameters->roll}k{$r->parameters->keep} => {$r->result()['total']}";
         if ($r->parameters->tn) {
             $description .= ' '."(TN: {$r->parameters->tn})";
         }
+
+        return $this->renderSPAWithMetadata($roll, $description);
+    }
+
+    private function showStandardRoll(ContextualizedRoll $roll): string
+    {
+        $r = $roll->getRoll();
+        $description = "{$r->parameters->formula()} => {$r->result()['total']}";
 
         return $this->renderSPAWithMetadata($roll, $description);
     }
