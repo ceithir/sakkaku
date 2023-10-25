@@ -6,16 +6,32 @@ use App\Models\ContextualizedRoll;
 
 class RollRenderController extends Controller
 {
+    public function showStandardRoll(int $id): string
+    {
+        $roll = ContextualizedRoll::where('type', 'DnD')->findOrFail($id);
+
+        $r = $roll->getRoll();
+        $description = "{$r->parameters->formula()} => {$r->result()['total']}";
+
+        return $this->renderSPAWithMetadata($roll, $description);
+    }
+
     public function showL5RAEGRoll(int $id): string
     {
         $roll = ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
 
         $r = $roll->getRoll();
-        $description = "{$roll->campaign} 🌸 {$roll->character} 🌸 ";
-        $description .= "{$r->parameters->roll}k{$r->parameters->keep} => {$r->result()['total']}";
+        $description = "{$r->parameters->roll}k{$r->parameters->keep} => {$r->result()['total']}";
         if ($r->parameters->tn) {
             $description .= ' '."(TN: {$r->parameters->tn})";
         }
+
+        return $this->renderSPAWithMetadata($roll, $description);
+    }
+
+    private function renderSPAWithMetadata(ContextualizedRoll $roll, $description): string
+    {
+        $description = "{$roll->campaign} 🌸 {$roll->character} 🌸 ".$description;
 
         $metadata = [
             'og:title' => "Sakkaku – Roll for {$roll->campaign}",
@@ -24,11 +40,6 @@ class RollRenderController extends Controller
             'og:description' => $description,
         ];
 
-        return $this->renderSPAWithMetadata($metadata);
-    }
-
-    private function renderSPAWithMetadata(array $metadata = []): string
-    {
         // FIXME Abonimation with likely twelve critical security issues
         $metadataString = '';
         foreach ($metadata as $key => $value) {

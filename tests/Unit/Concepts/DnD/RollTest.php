@@ -184,6 +184,48 @@ class RollTest extends TestCase
         $this->assertEquals(['total' => 15], $roll->result());
     }
 
+    public function testParametersCanBeConvertedBackToCanonFormula()
+    {
+        $roll = Roll::init([
+            'dices' => [
+                ['number' => 2, 'sides' => 20],
+                ['number' => 1, 'sides' => 10],
+            ],
+            'modifier' => 3,
+        ]);
+        $this->assertEquals('2d20+1d10+3', $roll->parameters->formula());
+
+        $roll = Roll::init([
+            'dices' => [
+                [
+                    'number' => 2,
+                    'sides' => 20,
+                    'keepNumber' => 1,
+                    'keepCriteria' => 'lowest',
+                ],
+                [
+                    'number' => 3,
+                    'sides' => 12,
+                    'keepNumber' => 2,
+                    'keepCriteria' => 'highest',
+                ],
+            ],
+        ]);
+        $this->assertEquals('2d20kl1+3d12kh2', $roll->parameters->formula());
+
+        $roll = Roll::init([
+            'dices' => [
+                [
+                    'number' => 3,
+                    'sides' => 6,
+                    'explode' => true,
+                ],
+            ],
+            'modifier' => -2,
+        ]);
+        $this->assertEquals('3d6!-2', $roll->parameters->formula());
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\DnD', 'random_int');
