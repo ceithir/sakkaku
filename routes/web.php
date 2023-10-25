@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RollRenderController;
 use App\Models\ContextualizedRoll;
 use Illuminate\Support\Facades\Route;
 
@@ -96,11 +97,7 @@ Route::get('/ffg-sw-rolls/{id}', function ($id) {
     return File::get(public_path().'/react/index.html');
 })->where('id', '[0-9]+');
 
-Route::get('/d10-rolls/{id}', function ($id) {
-    ContextualizedRoll::where('type', 'AEG-L5R')->findOrFail($id);
-
-    return File::get(public_path().'/react/index.html');
-})->where('id', '[0-9]+');
+Route::get('/d10-rolls/{id}', [RollRenderController::class, 'showL5RAEGRoll'])->where('id', '[0-9]+');
 
 Route::get('/roll', function () {
     return File::get(public_path().'/react/index.html');
