@@ -50,7 +50,9 @@ class RollRenderController extends Controller
             'og:description' => $description,
         ];
 
-        // FIXME Abonimation with likely twelve critical security issues
+        // FIXME
+        // Should be fine in absolute: https://stackoverflow.com/questions/19584189/when-used-correctly-is-htmlspecialchars-sufficient-for-protection-against-all-x
+        // But there's likely a way to do that that does not feel so much like it's about to explode
         $metadataString = '';
         foreach ($metadata as $key => $value) {
             $key = htmlspecialchars($key);
