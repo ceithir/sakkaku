@@ -23,7 +23,7 @@ import { ControlOutlined } from "@ant-design/icons";
 import UserContext from "components/form/UserContext";
 import Advanced from "./form/Advanced";
 import ApproachSelector from "./form/ApproachSelector";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NamedModifiers from "./form/NamedModifiers";
 import { distinctions, adversities } from "./data/advantages";
 
@@ -53,7 +53,7 @@ const Intent = ({ onFinish, values, onComplete }) => {
   const [unskilledAssist, setUnskilledAssist] = useState(0);
   const [commonModifiers, setCommonModifiers] = useState([]);
   const advanced = useSelector(selectAdvanced);
-  let history = useHistory();
+  let navigate = useNavigate();
   const [namedModifiers, setNamedModifiers] = useState([]);
   const [collapseActiveKey, setCollapseActiveKey] = useState();
 
@@ -88,7 +88,7 @@ const Intent = ({ onFinish, values, onComplete }) => {
         onFinish={onFinish}
         onComplete={onComplete}
         cancel={() => {
-          history.push("/roll");
+          navigate("/roll");
         }}
       />
     );
@@ -420,7 +420,7 @@ const Intent = ({ onFinish, values, onComplete }) => {
             <Button
               icon={<ControlOutlined />}
               onClick={() => {
-                history.push("/roll-advanced");
+                navigate("/roll-advanced");
               }}
             >{`Fully customized roll`}</Button>
           </Form.Item>

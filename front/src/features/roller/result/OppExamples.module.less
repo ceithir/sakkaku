@@ -9,9 +9,7 @@
   }
 
   @media (min-width: @screen-lg) {
-    @extra-width: (@screen-lg - @screen-md)/2;
-
-    margin-left: -@extra-width;
-    margin-right: -@extra-width;
+    margin-left: -(@screen-lg - @screen-md)/2;
+    margin-right: -(@screen-lg - @screen-md)/2;
   }
 }

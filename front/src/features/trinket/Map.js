@@ -4,7 +4,7 @@ import mapData from "./map-data";
 import { AutoComplete, Input } from "antd";
 import ScrollContainer from "react-indiana-drag-scroll";
 import Animate from "rc-animate";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ExternalLink from "../navigation/ExternalLink";
 
 const {
@@ -123,7 +123,7 @@ const PositionalCross = ({ scrollContainerRef, search, forceRefresh }) => {
 const Search = ({ scrollContainerRef, imageLoaded }) => {
   const [search, setSearch] = useState();
   const location = useLocation();
-  let history = useHistory();
+  let navigate = useNavigate();
   const [autocompleteValue, setAutocompleteValue] = useState();
   const [forceRefresh, setForceRefresh] = useState();
 
@@ -182,7 +182,7 @@ const Search = ({ scrollContainerRef, imageLoaded }) => {
     if (!loc) {
       // TODO: Some kind of message that the search did not end up on anything
       setSearch(null);
-      history.push({ hash: null });
+      navigate({ hash: null });
       return;
     }
 
@@ -192,7 +192,7 @@ const Search = ({ scrollContainerRef, imageLoaded }) => {
     }
 
     setSearch(loc);
-    history.push({ hash: loc.label });
+    navigate({ hash: loc.label });
   };
 
   return (

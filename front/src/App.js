@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./App.less";
 import { StandardRoller, AdvancedRoller } from "./features/roller";
 import Layout from "./features/navigation/Layout";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import List from "./features/browse/List";
 import IdentifiedRoll from "./features/roller/IdentifiedRoll";
 import { useDispatch } from "react-redux";
@@ -36,66 +36,77 @@ const App = () => {
       <ScrollToTop />
       <Layout>
         <ReconnectionModal />
-        <Switch>
-          <Route path="/gm/prefiller" exact>
-            <Prefiller />
-          </Route>
-          <Route path="/resources/rokugan-map" exact>
-            <FfgSubmenu />
-            <Map />
-          </Route>
-          <Route path="/probabilities" exact>
-            <FfgSubmenu />
-            <Calculator />
-          </Route>
-          <Route path="/heritage/:uuid" exact>
-            <HeritageRollLoader />
-          </Route>
-          <Route path="/heritage" exact>
-            <FfgSubmenu />
-            <HeritageRoll />
-          </Route>
-          <Route path="/rolls/:id" exact>
-            <IdentifiedRoll />
-          </Route>
-          <Route path="/rolls" exact>
-            <List />
-          </Route>
-          <Route path="/roll-advanced" exact>
-            <FfgSubmenu />
-
-            <AdvancedRoller />
-          </Route>
-          <Route path="/roll-dnd" exact>
-            <DnDRoller />
-          </Route>
-          <Route path="/r/:id" exact>
-            <Show />
-          </Route>
-          <Route path="/roll-d10" exact>
-            <AegSubmenu />
-            <D10Roller />
-          </Route>
-          <Route path="/roll" exact>
-            <FfgSubmenu />
-            <StandardRoller />
-          </Route>
-          <Route path="/roll-ffg-sw" exact>
-            <FFGSWRoller />
-          </Route>
-          <Route path="/ffg-sw-rolls/:id" exact>
-            <FFGSWRoll />
-          </Route>
-          <Route path="/cyberpunk/roll" exact>
-            <CyberpunkRoller />
-          </Route>
-          <Route path="/cyberpunk/rolls/:id" exact>
-            <CyberpunkRoll />
-          </Route>
-          <Route path="/" exact>
-            <Homepage />
-          </Route>
-        </Switch>
+        <Routes>
+          <Route path="/gm/prefiller" element={<Prefiller />} />
+          <Route
+            path="/resources/rokugan-map"
+            element={
+              <>
+                <FfgSubmenu />
+                <Map />
+              </>
+            }
+          />
+          <Route
+            path="/probabilities"
+            element={
+              <>
+                <FfgSubmenu />
+                <Calculator />
+              </>
+            }
+          />
+          <Route path="/heritage/:uuid" element={<HeritageRollLoader />} />
+          <Route
+            path="/heritage"
+            element={
+              <>
+                {" "}
+                <FfgSubmenu />
+                <HeritageRoll />
+              </>
+            }
+          />
+          <Route path="/rolls/:id" element={<IdentifiedRoll />} />
+          <Route path="/rolls" element={<List />} />
+          <Route
+            path="/roll-advanced"
+            element={
+              <>
+                {" "}
+                <FfgSubmenu />
+                <AdvancedRoller />
+              </>
+            }
+          />
+          <Route path="/roll-dnd" element={<DnDRoller />} />
+          <Route path="/r/:id" element={<Show />} />
+          <Route
+            path="/roll-d10"
+            element={
+              <>
+                {" "}
+                <AegSubmenu />
+                <D10Roller />
+              </>
+            }
+          />
+          <Route
+            path="/roll"
+            element={
+              <>
+                {" "}
+                <FfgSubmenu />
+                <StandardRoller />
+              </>
+            }
+          />
+          <Route path="/roll-ffg-sw" element={<FFGSWRoller />} />
+          <Route path="/ffg-sw-rolls/:id" element={<FFGSWRoll />} />
+          <Route path="/cyberpunk/roll" element={<CyberpunkRoller />} />
+          <Route path="/cyberpunk/rolls/:id" element={<CyberpunkRoll />} />
+          <Route path="/" element={<Homepage />} />
+        </Routes>
       </Layout>
     </Router>
   );
