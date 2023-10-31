@@ -1,12 +1,12 @@
 import React from "react";
 import queryString from "query-string";
-import { useLocation, Link, useHistory } from "react-router-dom";
+import { useLocation, Link, useNavigate } from "react-router-dom";
 import { Pagination } from "antd";
 import styles from "./Pagination.module.less";
 
 const CustomPagination = ({ pageSize, current, total }) => {
   const location = useLocation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const pageLink = (pageNumber) => {
     return `${location.pathname}?${queryString.stringify({
@@ -33,7 +33,7 @@ const CustomPagination = ({ pageSize, current, total }) => {
           return originalElement;
         }}
         onChange={(pageNumber) => {
-          history.push(pageLink(pageNumber));
+          navigate(pageLink(pageNumber));
         }}
       />
     </div>
