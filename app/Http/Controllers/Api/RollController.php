@@ -37,6 +37,10 @@ class RollController extends Controller
             $query->where('type', $request->input('type'));
         }
 
+        if ($request->input('text')) {
+            $query->whereFullText('description', $request->input('text'));
+        }
+
         $paginator = $query
             ->with('user')
             ->paginate()
