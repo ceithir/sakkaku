@@ -33,7 +33,8 @@ const Odds = ({ roll, keep, tn, explosions = [10], rerolls = [] }) => {
     rerolls.includes(2) ||
     rerolls.includes(3) ||
     explosions.includes(8) ||
-    tn > 100
+    tn > 100 ||
+    (explosions.length === 0 && rerolls.length > 0)
   ) {
     return <Text disabled={true}>{`Unknown`}</Text>;
   }
