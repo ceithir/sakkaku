@@ -56,6 +56,7 @@ const D10Roller = () => {
     ],
     rerolls: initialValues.rerolls,
     select: initialValues.select,
+    tn: initialValues.tn,
   });
   const [context, setContext] = useState();
 
@@ -63,6 +64,8 @@ const D10Roller = () => {
   const user = useSelector(selectUser);
 
   const [form] = Form.useForm();
+
+  const showMeTheOdds = true; //TODO
 
   if (error) {
     return <DefaultErrorMessage />;
@@ -77,6 +80,7 @@ const D10Roller = () => {
           {
             formula,
             explodeOnTen,
+            tn,
             otherExplosions = initialValues.otherExplosions,
             rerolls = initialValues.rerolls,
             select = initialValues.select,
@@ -87,6 +91,7 @@ const D10Roller = () => {
             explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
             rerolls,
             select,
+            tn,
           });
           setResult(undefined);
 
@@ -167,7 +172,11 @@ const D10Roller = () => {
         </div>
 
         {!!parsedFormula ? (
-          <TextSummary original={parsedFormula} {...params} />
+          <TextSummary
+            original={parsedFormula}
+            showMeTheOdds={showMeTheOdds}
+            {...params}
+          />
         ) : (
           <div className={styles.placeholder}>{`💮`}</div>
         )}
