@@ -24,10 +24,8 @@ const Odds = ({ roll, keep, tn, explosions = [10], rerolls = [] }) => {
   const [rawData, setRawData] = useState();
 
   useEffect(() => {
-    if (!rawData) {
-      loadRawData(setRawData);
-    }
-  }, [rawData]);
+    loadRawData(setRawData);
+  }, []);
 
   if (
     rerolls.includes(2) ||
