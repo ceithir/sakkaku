@@ -22,7 +22,12 @@ import FormResult from "./FormResult";
 
 const { Text } = Typography;
 
-const initialValues = { explosions: [10], rerolls: [], select: "high" };
+const initialValues = {
+  rerolls: [],
+  select: "high",
+  explodeOnTen: true,
+  otherExplosions: [],
+};
 
 const Syntax = () => {
   return (
@@ -43,7 +48,10 @@ const D10Roller = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState();
   const [params, setParams] = useState({
-    explosions: initialValues.explosions,
+    explosions: [
+      ...initialValues.otherExplosions,
+      ...(initialValues.explodeOnTen ? [10] : []),
+    ],
     rerolls: initialValues.rerolls,
     select: initialValues.select,
   });
@@ -64,10 +72,14 @@ const D10Roller = () => {
       <Form
         onValuesChange={(
           changedValues,
-          { formula, explosions, rerolls, select }
+          { formula, explodeOnTen, otherExplosions, rerolls, select }
         ) => {
           setParsedFormula(parse(formula));
-          setParams({ explosions, rerolls, select });
+          setParams({
+            explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
+            rerolls,
+            select,
+          });
           setResult(undefined);
 
           // Trickery to revalidate on each if alreayd in error
@@ -82,7 +94,7 @@ const D10Roller = () => {
           }
         }}
         onFinish={(values) => {
-          const { formula } = values;
+          const { formula, explodeOnTen, otherExplosions } = values;
 
           prepareFinish({
             setLoading,
@@ -93,6 +105,7 @@ const D10Roller = () => {
             user,
           })({
             ...values,
+            explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
             metadata: {
               original: formula,
             },
@@ -130,12 +143,18 @@ const D10Roller = () => {
         <Form.Item label={`TN`} name="tn">
           <InputNumber />
         </Form.Item>
-        <Form.Item label={`Dice explode on`} name="explosions">
+        <Form.Item
+          label={`Exploding 10`}
+          name="explodeOnTen"
+          valuePropName="checked"
+        >
+          <Checkbox />
+        </Form.Item>
+        <Form.Item label={`Dice also explode on`} name="otherExplosions">
           <Checkbox.Group
             options={[
               { label: 8, value: 8 },
               { label: 9, value: 9 },
-              { label: 10, value: 10 },
             ]}
           />
         </Form.Item>
