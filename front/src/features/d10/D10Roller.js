@@ -153,22 +153,25 @@ const D10Roller = () => {
         >
           <Input placeholder={`5k4 +1k0 -5`} />
         </Form.Item>
-        <Form.Item label={`TN`} name="tn">
-          <InputNumber />
-        </Form.Item>
-        <Form.Item
-          label={`Exploding 10`}
-          name="explodeOnTen"
-          valuePropName="checked"
-        >
-          <Checkbox />
-        </Form.Item>
+        <div className={styles.inlined}>
+          <Form.Item label={`TN`} name="tn">
+            <InputNumber />
+          </Form.Item>
+          <Form.Item
+            label={`Exploding 10`}
+            name="explodeOnTen"
+            valuePropName="checked"
+          >
+            <Checkbox />
+          </Form.Item>
+        </div>
+
         {!!parsedFormula ? (
           <TextSummary original={parsedFormula} {...params} />
         ) : (
           <div className={styles.placeholder}>{`💮`}</div>
         )}
-        <Collapse>
+        <Collapse className={styles["extra-options"]}>
           <Panel header={`More options`}>
             <Form.Item label={`Dice also explode on`} name="otherExplosions">
               <Checkbox.Group
