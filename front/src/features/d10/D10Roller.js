@@ -59,13 +59,12 @@ const D10Roller = () => {
     tn: initialValues.tn,
   });
   const [context, setContext] = useState();
+  const [showMeTheOdds, setShowMeTheOdds] = useState();
 
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
   const [form] = Form.useForm();
-
-  const showMeTheOdds = true; //TODO
 
   if (error) {
     return <DefaultErrorMessage />;
@@ -84,6 +83,7 @@ const D10Roller = () => {
             otherExplosions = initialValues.otherExplosions,
             rerolls = initialValues.rerolls,
             select = initialValues.select,
+            showMeTheOdds,
           }
         ) => {
           setParsedFormula(parse(formula));
@@ -94,6 +94,7 @@ const D10Roller = () => {
             tn,
           });
           setResult(undefined);
+          setShowMeTheOdds(showMeTheOdds);
 
           // Trickery to revalidate on each if alreayd in error
           if (Object.keys(changedValues).includes("formula")) {
@@ -210,6 +211,13 @@ const D10Roller = () => {
                   { value: "low", label: `Lowest dice` },
                 ]}
               />
+            </Form.Item>
+            <Form.Item
+              label={`Show me the odds`}
+              name="showMeTheOdds"
+              valuePropName="checked"
+            >
+              <Checkbox />
             </Form.Item>
           </Panel>
         </Collapse>

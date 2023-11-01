@@ -3,7 +3,7 @@ import { Typography } from "antd";
 import { stringify, cap } from "./formula";
 import Odds from "./Odds";
 
-const { Paragraph } = Typography;
+const { Paragraph, Text } = Typography;
 
 const TextSummary = ({
   original,
@@ -61,15 +61,18 @@ const TextSummary = ({
         )}
         {showMeTheOdds && tn > 0 && select === "high" && (
           <>
-            {` Estimated chances of success: `}
-            <Odds
-              roll={capped.roll}
-              keep={capped.keep}
-              rerolls={rerolls}
-              explosions={explosions}
-              tn={tn}
-            />
-            {`.`}
+            {` `}
+            <Text italic>
+              {`Estimated chances of success: `}
+              <Odds
+                roll={capped.roll}
+                keep={capped.keep}
+                rerolls={rerolls}
+                explosions={explosions}
+                tn={tn}
+              />
+              {`.`}
+            </Text>
           </>
         )}
       </Paragraph>
