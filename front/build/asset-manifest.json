@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/react/static/css/main.81d0cbe2.css",
-    "main.js": "/react/static/js/main.e11d96e7.js",
+    "main.css": "/react/static/css/main.d1abba9f.css",
+    "main.js": "/react/static/js/main.e2e657ab.js",
     "static/media/rokugan-map-1800.jpg": "/react/static/media/rokugan-map-1800.05a263da48ba4a02fe14.jpg",
     "static/media/wandering.jpg": "/react/static/media/wandering.01e959d9ac549b548f37.jpg",
     "static/media/manipulator.png": "/react/static/media/manipulator.0ef16af07dfd77101f97.png",
@@ -26,11 +26,11 @@
     "static/media/success.svg": "/react/static/media/success.25d2da55b008b2ffdcaa7f94d17fc956.svg",
     "index.html": "/react/index.html",
     "static/media/external-link.svg": "/react/static/media/external-link.7808b7fbbb437f6a567b2377f11e2e13.svg",
-    "main.81d0cbe2.css.map": "/react/static/css/main.81d0cbe2.css.map",
-    "main.e11d96e7.js.map": "/react/static/js/main.e11d96e7.js.map"
+    "main.d1abba9f.css.map": "/react/static/css/main.d1abba9f.css.map",
+    "main.e2e657ab.js.map": "/react/static/js/main.e2e657ab.js.map"
   },
   "entrypoints": [
-    "static/css/main.81d0cbe2.css",
-    "static/js/main.e11d96e7.js"
+    "static/css/main.d1abba9f.css",
+    "static/js/main.e2e657ab.js"
   ]
 }
