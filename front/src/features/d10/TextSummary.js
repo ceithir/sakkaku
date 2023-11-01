@@ -1,10 +1,18 @@
 import React from "react";
 import { Typography } from "antd";
 import { stringify, cap } from "./formula";
+import Odds from "./Odds";
 
-const { Paragraph } = Typography;
+const { Paragraph, Text } = Typography;
 
-const TextSummary = ({ original, explosions, rerolls, select }) => {
+const TextSummary = ({
+  original,
+  explosions,
+  rerolls,
+  select,
+  tn,
+  showMeTheOdds,
+}) => {
   const capped = cap(original);
   const wasCapped =
     original.roll !== capped.roll ||
@@ -49,6 +57,22 @@ const TextSummary = ({ original, explosions, rerolls, select }) => {
             {` Dice that show `}
             <strong>{explosions.join(", ")}</strong>
             {` will explode (possibly several times).`}
+          </>
+        )}
+        {showMeTheOdds && tn > 0 && select === "high" && (
+          <>
+            {` `}
+            <Text italic>
+              {`Estimated chances of success: `}
+              <Odds
+                roll={capped.roll}
+                keep={capped.keep}
+                rerolls={rerolls}
+                explosions={explosions}
+                tn={tn}
+              />
+              {`.`}
+            </Text>
           </>
         )}
       </Paragraph>
