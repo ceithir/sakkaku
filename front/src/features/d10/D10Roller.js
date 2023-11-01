@@ -8,6 +8,7 @@ import {
   InputNumber,
   Checkbox,
   Radio,
+  Collapse,
 } from "antd";
 import { parse } from "./formula";
 import DefaultErrorMessage from "DefaultErrorMessage";
@@ -21,6 +22,7 @@ import { prepareFinish } from "./form";
 import FormResult from "./FormResult";
 
 const { Text } = Typography;
+const { Panel } = Collapse;
 
 const initialValues = {
   rerolls: [],
@@ -72,7 +74,13 @@ const D10Roller = () => {
       <Form
         onValuesChange={(
           changedValues,
-          { formula, explodeOnTen, otherExplosions, rerolls, select }
+          {
+            formula,
+            explodeOnTen,
+            otherExplosions = initialValues.otherExplosions,
+            rerolls = initialValues.rerolls,
+            select = initialValues.select,
+          }
         ) => {
           setParsedFormula(parse(formula));
           setParams({
@@ -94,7 +102,11 @@ const D10Roller = () => {
           }
         }}
         onFinish={(values) => {
-          const { formula, explodeOnTen, otherExplosions } = values;
+          const {
+            formula,
+            explodeOnTen,
+            otherExplosions = initialValues.otherExplosions,
+          } = values;
 
           prepareFinish({
             setLoading,
@@ -104,6 +116,7 @@ const D10Roller = () => {
             dispatch,
             user,
           })({
+            ...initialValues,
             ...values,
             explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
             metadata: {
@@ -150,40 +163,44 @@ const D10Roller = () => {
         >
           <Checkbox />
         </Form.Item>
-        <Form.Item label={`Dice also explode on`} name="otherExplosions">
-          <Checkbox.Group
-            options={[
-              { label: 8, value: 8 },
-              { label: 9, value: 9 },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item
-          label={`Reroll (once)`}
-          name="rerolls"
-          tooltip={`Check "1" to apply a 4th edition Emphasis [see Core, page 133]`}
-        >
-          <Checkbox.Group
-            options={[
-              { label: 1, value: 1 },
-              { label: 2, value: 2 },
-              { label: 3, value: 3 },
-            ]}
-          />
-        </Form.Item>
-        <Form.Item label={`Keep`} name="select">
-          <Radio.Group
-            options={[
-              { value: "high", label: `Highest dice` },
-              { value: "low", label: `Lowest dice` },
-            ]}
-          />
-        </Form.Item>
         {!!parsedFormula ? (
           <TextSummary original={parsedFormula} {...params} />
         ) : (
           <div className={styles.placeholder}>{`💮`}</div>
         )}
+        <Collapse>
+          <Panel header={`More options`}>
+            <Form.Item label={`Dice also explode on`} name="otherExplosions">
+              <Checkbox.Group
+                options={[
+                  { label: 8, value: 8 },
+                  { label: 9, value: 9 },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item
+              label={`Reroll (once)`}
+              name="rerolls"
+              tooltip={`Check "1" to apply a 4th edition Emphasis [see Core, page 133]`}
+            >
+              <Checkbox.Group
+                options={[
+                  { label: 1, value: 1 },
+                  { label: 2, value: 2 },
+                  { label: 3, value: 3 },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item label={`Keep`} name="select">
+              <Radio.Group
+                options={[
+                  { value: "high", label: `Highest dice` },
+                  { value: "low", label: `Lowest dice` },
+                ]}
+              />
+            </Form.Item>
+          </Panel>
+        </Collapse>
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
             {`Roll`}
