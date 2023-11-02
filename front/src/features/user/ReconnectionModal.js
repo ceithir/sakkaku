@@ -46,7 +46,7 @@ const ReconnectionModal = () => {
 
   return (
     <Modal
-      visible={true}
+      open={true}
       footer={null}
       closable={success}
       onCancel={success && close}

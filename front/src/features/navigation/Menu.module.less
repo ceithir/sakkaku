@@ -1,7 +1,19 @@
 .sub-menu {
-  border: 1px solid #d9d9d9;
+  padding-top: 0;
+
+  & > ul:global(.ant-menu) {
+    border-radius: 0;
+  }
 }
 
-.push-to-right {
+.push-to-right:global(.ant-menu-item) {
   margin-left: auto;
+}
+
+.logo {
+  a {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
 }

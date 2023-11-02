@@ -71,6 +71,7 @@ const CustomMenu = () => {
           />
         </Link>
       ),
+      className: styles.logo,
     },
     {
       label: `New roll`,
