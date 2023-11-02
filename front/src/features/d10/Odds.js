@@ -31,6 +31,7 @@ const Odds = ({ roll, keep, tn, explosions = [10], rerolls = [] }) => {
     rerolls.includes(2) ||
     rerolls.includes(3) ||
     explosions.includes(8) ||
+    !Number.isInteger(tn) ||
     tn > 100 ||
     (explosions.length === 0 && rerolls.length > 0)
   ) {

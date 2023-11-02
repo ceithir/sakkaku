@@ -59,7 +59,7 @@ const TextSummary = ({
             {` will explode (possibly several times).`}
           </>
         )}
-        {showMeTheOdds && tn > 0 && select === "high" && (
+        {showMeTheOdds && select === "high" && (
           <>
             {` `}
             <Text italic>
