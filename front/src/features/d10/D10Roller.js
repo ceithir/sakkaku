@@ -22,7 +22,6 @@ import { prepareFinish } from "./form";
 import FormResult from "./FormResult";
 
 const { Text } = Typography;
-const { Panel } = Collapse;
 
 const initialValues = {
   rerolls: [],
@@ -181,46 +180,58 @@ const D10Roller = () => {
         ) : (
           <div className={styles.placeholder}>{`💮`}</div>
         )}
-        <Collapse className={styles["extra-options"]}>
-          <Panel header={`More options`}>
-            <Form.Item label={`Dice also explode on`} name="otherExplosions">
-              <Checkbox.Group
-                options={[
-                  { label: 8, value: 8 },
-                  { label: 9, value: 9 },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item
-              label={`Reroll (once)`}
-              name="rerolls"
-              tooltip={`Check "1" to apply a 4th edition Emphasis [see Core, page 133]`}
-            >
-              <Checkbox.Group
-                options={[
-                  { label: 1, value: 1 },
-                  { label: 2, value: 2 },
-                  { label: 3, value: 3 },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item label={`Keep`} name="select">
-              <Radio.Group
-                options={[
-                  { value: "high", label: `Highest dice` },
-                  { value: "low", label: `Lowest dice` },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item
-              label={`Show me the odds`}
-              name="showMeTheOdds"
-              valuePropName="checked"
-            >
-              <Checkbox />
-            </Form.Item>
-          </Panel>
-        </Collapse>
+        <Collapse
+          className={styles["extra-options"]}
+          items={[
+            {
+              key: "1",
+              label: `More options`,
+              children: (
+                <>
+                  <Form.Item
+                    label={`Dice also explode on`}
+                    name="otherExplosions"
+                  >
+                    <Checkbox.Group
+                      options={[
+                        { label: 8, value: 8 },
+                        { label: 9, value: 9 },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={`Reroll (once)`}
+                    name="rerolls"
+                    tooltip={`Check "1" to apply a 4th edition Emphasis [see Core, page 133]`}
+                  >
+                    <Checkbox.Group
+                      options={[
+                        { label: 1, value: 1 },
+                        { label: 2, value: 2 },
+                        { label: 3, value: 3 },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Form.Item label={`Keep`} name="select">
+                    <Radio.Group
+                      options={[
+                        { value: "high", label: `Highest dice` },
+                        { value: "low", label: `Lowest dice` },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label={`Show me the odds`}
+                    name="showMeTheOdds"
+                    valuePropName="checked"
+                  >
+                    <Checkbox />
+                  </Form.Item>
+                </>
+              ),
+            },
+          ]}
+        />
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={loading}>
             {`Roll`}
