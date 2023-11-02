@@ -20,6 +20,7 @@ import classNames from "classnames";
 import TextSummary from "./TextSummary";
 import { prepareFinish } from "./form";
 import FormResult from "./FormResult";
+import ExternalLink from "features/navigation/ExternalLink";
 
 const { Text } = Typography;
 
@@ -221,7 +222,13 @@ const D10Roller = () => {
                     />
                   </Form.Item>
                   <Form.Item
-                    label={`Show me the odds`}
+                    label={
+                      <>
+                        {`Show me the odds (`}
+                        <ExternalLink href="https://lynks.se/probability/">{`source`}</ExternalLink>
+                        {`)`}
+                      </>
+                    }
                     name="showMeTheOdds"
                     valuePropName="checked"
                   >

@@ -15,7 +15,6 @@ import Map from "./features/trinket/Map";
 import ScrollToTop from "./features/navigation/ScrollToTop";
 import FfgSubmenu from "features/navigation/FfgSubmenu";
 import D10Roller from "features/d10/D10Roller";
-import AegSubmenu from "features/navigation/AegSubmenu";
 import ReconnectionModal from "features/user/ReconnectionModal";
 import DnDRoller from "features/dnd/Roller";
 import FFGSWRoller from "features/sw/Roller";
@@ -61,7 +60,6 @@ const App = () => {
             path="/heritage"
             element={
               <>
-                {" "}
                 <FfgSubmenu />
                 <HeritageRoll />
               </>
@@ -73,7 +71,6 @@ const App = () => {
             path="/roll-advanced"
             element={
               <>
-                {" "}
                 <FfgSubmenu />
                 <AdvancedRoller />
               </>
@@ -81,21 +78,11 @@ const App = () => {
           />
           <Route path="/roll-dnd" element={<DnDRoller />} />
           <Route path="/r/:id" element={<Show />} />
-          <Route
-            path="/roll-d10"
-            element={
-              <>
-                {" "}
-                <AegSubmenu />
-                <D10Roller />
-              </>
-            }
-          />
+          <Route path="/roll-d10" element={<D10Roller />} />
           <Route
             path="/roll"
             element={
               <>
-                {" "}
                 <FfgSubmenu />
                 <StandardRoller />
               </>
