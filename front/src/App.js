@@ -20,7 +20,6 @@ import DnDRoller from "features/dnd/Roller";
 import FFGSWRoller from "features/sw/Roller";
 import FFGSWRoll from "features/sw/Roll";
 import CyberpunkRoller from "features/cyberpunk/Roller";
-import CyberpunkRoll from "features/cyberpunk/Roll";
 import Prefiller from "features/gm/Prefiller";
 import Show from "features/browse/Show";
 
@@ -91,7 +90,6 @@ const App = () => {
           <Route path="/roll-ffg-sw" element={<FFGSWRoller />} />
           <Route path="/ffg-sw-rolls/:id" element={<FFGSWRoll />} />
           <Route path="/cyberpunk/roll" element={<CyberpunkRoller />} />
-          <Route path="/cyberpunk/rolls/:id" element={<CyberpunkRoll />} />
           <Route path="/" element={<Homepage />} />
         </Routes>
       </Layout>

@@ -4,7 +4,8 @@ import DefaultErrorMessage from "DefaultErrorMessage";
 import { getOnServer } from "server";
 import Loader from "features/navigation/Loader";
 import L5RAEGRoll from "features/d10/D10IdentifiedRoll";
-import DnDRoll from "features/dnd/IdentifiedRoll.js";
+import DnDRoll from "features/dnd/IdentifiedRoll";
+import CyberpunkRoll from "features/cyberpunk/Roll";
 
 const Show = () => {
   const { id } = useParams();
@@ -44,6 +45,8 @@ const Show = () => {
       return <L5RAEGRoll {...data} player={data.user} />;
     case "DnD":
       return <DnDRoll {...data} player={data.user} />;
+    case "Cyberpunk-RED":
+      return <CyberpunkRoll {...data} player={data.user} />;
     default:
       return null;
   }

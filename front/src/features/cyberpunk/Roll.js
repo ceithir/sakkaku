@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import DefaultErrorMessage from "DefaultErrorMessage";
-import { getOnServer } from "server";
-import Loader from "features/navigation/Loader";
 import ResultBox from "components/aftermath/ResultBox";
 import Layout from "./Layout";
 import TextResult from "./TextResult";
 import styles from "./Roll.module.less";
 
-export const link = (id) =>
-  !!id && `${window.location.origin}/cyberpunk/rolls/${id}`;
+export const link = (id) => !!id && `${window.location.origin}/r/${id}`;
 export const bbMessage = ({ description, total, parameters }) => {
   const textModifier = () => {
     const { modifier } = parameters;
@@ -25,41 +19,15 @@ export const bbMessage = ({ description, total, parameters }) => {
   return `${description} | "1d10"${textModifier()} ⇒ [b]${total}[/b]`;
 };
 
-const Roll = () => {
-  const { id } = useParams();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    setLoading(true);
-    getOnServer({
-      uri: `/public/cyberpunk/rolls/${id}`,
-      success: (data) => {
-        setData(data);
-        setLoading(false);
-      },
-      error: () => {
-        setError(true);
-        setLoading(false);
-      },
-    });
-  }, [id]);
-
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <DefaultErrorMessage />;
-  }
-
-  if (!data) {
-    return null;
-  }
-
-  const { character, campaign, user: player, description, roll, result } = data;
-
+const Roll = ({
+  id,
+  character,
+  campaign,
+  player,
+  description,
+  roll,
+  result,
+}) => {
   const tn = roll.parameters.tn;
   const rollSpecificData = [
     !!tn && {
