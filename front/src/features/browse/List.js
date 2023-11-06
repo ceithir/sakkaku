@@ -200,12 +200,8 @@ const defaultColumns = [
           return `/heritage/${uuid}`;
         }
 
-        if (["AEG-L5R", "DnD", "Cyberpunk-RED"].includes(type)) {
+        if (["AEG-L5R", "DnD", "Cyberpunk-RED", "FFG-SW"].includes(type)) {
           return `/r/${id}`;
-        }
-
-        if (type === "FFG-SW") {
-          return `/ffg-sw-rolls/${id}`;
         }
 
         return null;

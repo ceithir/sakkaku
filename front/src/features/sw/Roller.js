@@ -211,7 +211,7 @@ const Roller = () => {
                       result: context.result,
                     })}
                   />
-                  <Link to={`/ffg-sw-rolls/${context.id}`}>{`Go to page`}</Link>
+                  <Link to={`/r/${context.id}`}>{`Go to page`}</Link>
                 </div>
               </>
             )}

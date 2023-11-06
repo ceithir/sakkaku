@@ -69,11 +69,7 @@ Route::get('/roll-ffg-sw', function () {
     return File::get(public_path().'/react/index.html');
 });
 
-Route::get('/ffg-sw-rolls/{id}', function ($id) {
-    ContextualizedRoll::where('type', 'FFG-SW')->findOrFail($id);
-
-    return File::get(public_path().'/react/index.html');
-})->where('id', '[0-9]+');
+Route::permanentRedirect('/ffg-sw-rolls/{id}', '/r/{id}');
 
 Route::permanentRedirect('/d10-rolls/{id}', '/r/{id}');
 

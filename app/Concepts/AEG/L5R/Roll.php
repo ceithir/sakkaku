@@ -10,6 +10,8 @@ class Roll implements RollInterface
 
     public array $dice;
 
+    public array $metadata;
+
     public function __construct(array $parameters, array $metadata = [], array $dice = null)
     {
         $this->parameters = new Parameters($parameters);
