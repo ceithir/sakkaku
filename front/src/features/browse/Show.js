@@ -6,6 +6,7 @@ import Loader from "features/navigation/Loader";
 import L5RAEGRoll from "features/d10/D10IdentifiedRoll";
 import DnDRoll from "features/dnd/IdentifiedRoll";
 import CyberpunkRoll from "features/cyberpunk/Roll";
+import FFGSWRoll from "features/sw/Roll";
 
 const Show = () => {
   const { id } = useParams();
@@ -47,6 +48,8 @@ const Show = () => {
       return <DnDRoll {...data} player={data.user} />;
     case "Cyberpunk-RED":
       return <CyberpunkRoll {...data} player={data.user} />;
+    case "FFG-SW":
+      return <FFGSWRoll {...data} player={data.user} />;
     default:
       return null;
   }

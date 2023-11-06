@@ -81,7 +81,6 @@ Route::middleware('auth:sanctum')->post('/dnd/rolls/create', [DnDRollController:
 
 Route::post('/public/ffg/sw/rolls/create', [FFGSWRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/ffg/sw/rolls/create', [FFGSWRollController::class, 'statefulCreate']);
-Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->where('id', '[0-9]+');
 
 // Cyberpunk
 
@@ -92,3 +91,4 @@ Route::middleware('auth:sanctum')->post('/cyberpunk/rolls/create', [CyberpunkRol
 Route::get('/public/aeg/l5r/rolls/{id}', [D10RollAndKeepController::class, 'show'])->where('id', '[0-9]+');
 Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where('id', '[0-9]+');
 Route::get('/public/cyberpunk/rolls/{id}', [CyberpunkRollController::class, 'show'])->where('id', '[0-9]+');
+Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->where('id', '[0-9]+');

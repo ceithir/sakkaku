@@ -9,23 +9,36 @@ class RollRenderController extends Controller
     public function show(int $id): string
     {
         // TODO: Extend as more types become supported
-        $roll = ContextualizedRoll::whereIn('type', ['DnD', 'AEG-L5R', 'Cyberpunk-RED'])->findOrFail($id);
-
-        $actualRoll = $roll->getRoll();
-        $description = "{$roll->campaign} 🌸 {$roll->character} 🌸 ";
-        $description .= "{$actualRoll->parameters->formula()} => {$actualRoll->result()['total']}";
-        if ($actualRoll->parameters->tn) {
-            $description .= " (TN: {$actualRoll->parameters->tn})";
-        }
+        $roll = ContextualizedRoll::whereIn('type', ['DnD', 'AEG-L5R', 'Cyberpunk-RED', 'FFG-SW'])->findOrFail($id);
 
         $metadata = [
             'og:title' => "Sakkaku – Roll for {$roll->campaign}",
             'og:type' => 'website',
             'og:image' => 'https://sakkaku.org/logo.png',
-            'og:description' => $description,
+            'og:description' => $this->buildDescription($roll),
         ];
 
         return $this->renderSPAWithMetadata($metadata);
+    }
+
+    private function buildDescription(ContextualizedRoll $roll): string
+    {
+        $description = "{$roll->campaign} 🌸 {$roll->character} 🌸 ";
+
+        if ('FFG-SW' === $roll->type) {
+            // A.k.a "I have no idea what to put there"
+            $description .= 'Star Wars RPG (FFG)';
+
+            return $description;
+        }
+
+        $actualRoll = $roll->getRoll();
+        $description .= "{$actualRoll->parameters->formula()} => {$actualRoll->result()['total']}";
+        if ($actualRoll->parameters->tn) {
+            $description .= " (TN: {$actualRoll->parameters->tn})";
+        }
+
+        return $description;
     }
 
     private function renderSPAWithMetadata(array $metadata): string
