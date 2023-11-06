@@ -21,4 +21,14 @@ class Parameters
         $this->modifier = $modifier;
         $this->tn = $tn;
     }
+
+    public function formula(): string
+    {
+        $formula = '"1d10"';
+        if (0 !== $this->modifier) {
+            $formula .= $this->modifier > 0 ? "+{$this->modifier}" : "{$this->modifier}";
+        }
+
+        return $formula;
+    }
 }

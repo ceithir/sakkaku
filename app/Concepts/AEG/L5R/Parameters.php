@@ -59,4 +59,14 @@ class Parameters
         $this->rerolls = $rerolls;
         $this->select = $select;
     }
+
+    public function formula(): string
+    {
+        $formula = "{$this->roll}k{$this->keep}";
+        if (0 !== $this->modifier) {
+            $formula .= $this->modifier > 0 ? "+{$this->modifier}" : $this->modifier;
+        }
+
+        return $formula;
+    }
 }

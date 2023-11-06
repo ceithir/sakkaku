@@ -21,7 +21,7 @@ const Buttons = ({ id, parameters, description, total }) => {
         link={link(id)}
         bbMessage={bbMessage({ parameters, description, total })}
       />
-      <Link disabled={!id} to={`/cyberpunk/rolls/${id}`}>{`Go to page`}</Link>
+      <Link disabled={!id} to={`/r/${id}`}>{`Go to page`}</Link>
     </div>
   );
 };

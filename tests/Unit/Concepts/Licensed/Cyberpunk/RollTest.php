@@ -54,6 +54,18 @@ class RollTest extends TestCase
         $this->assertEquals([10, 1], $roll->dice);
     }
 
+    public function testParametersCanBeConvertedBackToCanonFormula()
+    {
+        $roll = Roll::init([]);
+        $this->assertEquals('"1d10"', $roll->parameters->formula());
+
+        $roll = Roll::init(['modifier' => 2]);
+        $this->assertEquals('"1d10"+2', $roll->parameters->formula());
+
+        $roll = Roll::init(['modifier' => -3]);
+        $this->assertEquals('"1d10"-3', $roll->parameters->formula());
+    }
+
     private function stubRandInt(...$params)
     {
         $rand = $this->getFunctionMock('App\Concepts\Licensed\Cyberpunk', 'random_int');
