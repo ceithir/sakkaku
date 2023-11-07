@@ -16,11 +16,11 @@ import ScrollToTop from "./features/navigation/ScrollToTop";
 import FfgSubmenu from "features/navigation/FfgSubmenu";
 import D10Roller from "features/d10/D10Roller";
 import ReconnectionModal from "features/user/ReconnectionModal";
-import DnDRoller from "features/dnd/Roller";
 import FFGSWRoller from "features/sw/Roller";
 import CyberpunkRoller from "features/cyberpunk/Roller";
 import Prefiller from "features/gm/Prefiller";
 import Show from "features/browse/Show";
+import UnifiedRoller from "features/unified/Roller";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -74,7 +74,7 @@ const App = () => {
               </>
             }
           />
-          <Route path="/roll-dnd" element={<DnDRoller />} />
+          <Route path="/roll-dnd" element={<UnifiedRoller />} />
           <Route path="/r/:id" element={<Show />} />
           <Route path="/roll-d10" element={<D10Roller />} />
           <Route

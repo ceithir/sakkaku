@@ -1,0 +1,20 @@
+@import (reference) "common.less";
+
+.layout {
+  .paper-background();
+  flex: 1;
+  padding: 24px 0;
+
+  & > * {
+    .torii-box();
+    margin: 0 auto 24px;
+    max-width: @screen-md;
+
+    @media (min-width: @screen-md) {
+      min-width: @screen-sm;
+    }
+    @media (min-width: @screen-lg) {
+      min-width: @screen-md;
+    }
+  }
+}
