@@ -14,7 +14,6 @@ import Homepage from "./features/navigation/Homepage";
 import Map from "./features/trinket/Map";
 import ScrollToTop from "./features/navigation/ScrollToTop";
 import FfgSubmenu from "features/navigation/FfgSubmenu";
-import D10Roller from "features/d10/D10Roller";
 import ReconnectionModal from "features/user/ReconnectionModal";
 import Prefiller from "features/gm/Prefiller";
 import Show from "features/browse/Show";
@@ -77,7 +76,10 @@ const App = () => {
             element={<UnifiedRoller rollType={"DnD"} />}
           />
           <Route path="/r/:id" element={<Show />} />
-          <Route path="/roll-d10" element={<D10Roller />} />
+          <Route
+            path="/roll-d10"
+            element={<UnifiedRoller rollType={"AEG-L5R"} />}
+          />
           <Route
             path="/roll"
             element={
