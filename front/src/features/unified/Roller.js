@@ -4,7 +4,7 @@ import Result from "./Result";
 import Form from "./Form";
 import DefaultErrorMessage from "DefaultErrorMessage";
 
-const Roller = () => {
+const Roller = ({ rollType }) => {
   const [bbMessage, setBbMessage] = useState();
   const [id, setId] = useState();
   const [loading, setLoading] = useState(false);
@@ -18,6 +18,7 @@ const Roller = () => {
   return (
     <div className={styles.layout}>
       <Form
+        rollType={rollType}
         setBbMessage={setBbMessage}
         setId={setId}
         loading={loading}

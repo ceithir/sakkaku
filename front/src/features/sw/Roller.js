@@ -1,8 +1,5 @@
-import React, { useState, useEffect } from "react";
-import Layout from "./Layout";
 import styles from "./Roller.module.less";
-import { Form, Button, InputNumber, Divider } from "antd";
-import DefaultErrorMessage from "DefaultErrorMessage";
+import { Form, Button, InputNumber } from "antd";
 import { postOnServer, authentifiedPostOnServer } from "server";
 import Result from "./Result";
 import UserContext from "components/form/UserContext";
@@ -13,9 +10,6 @@ import {
   setShowReconnectionModal,
 } from "features/user/reducer";
 import { useSelector, useDispatch } from "react-redux";
-import CopyButtons from "components/aftermath/CopyButtons";
-import { link, bbMessage } from "./Roll";
-import { Link } from "react-router-dom";
 import {
   AbilityDie,
   BoostDie,
@@ -25,6 +19,7 @@ import {
   ProficiencyDie,
   SetbackDie,
 } from "./LabeledDie";
+import { bbMessage } from "./Roll";
 
 const DiceNumber = ({ label, name, rules = [] }) => {
   return (
@@ -46,24 +41,16 @@ const DiceNumber = ({ label, name, rules = [] }) => {
   );
 };
 
-const Roller = () => {
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState();
-  const [context, setContext] = useState();
-
+const Roller = ({
+  setError,
+  loading,
+  setLoading,
+  setResult,
+  setId,
+  setBbMessage,
+}) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
-
-  useEffect(() => {
-    if (!!result) {
-      document.querySelector(":focus")?.blur();
-    }
-  }, [result]);
-
-  if (error) {
-    return <DefaultErrorMessage />;
-  }
 
   const onFinish = ({
     boost,
@@ -81,7 +68,6 @@ const Roller = () => {
   }) => {
     setLoading(true);
     setResult(undefined);
-    setContext(undefined);
 
     const parameters = {
       boost,
@@ -111,7 +97,9 @@ const Roller = () => {
           metadata,
         },
         success: (data) => {
-          setResult(data);
+          setResult(<Result {...data} />);
+          setId(undefined);
+          setBbMessage(undefined);
           setLoading(false);
         },
         error,
@@ -128,9 +116,11 @@ const Roller = () => {
         character,
         description,
       },
-      success: ({ roll, ...context }) => {
-        setResult(roll);
-        setContext(context);
+      success: ({ roll, id, description, result }) => {
+        setResult(<Result {...roll} />);
+        setId(id);
+        const { dice, parameters } = roll;
+        setBbMessage(bbMessage({ id, description, dice, parameters, result }));
         dispatch(addCampaign(campaign));
         dispatch(addCharacter(character));
         setLoading(false);
@@ -140,85 +130,54 @@ const Roller = () => {
   };
 
   return (
-    <Layout>
-      <div className={styles.container}>
-        <Form
-          className={styles.form}
-          onValuesChange={() => {
-            setResult(undefined);
-            setContext(undefined);
-          }}
-          onFinish={onFinish}
-        >
-          <UserContext />
-          <div className={styles.line}>
-            <DiceNumber label={<BoostDie />} name="boost" />
-            <DiceNumber label={<AbilityDie />} name="ability" />
-            <DiceNumber label={<ProficiencyDie />} name="proficiency" />
-          </div>
-          <div className={styles.line}>
-            <DiceNumber label={<SetbackDie />} name="setback" />
-            <DiceNumber label={<DifficutlyDie />} name="difficulty" />
-            <DiceNumber label={<ChallengeDie />} name="challenge" />
-          </div>
-          <div className={styles.center}>
-            <DiceNumber
-              label={<ForceDie />}
-              name="force"
-              rules={[
-                ({ getFieldValue }) => ({
-                  validator: () => {
-                    if (
-                      !!getFieldValue("boost") ||
-                      !!getFieldValue("ability") ||
-                      !!getFieldValue("proficiency") ||
-                      !!getFieldValue("setback") ||
-                      !!getFieldValue("difficulty") ||
-                      !!getFieldValue("challenge") ||
-                      !!getFieldValue("force")
-                    ) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error(`Must roll at least one die.`)
-                    );
-                  },
-                }),
-              ]}
-            />
-          </div>
-          <Form.Item>
-            <Button type="primary" htmlType="submit" loading={loading}>
-              {`Roll`}
-            </Button>
-          </Form.Item>
-        </Form>
-        {!!result && (
-          <>
-            <Divider />
-            <Result {...result} />
-            {!!context?.id && (
-              <>
-                <Divider />
-                <div className={styles.buttons}>
-                  <CopyButtons
-                    link={link(context.id)}
-                    bbMessage={bbMessage({
-                      id: context.id,
-                      description: context.description,
-                      dice: result.dice,
-                      parameters: result.parameters,
-                      result: context.result,
-                    })}
-                  />
-                  <Link to={`/r/${context.id}`}>{`Go to page`}</Link>
-                </div>
-              </>
-            )}
-          </>
-        )}
+    <Form
+      className={styles.form}
+      onValuesChange={() => {
+        setResult(undefined);
+      }}
+      onFinish={onFinish}
+    >
+      <UserContext />
+      <div className={styles.line}>
+        <DiceNumber label={<BoostDie />} name="boost" />
+        <DiceNumber label={<AbilityDie />} name="ability" />
+        <DiceNumber label={<ProficiencyDie />} name="proficiency" />
       </div>
-    </Layout>
+      <div className={styles.line}>
+        <DiceNumber label={<SetbackDie />} name="setback" />
+        <DiceNumber label={<DifficutlyDie />} name="difficulty" />
+        <DiceNumber label={<ChallengeDie />} name="challenge" />
+      </div>
+      <div className={styles.center}>
+        <DiceNumber
+          label={<ForceDie />}
+          name="force"
+          rules={[
+            ({ getFieldValue }) => ({
+              validator: () => {
+                if (
+                  !!getFieldValue("boost") ||
+                  !!getFieldValue("ability") ||
+                  !!getFieldValue("proficiency") ||
+                  !!getFieldValue("setback") ||
+                  !!getFieldValue("difficulty") ||
+                  !!getFieldValue("challenge") ||
+                  !!getFieldValue("force")
+                ) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(new Error(`Must roll at least one die.`));
+              },
+            }),
+          ]}
+        />
+      </div>
+      <Form.Item>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {`Roll`}
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 
