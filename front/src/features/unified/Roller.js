@@ -3,6 +3,7 @@ import styles from "./Roller.module.less";
 import Result from "./Result";
 import Form from "./Form";
 import DefaultErrorMessage from "DefaultErrorMessage";
+import Selector from "./Selector";
 
 const Roller = ({ rollType }) => {
   const [bbMessage, setBbMessage] = useState();
@@ -17,16 +18,24 @@ const Roller = ({ rollType }) => {
 
   return (
     <div className={styles.layout}>
-      <Form
-        rollType={rollType}
-        setBbMessage={setBbMessage}
-        setId={setId}
-        loading={loading}
-        setLoading={setLoading}
-        setResult={setResult}
-        setError={setError}
-      />
-      <Result bbMessage={bbMessage} id={id} loading={loading} result={result} />
+      <Selector />
+      <div className={styles.content}>
+        <Form
+          rollType={rollType}
+          setBbMessage={setBbMessage}
+          setId={setId}
+          loading={loading}
+          setLoading={setLoading}
+          setResult={setResult}
+          setError={setError}
+        />
+        <Result
+          bbMessage={bbMessage}
+          id={id}
+          loading={loading}
+          result={result}
+        />
+      </div>
     </div>
   );
 };
