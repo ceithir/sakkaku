@@ -16,7 +16,6 @@ import ScrollToTop from "./features/navigation/ScrollToTop";
 import FfgSubmenu from "features/navigation/FfgSubmenu";
 import D10Roller from "features/d10/D10Roller";
 import ReconnectionModal from "features/user/ReconnectionModal";
-import CyberpunkRoller from "features/cyberpunk/Roller";
 import Prefiller from "features/gm/Prefiller";
 import Show from "features/browse/Show";
 import UnifiedRoller from "features/unified/Roller";
@@ -92,7 +91,10 @@ const App = () => {
             path="/roll-ffg-sw"
             element={<UnifiedRoller rollType={"FFG-SW"} />}
           />
-          <Route path="/cyberpunk/roll" element={<CyberpunkRoller />} />
+          <Route
+            path="/cyberpunk/roll"
+            element={<UnifiedRoller rollType={"Cyberpunk-RED"} />}
+          />
           <Route path="/" element={<Homepage />} />
         </Routes>
       </Layout>
