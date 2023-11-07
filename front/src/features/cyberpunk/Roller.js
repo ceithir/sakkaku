@@ -86,7 +86,6 @@ const Roller = ({
           error,
         });
       }}
-      className={styles.form}
     >
       <UserContext />
       <div className={styles.formula}>

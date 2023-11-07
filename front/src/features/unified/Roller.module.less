@@ -17,4 +17,18 @@
       min-width: @screen-md;
     }
   }
+
+  form {
+    :global(.ant-form-item):last-child {
+      margin-bottom: 0;
+
+      button:global(.ant-btn-primary) {
+        float: right;
+      }
+    }
+
+    label[for="testMode"] {
+      margin-bottom: 12px;
+    }
+  }
 }

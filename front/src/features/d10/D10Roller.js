@@ -14,7 +14,6 @@ import styles from "./D10Roller.module.less";
 import UserContext from "components/form/UserContext";
 import { selectUser } from "features/user/reducer";
 import { useSelector, useDispatch } from "react-redux";
-import classNames from "classnames";
 import TextSummary from "./TextSummary";
 import ExternalLink from "features/navigation/ExternalLink";
 import { postOnServer, authentifiedPostOnServer } from "server";
@@ -188,9 +187,6 @@ const D10Roller = ({
         dispatch(addCampaign(campaign));
         dispatch(addCharacter(character));
       }}
-      className={classNames(styles.form, {
-        [styles["fix-user-switch"]]: !!user,
-      })}
       initialValues={initialValues}
       form={form}
     >

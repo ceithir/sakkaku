@@ -129,7 +129,6 @@ export const Roller = ({
           error,
         });
       }}
-      className={styles.form}
     >
       <UserContext />
       <Form.Item
