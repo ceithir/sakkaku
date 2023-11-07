@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Title from "./Title";
+import { useState } from "react";
 import {
   Form,
   Input,
@@ -10,17 +9,21 @@ import {
   Radio,
   Collapse,
 } from "antd";
-import { parse } from "./formula";
-import DefaultErrorMessage from "DefaultErrorMessage";
+import { parse, cap } from "./formula";
 import styles from "./D10Roller.module.less";
 import UserContext from "components/form/UserContext";
 import { selectUser } from "features/user/reducer";
 import { useSelector, useDispatch } from "react-redux";
-import classNames from "classnames";
 import TextSummary from "./TextSummary";
-import { prepareFinish } from "./form";
-import FormResult from "./FormResult";
 import ExternalLink from "features/navigation/ExternalLink";
+import { postOnServer, authentifiedPostOnServer } from "server";
+import {
+  addCampaign,
+  addCharacter,
+  setShowReconnectionModal,
+} from "features/user/reducer";
+import RollResult from "./RollResult";
+import { bbMessage } from "./D10IdentifiedRoll";
 
 const { Text } = Typography;
 
@@ -44,11 +47,15 @@ const Syntax = () => {
   );
 };
 
-const D10Roller = () => {
+const D10Roller = ({
+  loading,
+  setLoading,
+  setResult,
+  setError,
+  setId,
+  setBbMessage,
+}) => {
   const [parsedFormula, setParsedFormula] = useState();
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState();
   const [params, setParams] = useState({
     explosions: [
       ...initialValues.otherExplosions,
@@ -58,7 +65,6 @@ const D10Roller = () => {
     select: initialValues.select,
     tn: initialValues.tn,
   });
-  const [context, setContext] = useState();
   const [showMeTheOdds, setShowMeTheOdds] = useState();
 
   const dispatch = useDispatch();
@@ -66,187 +72,233 @@ const D10Roller = () => {
 
   const [form] = Form.useForm();
 
-  if (error) {
-    return <DefaultErrorMessage />;
-  }
-
   return (
-    <div className={styles.background}>
-      <Title />
-      <Form
-        onValuesChange={(
-          changedValues,
-          {
-            formula,
-            explodeOnTen,
-            tn,
-            otherExplosions = initialValues.otherExplosions,
-            rerolls = initialValues.rerolls,
-            select = initialValues.select,
-            showMeTheOdds,
-          }
-        ) => {
-          setParsedFormula(parse(formula));
-          setParams({
-            explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
-            rerolls,
-            select,
-            tn,
-          });
-          setResult(undefined);
-          setShowMeTheOdds(showMeTheOdds);
+    <Form
+      onValuesChange={(
+        changedValues,
+        {
+          formula,
+          explodeOnTen,
+          tn,
+          otherExplosions = initialValues.otherExplosions,
+          rerolls = initialValues.rerolls,
+          select = initialValues.select,
+          showMeTheOdds,
+        }
+      ) => {
+        setParsedFormula(parse(formula));
+        setParams({
+          explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
+          rerolls,
+          select,
+          tn,
+        });
+        setResult(undefined);
+        setShowMeTheOdds(showMeTheOdds);
 
-          // Trickery to revalidate on each if alreayd in error
-          if (Object.keys(changedValues).includes("formula")) {
-            if (
-              form
-                .getFieldInstance("formula")
-                ?.input?.classList?.contains("ant-input-status-error")
-            ) {
-              form.validateFields(["formula"]);
-            }
+        // Trickery to revalidate on each if alreayd in error
+        if (Object.keys(changedValues).includes("formula")) {
+          if (
+            form
+              .getFieldInstance("formula")
+              ?.input?.classList?.contains("ant-input-status-error")
+          ) {
+            form.validateFields(["formula"]);
           }
-        }}
-        onFinish={(values) => {
-          const {
-            formula,
-            explodeOnTen,
-            otherExplosions = initialValues.otherExplosions,
-          } = values;
+        }
+      }}
+      onFinish={(values) => {
+        const allValues = { ...initialValues, ...values };
 
-          prepareFinish({
-            setLoading,
-            setResult,
-            setContext,
-            setError,
-            dispatch,
-            user,
-          })({
-            ...initialValues,
-            ...values,
-            explosions: [...otherExplosions, ...(explodeOnTen ? [10] : [])],
-            metadata: {
-              original: formula,
+        const {
+          formula,
+          tn,
+          explodeOnTen,
+          otherExplosions,
+          rerolls,
+          select,
+
+          campaign,
+          character,
+          description,
+          testMode,
+        } = allValues;
+
+        const explosions = [...otherExplosions, ...(explodeOnTen ? [10] : [])];
+        const metadata = {
+          original: formula,
+        };
+
+        setLoading(true);
+        setResult(undefined);
+        setId(undefined);
+        setBbMessage(undefined);
+
+        const parameters = {
+          ...cap(parse(formula)),
+          tn,
+          explosions,
+          rerolls,
+          select,
+        };
+        const error = (err) => {
+          if (err.message === "Authentication issue") {
+            dispatch(setShowReconnectionModal(true));
+          } else {
+            setError(true);
+          }
+          setLoading(false);
+        };
+
+        if (!user || testMode) {
+          postOnServer({
+            uri: "/public/aeg/l5r/rolls/create",
+            body: {
+              parameters,
+              metadata,
             },
+            success: ({ dice, parameters }) => {
+              setResult(<RollResult dice={dice} parameters={parameters} />);
+              setLoading(false);
+            },
+            error,
           });
-        }}
-        className={classNames(styles.form, {
-          [styles["fix-user-switch"]]: !!user,
-        })}
-        initialValues={initialValues}
-        form={form}
+          return;
+        }
+
+        authentifiedPostOnServer({
+          uri: "/aeg/l5r/rolls/create",
+          body: {
+            parameters,
+            campaign,
+            character,
+            description,
+            metadata,
+          },
+          success: ({ roll, id, description }) => {
+            setResult(<RollResult {...roll} />);
+            setId(id);
+            setBbMessage(bbMessage({ description, roll }));
+            setLoading(false);
+          },
+          error,
+        });
+
+        dispatch(addCampaign(campaign));
+        dispatch(addCharacter(character));
+      }}
+      initialValues={initialValues}
+      form={form}
+    >
+      <UserContext />
+      <Form.Item
+        label={`Your dice pool`}
+        name="formula"
+        validateTrigger={["onBlur"]}
+        rules={[
+          { required: true, message: `Please enter what you wish to roll` },
+          () => ({
+            validator: (_, value) => {
+              if (!value) {
+                return Promise.resolve();
+              }
+              if (!!parse(value)) {
+                return Promise.resolve();
+              }
+              return Promise.reject(`Bad syntax`);
+            },
+            message: <Syntax />,
+          }),
+        ]}
       >
-        <UserContext />
+        <Input placeholder={`5k4 +1k0 -5`} />
+      </Form.Item>
+      <div className={styles.inlined}>
+        <Form.Item label={`TN`} name="tn">
+          <InputNumber />
+        </Form.Item>
         <Form.Item
-          label={`Your dice pool`}
-          name="formula"
-          validateTrigger={["onBlur"]}
-          rules={[
-            { required: true, message: `Please enter what you wish to roll` },
-            () => ({
-              validator: (_, value) => {
-                if (!value) {
-                  return Promise.resolve();
-                }
-                if (!!parse(value)) {
-                  return Promise.resolve();
-                }
-                return Promise.reject(`Bad syntax`);
-              },
-              message: <Syntax />,
-            }),
-          ]}
+          label={`Exploding 10`}
+          name="explodeOnTen"
+          valuePropName="checked"
         >
-          <Input placeholder={`5k4 +1k0 -5`} />
+          <Checkbox />
         </Form.Item>
-        <div className={styles.inlined}>
-          <Form.Item label={`TN`} name="tn">
-            <InputNumber />
-          </Form.Item>
-          <Form.Item
-            label={`Exploding 10`}
-            name="explodeOnTen"
-            valuePropName="checked"
-          >
-            <Checkbox />
-          </Form.Item>
-        </div>
+      </div>
 
-        {!!parsedFormula ? (
-          <TextSummary
-            original={parsedFormula}
-            showMeTheOdds={showMeTheOdds}
-            {...params}
-          />
-        ) : (
-          <div className={styles.placeholder}>{`💮`}</div>
-        )}
-        <Collapse
-          className={styles["extra-options"]}
-          items={[
-            {
-              key: "1",
-              label: `More options`,
-              children: (
-                <>
-                  <Form.Item
-                    label={`Dice also explode on`}
-                    name="otherExplosions"
-                  >
-                    <Checkbox.Group
-                      options={[
-                        { label: 8, value: 8 },
-                        { label: 9, value: 9 },
-                      ]}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label={`Reroll (once)`}
-                    name="rerolls"
-                    tooltip={`Check "1" to apply a 4th edition Emphasis [see Core, page 133]`}
-                  >
-                    <Checkbox.Group
-                      options={[
-                        { label: 1, value: 1 },
-                        { label: 2, value: 2 },
-                        { label: 3, value: 3 },
-                      ]}
-                    />
-                  </Form.Item>
-                  <Form.Item label={`Keep`} name="select">
-                    <Radio.Group
-                      options={[
-                        { value: "high", label: `Highest dice` },
-                        { value: "low", label: `Lowest dice` },
-                      ]}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label={
-                      <>
-                        {`Show me the odds (`}
-                        <ExternalLink href="https://lynks.se/probability/">{`source`}</ExternalLink>
-                        {`)`}
-                      </>
-                    }
-                    name="showMeTheOdds"
-                    valuePropName="checked"
-                  >
-                    <Checkbox />
-                  </Form.Item>
-                </>
-              ),
-            },
-          ]}
+      {!!parsedFormula ? (
+        <TextSummary
+          original={parsedFormula}
+          showMeTheOdds={showMeTheOdds}
+          {...params}
         />
-        <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            {`Roll`}
-          </Button>
-        </Form.Item>
-      </Form>
-      <FormResult result={result} context={context} loading={loading} />
-    </div>
+      ) : (
+        <div className={styles.placeholder}>{`💮`}</div>
+      )}
+      <Collapse
+        className={styles["extra-options"]}
+        items={[
+          {
+            key: "1",
+            label: `More options`,
+            children: (
+              <>
+                <Form.Item
+                  label={`Dice also explode on`}
+                  name="otherExplosions"
+                >
+                  <Checkbox.Group
+                    options={[
+                      { label: 8, value: 8 },
+                      { label: 9, value: 9 },
+                    ]}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={`Reroll (once)`}
+                  name="rerolls"
+                  tooltip={`Check "1" to apply a 4th edition Emphasis [see Core, page 133]`}
+                >
+                  <Checkbox.Group
+                    options={[
+                      { label: 1, value: 1 },
+                      { label: 2, value: 2 },
+                      { label: 3, value: 3 },
+                    ]}
+                  />
+                </Form.Item>
+                <Form.Item label={`Keep`} name="select">
+                  <Radio.Group
+                    options={[
+                      { value: "high", label: `Highest dice` },
+                      { value: "low", label: `Lowest dice` },
+                    ]}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label={
+                    <>
+                      {`Show me the odds (`}
+                      <ExternalLink href="https://lynks.se/probability/">{`source`}</ExternalLink>
+                      {`)`}
+                    </>
+                  }
+                  name="showMeTheOdds"
+                  valuePropName="checked"
+                >
+                  <Checkbox />
+                </Form.Item>
+              </>
+            ),
+          },
+        ]}
+      />
+      <Form.Item>
+        <Button type="primary" htmlType="submit" loading={loading}>
+          {`Roll`}
+        </Button>
+      </Form.Item>
+    </Form>
   );
 };
 
