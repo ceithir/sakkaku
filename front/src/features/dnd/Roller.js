@@ -93,6 +93,8 @@ export const Roller = ({
               setResult(
                 <Result parameters={data.parameters} dice={data.dice} />
               );
+              setId(undefined);
+              setBbMessage(undefined);
               setLoading(false);
             },
             error,
