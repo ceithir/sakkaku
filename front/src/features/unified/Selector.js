@@ -10,7 +10,8 @@ const Selector = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValue(location.pathname);
+    const pathnameWithoutTrailingSlash = location.pathname.replace(/\/+$/, "");
+    setValue(pathnameWithoutTrailingSlash);
   }, [location]);
 
   return (
