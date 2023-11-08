@@ -2,16 +2,55 @@ import DnDRoller from "features/dnd/Roller";
 import StarWarsFFGRoller from "features/sw/Roller";
 import CyberpunkRoller from "features/cyberpunk/Roller";
 import L5RAEG from "features/d10/D10Roller";
-import { setShowReconnectionModal } from "features/user/reducer";
+import {
+  setShowReconnectionModal,
+  addCampaign,
+  addCharacter,
+} from "features/user/reducer";
 import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { useEffect, useCallback } from "react";
 
-const Form = ({ rollType, setError, setLoading, ...otherParams }) => {
+const Form = ({
+  rollType,
+  setError,
+  setLoading,
+  setId,
+  setBbMessage,
+  setResult,
+  ...otherParams
+}) => {
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  const updateResult = (
+    result,
+    { id, campaign, character, bbMessage } = {}
+  ) => {
+    setResult(result);
+    setId(id);
+    setBbMessage(bbMessage);
+    dispatch(addCampaign(campaign));
+    dispatch(addCharacter(character));
+    setError(false);
+    setLoading(false);
+  };
+
+  const clearResult = useCallback(() => {
+    setResult(undefined);
+    setId(undefined);
+    setBbMessage(undefined);
+  }, [setResult, setId, setBbMessage]);
+
+  useEffect(() => {
+    clearResult();
+  }, [location, clearResult]);
 
   const ajaxError = (err) => {
     if (err.message === "Authentication issue") {
       dispatch(setShowReconnectionModal(true));
     } else {
+      console.error(err);
       setError(true);
     }
     setLoading(false);
@@ -20,6 +59,8 @@ const Form = ({ rollType, setError, setLoading, ...otherParams }) => {
   const params = {
     setLoading,
     ajaxError,
+    updateResult,
+    clearResult,
     ...otherParams,
   };
 

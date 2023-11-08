@@ -3,8 +3,8 @@ import { Form, Button, InputNumber } from "antd";
 import { postOnServer, authentifiedPostOnServer } from "server";
 import Result from "./Result";
 import UserContext from "components/form/UserContext";
-import { selectUser, addCampaign, addCharacter } from "features/user/reducer";
-import { useSelector, useDispatch } from "react-redux";
+import { selectUser } from "features/user/reducer";
+import { useSelector } from "react-redux";
 import {
   AbilityDie,
   BoostDie,
@@ -39,12 +39,10 @@ const DiceNumber = ({ label, name, rules = [] }) => {
 const Roller = ({
   loading,
   setLoading,
-  setResult,
-  setId,
-  setBbMessage,
+  updateResult,
+  clearResult,
   ajaxError,
 }) => {
-  const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
   const onFinish = ({
@@ -62,7 +60,7 @@ const Roller = ({
     description,
   }) => {
     setLoading(true);
-    setResult(undefined);
+    clearResult();
 
     const parameters = {
       boost,
@@ -82,12 +80,7 @@ const Roller = ({
           parameters,
           metadata,
         },
-        success: (data) => {
-          setResult(<Result {...data} />);
-          setId(undefined);
-          setBbMessage(undefined);
-          setLoading(false);
-        },
+        success: (data) => updateResult(<Result {...data} />),
         error: ajaxError,
       });
       return;
@@ -103,13 +96,13 @@ const Roller = ({
         description,
       },
       success: ({ roll, id, description, result }) => {
-        setResult(<Result {...roll} />);
-        setId(id);
         const { dice, parameters } = roll;
-        setBbMessage(bbMessage({ id, description, dice, parameters, result }));
-        dispatch(addCampaign(campaign));
-        dispatch(addCharacter(character));
-        setLoading(false);
+        updateResult(<Result {...roll} />, {
+          id,
+          bbMessage: bbMessage({ id, description, dice, parameters, result }),
+          campaign,
+          character,
+        });
       },
       error: ajaxError,
     });
@@ -119,7 +112,7 @@ const Roller = ({
     <Form
       className={styles.form}
       onValuesChange={() => {
-        setResult(undefined);
+        clearResult();
       }}
       onFinish={onFinish}
     >
