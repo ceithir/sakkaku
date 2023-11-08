@@ -45,12 +45,7 @@ const ReconnectionModal = () => {
   const close = () => dispatch(setShowReconnectionModal(false));
 
   return (
-    <Modal
-      open={true}
-      footer={null}
-      closable={success}
-      onCancel={success && close}
-    >
+    <Modal open={true} closeIcon={null} footer={null} onCancel={close}>
       {!success && (
         <>
           <Alert
