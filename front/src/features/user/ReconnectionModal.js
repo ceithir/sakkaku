@@ -10,12 +10,15 @@ import {
 import useInterval from "useInterval";
 import useTimeout from "useTimeout";
 
-const Iframe = ({ setSuccess }) => {
+const Iframe = ({ setShowSuccessMessage }) => {
   const dispatch = useDispatch();
 
   // FIXME: There's definetely a better solution than spamming the server
   useInterval(() => {
-    fetchUser(dispatch, setSuccess);
+    fetchUser(dispatch, () => {
+      dispatch(setShowReconnectionModal(false));
+      setShowSuccessMessage(true);
+    });
   }, 1 * 1000);
 
   // To avoid an infinity of calls, close the modal after three minutes
@@ -30,41 +33,42 @@ const ReconnectionModal = () => {
   const show = useSelector(selectShowReconnectionModal);
   const dispatch = useDispatch();
 
-  const [success, setSuccess] = useState(false);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const close = () => dispatch(setShowReconnectionModal(false));
 
   useEffect(() => {
     if (show) {
-      setSuccess(false);
+      setShowSuccessMessage(false);
     }
   }, [show]);
+
+  if (showSuccessMessage) {
+    return (
+      <Alert
+        message={`Success! You can now continue what you were doing before this interruption.`}
+        type="success"
+        showIcon
+        closable={true}
+        onClose={() => {
+          setShowSuccessMessage(false);
+        }}
+      />
+    );
+  }
 
   if (!show) {
     return null;
   }
 
-  const close = () => dispatch(setShowReconnectionModal(false));
-
   return (
     <Modal open={true} closeIcon={null} footer={null} onCancel={close}>
-      {!success && (
-        <>
-          <Alert
-            message={`You are currently logged out. Please log in to pursue.`}
-            type="warning"
-            showIcon
-            className={styles.message}
-          />
-          <Iframe setSuccess={setSuccess} />
-        </>
-      )}
-      {success && (
-        <Alert
-          message={`Success! You can now close this window and continue what you were doing before this interruption.`}
-          type="success"
-          showIcon
-          className={styles.message}
-        />
-      )}
+      <Alert
+        message={`You are currently logged out. Please log in to pursue.`}
+        type="warning"
+        showIcon
+        className={styles.message}
+      />
+      <Iframe setShowSuccessMessage={setShowSuccessMessage} />
     </Modal>
   );
 };
