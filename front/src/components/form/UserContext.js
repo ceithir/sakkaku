@@ -38,13 +38,25 @@ export const arrayToAutoCompleteOptions = (values) => {
     });
 };
 
+const QuickLoginButton = () => {
+  const dispatch = useDispatch();
+
+  return (
+    <Button
+      onClick={() => {
+        dispatch(setShowReconnectionModal(true));
+      }}
+      icon={<LoginOutlined />}
+    >{`Log in`}</Button>
+  );
+};
+
 const AnonymousAlert = () => {
   const location = useLocation();
   const [params, setParams] = useState({});
   useEffect(() => {
     setParams(queryString.parse(location.search));
   }, [location]);
-  const dispatch = useDispatch();
 
   const campaign = params.campaign;
   const description = campaign ? (
@@ -52,16 +64,16 @@ const AnonymousAlert = () => {
       <p>{`This appears to be a campaign roll, for the campaign "${campaign}".`}</p>
       <p>{`Please log in first to access all information your GM added to it in top of the usual benefits for being logged it (like rolls being persisted in the database).`}</p>
       <div className={styles["button-wrapper"]}>
-        <Button
-          onClick={() => {
-            dispatch(setShowReconnectionModal(true));
-          }}
-          icon={<LoginOutlined />}
-        >{`Log in`}</Button>
+        <QuickLoginButton />
       </div>
     </>
   ) : (
-    `No history of your rolls will be kept, and you won't be able to retrieve or share them later.`
+    <>
+      <p>{`No history of your rolls will be kept, and you won't be able to retrieve or share them later.`}</p>
+      <div className={styles["button-wrapper"]}>
+        <QuickLoginButton />
+      </div>
+    </>
   );
 
   return (
@@ -71,6 +83,7 @@ const AnonymousAlert = () => {
       message={`You are not logged in.`}
       description={description}
       type={campaign ? "error" : "warning"}
+      closeIcon={true}
     />
   );
 };
