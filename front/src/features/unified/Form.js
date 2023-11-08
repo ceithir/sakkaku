@@ -4,8 +4,6 @@ import CyberpunkRoller from "features/cyberpunk/Roller";
 import L5RAEG from "features/d10/D10Roller";
 
 const Form = ({ rollType, ...params }) => {
-  if (rollType === "DnD") {
-  }
   switch (rollType) {
     case "DnD":
       return <DnDRoller {...params} />;
