@@ -83,6 +83,7 @@ const AnonymousAlert = () => {
       message={`You are not logged in.`}
       description={description}
       type={campaign ? "error" : "warning"}
+      closeIcon={true}
     />
   );
 };
