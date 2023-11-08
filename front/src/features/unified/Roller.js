@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styles from "./Roller.module.less";
 import Result from "./Result";
 import Form from "./Form";
 import DefaultErrorMessage from "DefaultErrorMessage";
 import Selector from "./Selector";
-import { useLocation } from "react-router-dom";
 
 const Roller = ({ rollType }) => {
   const [bbMessage, setBbMessage] = useState();
@@ -12,16 +11,6 @@ const Roller = ({ rollType }) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState();
   const [error, setError] = useState(false);
-
-  const location = useLocation();
-
-  useEffect(() => {
-    setId(undefined);
-    setBbMessage(undefined);
-    setResult(undefined);
-    setError(undefined);
-    setLoading(false);
-  }, [location]);
 
   if (error) {
     return <DefaultErrorMessage />;

@@ -13,15 +13,10 @@ import { parse, cap } from "./formula";
 import styles from "./D10Roller.module.less";
 import UserContext from "components/form/UserContext";
 import { selectUser } from "features/user/reducer";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import TextSummary from "./TextSummary";
 import ExternalLink from "features/navigation/ExternalLink";
 import { postOnServer, authentifiedPostOnServer } from "server";
-import {
-  addCampaign,
-  addCharacter,
-  setShowReconnectionModal,
-} from "features/user/reducer";
 import RollResult from "./RollResult";
 import { bbMessage } from "./D10IdentifiedRoll";
 
@@ -50,10 +45,9 @@ const Syntax = () => {
 const D10Roller = ({
   loading,
   setLoading,
-  setResult,
-  setError,
-  setId,
-  setBbMessage,
+  ajaxError,
+  updateResult,
+  clearResult,
 }) => {
   const [parsedFormula, setParsedFormula] = useState();
   const [params, setParams] = useState({
@@ -67,7 +61,6 @@ const D10Roller = ({
   });
   const [showMeTheOdds, setShowMeTheOdds] = useState();
 
-  const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
   const [form] = Form.useForm();
@@ -93,7 +86,7 @@ const D10Roller = ({
           select,
           tn,
         });
-        setResult(undefined);
+        clearResult();
         setShowMeTheOdds(showMeTheOdds);
 
         // Trickery to revalidate on each if alreayd in error
@@ -130,9 +123,7 @@ const D10Roller = ({
         };
 
         setLoading(true);
-        setResult(undefined);
-        setId(undefined);
-        setBbMessage(undefined);
+        clearResult();
 
         const parameters = {
           ...cap(parse(formula)),
@@ -140,14 +131,6 @@ const D10Roller = ({
           explosions,
           rerolls,
           select,
-        };
-        const error = (err) => {
-          if (err.message === "Authentication issue") {
-            dispatch(setShowReconnectionModal(true));
-          } else {
-            setError(true);
-          }
-          setLoading(false);
         };
 
         if (!user || testMode) {
@@ -157,11 +140,9 @@ const D10Roller = ({
               parameters,
               metadata,
             },
-            success: ({ dice, parameters }) => {
-              setResult(<RollResult dice={dice} parameters={parameters} />);
-              setLoading(false);
-            },
-            error,
+            success: ({ dice, parameters }) =>
+              updateResult(<RollResult dice={dice} parameters={parameters} />),
+            error: ajaxError,
           });
           return;
         }
@@ -175,17 +156,15 @@ const D10Roller = ({
             description,
             metadata,
           },
-          success: ({ roll, id, description }) => {
-            setResult(<RollResult {...roll} />);
-            setId(id);
-            setBbMessage(bbMessage({ description, roll }));
-            setLoading(false);
-          },
-          error,
+          success: ({ roll, id, character, campaign, description }) =>
+            updateResult(<RollResult {...roll} />, {
+              id,
+              character,
+              campaign,
+              bbMessage: bbMessage({ description, roll }),
+            }),
+          error: ajaxError,
         });
-
-        dispatch(addCampaign(campaign));
-        dispatch(addCharacter(character));
       }}
       initialValues={initialValues}
       form={form}

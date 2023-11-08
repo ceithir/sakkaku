@@ -3,30 +3,21 @@ import styles from "./Roller.module.less";
 import { postOnServer, authentifiedPostOnServer } from "server";
 import { pattern, parse } from "./formula";
 import UserContext from "components/form/UserContext";
-import { addCampaign, addCharacter } from "features/user/reducer";
-import { useDispatch } from "react-redux";
 import TextResult from "./TextResult";
 import { bbMessage } from "./Roll";
 
 const Roller = ({
-  setError,
   loading,
   setLoading,
-  setResult,
-  setId,
-  setBbMessage,
+  ajaxError,
+  updateResult,
+  clearResult,
 }) => {
-  const dispatch = useDispatch();
-  const updateUser = ({ campaign, character }) => {
-    dispatch(addCampaign(campaign));
-    dispatch(addCharacter(character));
-  };
-
   return (
     <Form
       onFinish={({ formula, tn, ...values }) => {
         setLoading(true);
-        setResult(undefined);
+        clearResult();
 
         const parameters = {
           modifier: parse(formula) || 0,
@@ -34,11 +25,6 @@ const Roller = ({
         };
         const metadata = {
           original: formula,
-        };
-
-        const error = () => {
-          setError(true);
-          setLoading(false);
         };
 
         const { testMode, campaign, character, description } = values;
@@ -51,13 +37,9 @@ const Roller = ({
               parameters,
               metadata,
             },
-            success: ({ parameters, dice }) => {
-              setResult(<TextResult parameters={parameters} dice={dice} />);
-              setId(undefined);
-              setBbMessage(undefined);
-              setLoading(false);
-            },
-            error,
+            success: ({ parameters, dice }) =>
+              updateResult(<TextResult parameters={parameters} dice={dice} />),
+            error: ajaxError,
           });
           return;
         }
@@ -76,14 +58,17 @@ const Roller = ({
             id,
             result: { total },
             description,
+            campaign,
+            character,
           }) => {
-            setResult(<TextResult parameters={parameters} dice={dice} />);
-            updateUser({ campaign, character });
-            setId(id);
-            setBbMessage(bbMessage({ description, total, parameters }));
-            setLoading(false);
+            updateResult(<TextResult parameters={parameters} dice={dice} />, {
+              id,
+              campaign,
+              character,
+              bbMessage: bbMessage({ description, total, parameters }),
+            });
           },
-          error,
+          error: ajaxError,
         });
       }}
     >
