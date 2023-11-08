@@ -9,12 +9,12 @@ import TextResult from "./TextResult";
 import { bbMessage } from "./Roll";
 
 const Roller = ({
-  setError,
   loading,
   setLoading,
   setResult,
   setId,
   setBbMessage,
+  ajaxError,
 }) => {
   const dispatch = useDispatch();
   const updateUser = ({ campaign, character }) => {
@@ -36,11 +36,6 @@ const Roller = ({
           original: formula,
         };
 
-        const error = () => {
-          setError(true);
-          setLoading(false);
-        };
-
         const { testMode, campaign, character, description } = values;
         const stateless = testMode || !campaign;
 
@@ -57,7 +52,7 @@ const Roller = ({
               setBbMessage(undefined);
               setLoading(false);
             },
-            error,
+            error: ajaxError,
           });
           return;
         }
@@ -83,7 +78,7 @@ const Roller = ({
             setBbMessage(bbMessage({ description, total, parameters }));
             setLoading(false);
           },
-          error,
+          error: ajaxError,
         });
       }}
     >

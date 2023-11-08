@@ -4,12 +4,7 @@ import styles from "./Roller.module.less";
 import { parse } from "./formula";
 import { postOnServer, authentifiedPostOnServer } from "server";
 import UserContext from "components/form/UserContext";
-import {
-  selectUser,
-  addCampaign,
-  addCharacter,
-  setShowReconnectionModal,
-} from "features/user/reducer";
+import { selectUser, addCampaign, addCharacter } from "features/user/reducer";
 import { useSelector, useDispatch } from "react-redux";
 import Result from "./TextResult";
 import ExternalLink from "features/navigation/ExternalLink";
@@ -47,7 +42,7 @@ export const Roller = ({
   setId,
   setResult,
   setBbMessage,
-  setError,
+  ajaxError,
 }) => {
   const [parsedFormula, setParsedFormula] = useState();
   const dispatch = useDispatch();
@@ -71,15 +66,6 @@ export const Roller = ({
           original: formula,
         };
 
-        const error = (err) => {
-          if (err.message === "Authentication issue") {
-            dispatch(setShowReconnectionModal(true));
-          } else {
-            setError(true);
-          }
-          setLoading(false);
-        };
-
         const { testMode } = values;
 
         if (!user || testMode) {
@@ -97,7 +83,7 @@ export const Roller = ({
               setBbMessage(undefined);
               setLoading(false);
             },
-            error,
+            error: ajaxError,
           });
           return;
         }
@@ -126,7 +112,7 @@ export const Roller = ({
             dispatch(addCharacter(character));
             setLoading(false);
           },
-          error,
+          error: ajaxError,
         });
       }}
     >

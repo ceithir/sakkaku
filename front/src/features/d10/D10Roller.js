@@ -17,11 +17,7 @@ import { useSelector, useDispatch } from "react-redux";
 import TextSummary from "./TextSummary";
 import ExternalLink from "features/navigation/ExternalLink";
 import { postOnServer, authentifiedPostOnServer } from "server";
-import {
-  addCampaign,
-  addCharacter,
-  setShowReconnectionModal,
-} from "features/user/reducer";
+import { addCampaign, addCharacter } from "features/user/reducer";
 import RollResult from "./RollResult";
 import { bbMessage } from "./D10IdentifiedRoll";
 
@@ -51,7 +47,7 @@ const D10Roller = ({
   loading,
   setLoading,
   setResult,
-  setError,
+  ajaxError,
   setId,
   setBbMessage,
 }) => {
@@ -141,14 +137,6 @@ const D10Roller = ({
           rerolls,
           select,
         };
-        const error = (err) => {
-          if (err.message === "Authentication issue") {
-            dispatch(setShowReconnectionModal(true));
-          } else {
-            setError(true);
-          }
-          setLoading(false);
-        };
 
         if (!user || testMode) {
           postOnServer({
@@ -161,7 +149,7 @@ const D10Roller = ({
               setResult(<RollResult dice={dice} parameters={parameters} />);
               setLoading(false);
             },
-            error,
+            error: ajaxError,
           });
           return;
         }
@@ -181,7 +169,7 @@ const D10Roller = ({
             setBbMessage(bbMessage({ description, roll }));
             setLoading(false);
           },
-          error,
+          error: ajaxError,
         });
 
         dispatch(addCampaign(campaign));

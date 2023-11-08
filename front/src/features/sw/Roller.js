@@ -3,12 +3,7 @@ import { Form, Button, InputNumber } from "antd";
 import { postOnServer, authentifiedPostOnServer } from "server";
 import Result from "./Result";
 import UserContext from "components/form/UserContext";
-import {
-  selectUser,
-  addCampaign,
-  addCharacter,
-  setShowReconnectionModal,
-} from "features/user/reducer";
+import { selectUser, addCampaign, addCharacter } from "features/user/reducer";
 import { useSelector, useDispatch } from "react-redux";
 import {
   AbilityDie,
@@ -42,12 +37,12 @@ const DiceNumber = ({ label, name, rules = [] }) => {
 };
 
 const Roller = ({
-  setError,
   loading,
   setLoading,
   setResult,
   setId,
   setBbMessage,
+  ajaxError,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
@@ -80,15 +75,6 @@ const Roller = ({
     };
     const metadata = {};
 
-    const error = (err) => {
-      if (err.message === "Authentication issue") {
-        dispatch(setShowReconnectionModal(true));
-      } else {
-        setError(true);
-      }
-      setLoading(false);
-    };
-
     if (!user || testMode) {
       postOnServer({
         uri: "/public/ffg/sw/rolls/create",
@@ -102,7 +88,7 @@ const Roller = ({
           setBbMessage(undefined);
           setLoading(false);
         },
-        error,
+        error: ajaxError,
       });
       return;
     }
@@ -125,7 +111,7 @@ const Roller = ({
         dispatch(addCharacter(character));
         setLoading(false);
       },
-      error,
+      error: ajaxError,
     });
   };
 
