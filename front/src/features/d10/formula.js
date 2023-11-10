@@ -4,7 +4,9 @@ export const parse = (str) => {
   }
 
   const s = str.replace(/\s+/g, "").toLowerCase();
-  const matches = s.match(/^([0-9]+)k([0-9]+)((\+|-)([0-9]+k[0-9]+|[0-9]+))*$/);
+  const matches = s.match(
+    /^([0-9]+)k([0-9]+)((\+|-)([0-9]+k[0-9]+|[0-9]+))*(#[0-9]+)?$/
+  );
 
   if (!matches) {
     return false;
@@ -44,7 +46,20 @@ export const parse = (str) => {
     return false;
   }
 
-  return { roll, keep, modifier };
+  const result = { roll, keep, modifier };
+
+  const rMatches = s.match(/#([0-9]+)$/);
+  if (!!rMatches) {
+    const repeat = parseInt(rMatches[1]);
+    if (repeat < 1) {
+      return false;
+    }
+    if (repeat > 1) {
+      result["repeat"] = parseInt(rMatches[1]);
+    }
+  }
+
+  return result;
 };
 
 export const cap = ({ roll, keep, modifier = 0 }) => {

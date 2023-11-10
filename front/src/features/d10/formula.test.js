@@ -52,6 +52,36 @@ describe("parse", () => {
   test("case insensitive", () => {
     expect(parse("4K2+1k1+0K1")).toEqual({ roll: 5, keep: 4, modifier: 0 });
   });
+
+  describe("repeat", () => {
+    test("repeat n times", () => {
+      expect(parse("7k3#5")).toEqual({
+        roll: 7,
+        keep: 3,
+        modifier: 0,
+        repeat: 5,
+      });
+
+      expect(parse("5k4#12")).toEqual({
+        roll: 5,
+        keep: 4,
+        modifier: 0,
+        repeat: 12,
+      });
+    });
+
+    test("errors on zero repeat", () => {
+      expect(parse("5k4#0")).toEqual(false);
+    });
+
+    test("ignore single repeat (i.e. default)", () => {
+      expect(parse("5k4+3#1")).toEqual({
+        roll: 5,
+        keep: 4,
+        modifier: 3,
+      });
+    });
+  });
 });
 
 describe("cap", () => {

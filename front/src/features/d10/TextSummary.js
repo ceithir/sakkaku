@@ -59,6 +59,16 @@ const TextSummary = ({
             {` will explode (possibly several times).`}
           </>
         )}
+        {!!original.repeat && (
+          <>
+            {` `}
+            <Text type="warning">
+              {`This roll will be repeated `}
+              <strong>{original.repeat}</strong>
+              {` times.`}
+            </Text>
+          </>
+        )}
         {showMeTheOdds && select === "high" && (
           <>
             {` `}
