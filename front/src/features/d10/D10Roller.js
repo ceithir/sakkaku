@@ -166,7 +166,8 @@ const D10Roller = ({
                 parameters,
                 campaign,
                 character,
-                description,
+                description:
+                  repeat > 1 ? description + ` – Roll #${i + 1}` : description,
                 metadata,
               },
               success: ({ roll, id, character, campaign, description }) =>
