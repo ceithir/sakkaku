@@ -3,6 +3,38 @@ import styles from "./Result.module.less";
 import Loader from "features/navigation/Loader";
 import { Link } from "react-router-dom";
 import CopyButtons from "components/aftermath/CopyButtons";
+import { Button, message } from "antd";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
+const MassBbCodeButton = ({ results }) => {
+  if (results.length <= 1) {
+    return null;
+  }
+
+  const mergedBbCode = results
+    .map(({ id, bbMessage }) => {
+      if (!id || !bbMessage) {
+        return "";
+      }
+      return `[url=/r/${id}]${bbMessage}[/url]`;
+    })
+    .join("\n\n")
+    .trim();
+
+  if (!mergedBbCode) {
+    return null;
+  }
+
+  return (
+    <CopyToClipboard
+      text={mergedBbCode}
+      onCopy={() => message.success("Copied to clipboard!")}
+      className={styles["mass-copy-button"]}
+    >
+      <Button>{`Copy all as BBCode`}</Button>
+    </CopyToClipboard>
+  );
+};
 
 const Result = ({ id, bbMessage, content }) => {
   return (
@@ -35,6 +67,7 @@ const ScrollToResult = ({ result }) => {
 
   return (
     <div ref={refContainer}>
+      <MassBbCodeButton results={results} />
       {results.map((params, index) => {
         return <Result key={index.toString()} {...params} />;
       })}
