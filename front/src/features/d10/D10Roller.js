@@ -167,7 +167,9 @@ const D10Roller = ({
                 campaign,
                 character,
                 description:
-                  repeat > 1 ? description + ` – Roll #${i + 1}` : description,
+                  repeat > 1
+                    ? description + ` – Roll ${i + 1} of ${repeat}`
+                    : description,
                 metadata,
               },
               success: ({ roll, id, character, campaign, description }) =>
