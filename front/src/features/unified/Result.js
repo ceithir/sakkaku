@@ -8,8 +8,8 @@ const Result = ({ id, bbMessage, content }) => {
   return (
     <div className={styles.result}>
       <>{content}</>
-      <div className={styles.buttons}>
-        {!!id && (
+      {!!id && (
+        <div className={styles.buttons}>
           <>
             <CopyButtons
               link={`${window.location.origin}/r/${id}`}
@@ -17,8 +17,8 @@ const Result = ({ id, bbMessage, content }) => {
             />
             <Link to={`/r/${id}`}>{`Go to page`}</Link>
           </>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
