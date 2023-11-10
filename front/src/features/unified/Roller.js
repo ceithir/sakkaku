@@ -6,8 +6,6 @@ import DefaultErrorMessage from "DefaultErrorMessage";
 import Selector from "./Selector";
 
 const Roller = ({ rollType }) => {
-  const [bbMessage, setBbMessage] = useState();
-  const [id, setId] = useState();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState();
   const [error, setError] = useState(false);
@@ -22,19 +20,12 @@ const Roller = ({ rollType }) => {
       <div className={styles.content}>
         <Form
           rollType={rollType}
-          setBbMessage={setBbMessage}
-          setId={setId}
           loading={loading}
           setLoading={setLoading}
           setResult={setResult}
           setError={setError}
         />
-        <Result
-          bbMessage={bbMessage}
-          id={id}
-          loading={loading}
-          result={result}
-        />
+        <Result loading={loading} result={result} />
       </div>
     </div>
   );

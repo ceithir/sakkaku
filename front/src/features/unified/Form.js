@@ -15,8 +15,6 @@ const Form = ({
   rollType,
   setError,
   setLoading,
-  setId,
-  setBbMessage,
   setResult,
   ...otherParams
 }) => {
@@ -24,12 +22,10 @@ const Form = ({
   const location = useLocation();
 
   const updateResult = (
-    result,
+    content,
     { id, campaign, character, bbMessage } = {}
   ) => {
-    setResult(result);
-    setId(id);
-    setBbMessage(bbMessage);
+    setResult({ content, id, bbMessage });
     dispatch(addCampaign(campaign));
     dispatch(addCharacter(character));
     setError(false);
@@ -38,9 +34,7 @@ const Form = ({
 
   const clearResult = useCallback(() => {
     setResult(undefined);
-    setId(undefined);
-    setBbMessage(undefined);
-  }, [setResult, setId, setBbMessage]);
+  }, [setResult]);
 
   useEffect(() => {
     clearResult();
