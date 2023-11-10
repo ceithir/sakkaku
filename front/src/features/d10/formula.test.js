@@ -61,13 +61,6 @@ describe("parse", () => {
         modifier: 0,
         repeat: 5,
       });
-
-      expect(parse("5k4#12")).toEqual({
-        roll: 5,
-        keep: 4,
-        modifier: 0,
-        repeat: 12,
-      });
     });
 
     test("errors on zero repeat", () => {
@@ -79,6 +72,15 @@ describe("parse", () => {
         roll: 5,
         keep: 4,
         modifier: 3,
+      });
+    });
+
+    test("treats any number of repeats greater than 10 as 10", () => {
+      expect(parse("5k4#12")).toEqual({
+        roll: 5,
+        keep: 4,
+        modifier: 0,
+        repeat: 10,
       });
     });
   });

@@ -55,7 +55,7 @@ export const parse = (str) => {
       return false;
     }
     if (repeat > 1) {
-      result["repeat"] = parseInt(rMatches[1]);
+      result["repeat"] = Math.min(parseInt(rMatches[1]), 10);
     }
   }
 
