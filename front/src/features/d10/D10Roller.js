@@ -125,46 +125,62 @@ const D10Roller = ({
         setLoading(true);
         clearResult();
 
+        const parsedFormula = parse(formula);
+        const repeat = parsedFormula.repeat || 1;
+        let done = 0;
+        let results = [];
+        const update = (result) => {
+          results.push(result);
+          done++;
+          if (done >= repeat) {
+            updateResult(results);
+          }
+        };
+
         const parameters = {
-          ...cap(parse(formula)),
+          ...cap(parsedFormula),
           tn,
           explosions,
           rerolls,
           select,
         };
 
-        if (!user || testMode) {
-          postOnServer({
-            uri: "/public/aeg/l5r/rolls/create",
-            body: {
-              parameters,
-              metadata,
-            },
-            success: ({ dice, parameters }) =>
-              updateResult(<RollResult dice={dice} parameters={parameters} />),
-            error: ajaxError,
-          });
-          return;
+        for (let i = 0; i < repeat; i++) {
+          if (!user || testMode) {
+            postOnServer({
+              uri: "/public/aeg/l5r/rolls/create",
+              body: {
+                parameters,
+                metadata,
+              },
+              success: ({ dice, parameters }) =>
+                update({
+                  content: <RollResult dice={dice} parameters={parameters} />,
+                }),
+              error: ajaxError,
+            });
+          } else {
+            authentifiedPostOnServer({
+              uri: "/aeg/l5r/rolls/create",
+              body: {
+                parameters,
+                campaign,
+                character,
+                description,
+                metadata,
+              },
+              success: ({ roll, id, character, campaign, description }) =>
+                update({
+                  content: <RollResult {...roll} />,
+                  id,
+                  character,
+                  campaign,
+                  bbMessage: bbMessage({ description, roll }),
+                }),
+              error: ajaxError,
+            });
+          }
         }
-
-        authentifiedPostOnServer({
-          uri: "/aeg/l5r/rolls/create",
-          body: {
-            parameters,
-            campaign,
-            character,
-            description,
-            metadata,
-          },
-          success: ({ roll, id, character, campaign, description }) =>
-            updateResult(<RollResult {...roll} />, {
-              id,
-              character,
-              campaign,
-              bbMessage: bbMessage({ description, roll }),
-            }),
-          error: ajaxError,
-        });
       }}
       initialValues={initialValues}
       form={form}

@@ -21,13 +21,17 @@ const Form = ({
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const updateResult = (
-    content,
-    { id, campaign, character, bbMessage } = {}
-  ) => {
-    setResult({ content, id, bbMessage });
-    dispatch(addCampaign(campaign));
-    dispatch(addCharacter(character));
+  const updateResult = (data) => {
+    let results = [];
+    (Array.isArray(data) ? data : [data]).forEach(
+      ({ character, campaign, ...result }) => {
+        dispatch(addCampaign(campaign));
+        dispatch(addCharacter(character));
+        results.push(result);
+      }
+    );
+    setResult(results);
+
     setError(false);
     setLoading(false);
   };

@@ -80,7 +80,7 @@ const Roller = ({
           parameters,
           metadata,
         },
-        success: (data) => updateResult(<Result {...data} />),
+        success: (data) => updateResult({ content: <Result {...data} /> }),
         error: ajaxError,
       });
       return;
@@ -97,7 +97,8 @@ const Roller = ({
       },
       success: ({ roll, id, description, result }) => {
         const { dice, parameters } = roll;
-        updateResult(<Result {...roll} />, {
+        updateResult({
+          content: <Result {...roll} />,
           id,
           bbMessage: bbMessage({ id, description, dice, parameters, result }),
           campaign,

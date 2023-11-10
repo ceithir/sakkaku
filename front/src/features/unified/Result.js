@@ -23,7 +23,7 @@ const Result = ({ id, bbMessage, content }) => {
   );
 };
 
-const ScrollToResult = (params) => {
+const ScrollToResult = ({ result }) => {
   const refContainer = useRef();
 
   useEffect(() => {
@@ -31,9 +31,13 @@ const ScrollToResult = (params) => {
     refContainer?.current?.scrollIntoView({ behavior: "smooth" });
   }, [refContainer]);
 
+  const results = Array.isArray(result) ? result : [result];
+
   return (
     <div ref={refContainer}>
-      <Result {...params} />
+      {results.map((params, index) => {
+        return <Result key={index.toString()} {...params} />;
+      })}
     </div>
   );
 };
@@ -47,7 +51,7 @@ const ResultWrapper = ({ result, loading }) => {
     return null;
   }
 
-  return <ScrollToResult {...result} />;
+  return <ScrollToResult result={result} />;
 };
 
 export default ResultWrapper;

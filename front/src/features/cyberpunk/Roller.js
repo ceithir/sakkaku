@@ -38,7 +38,9 @@ const Roller = ({
               metadata,
             },
             success: ({ parameters, dice }) =>
-              updateResult(<TextResult parameters={parameters} dice={dice} />),
+              updateResult({
+                content: <TextResult parameters={parameters} dice={dice} />,
+              }),
             error: ajaxError,
           });
           return;
@@ -61,7 +63,8 @@ const Roller = ({
             campaign,
             character,
           }) => {
-            updateResult(<TextResult parameters={parameters} dice={dice} />, {
+            updateResult({
+              content: <TextResult parameters={parameters} dice={dice} />,
               id,
               campaign,
               character,
