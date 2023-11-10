@@ -4,10 +4,10 @@ import Loader from "features/navigation/Loader";
 import { Link } from "react-router-dom";
 import CopyButtons from "components/aftermath/CopyButtons";
 
-const Result = ({ id, bbMessage, result }) => {
+const Result = ({ id, bbMessage, content }) => {
   return (
     <div className={styles.result}>
-      <>{result}</>
+      <>{content}</>
       <div className={styles.buttons}>
         {!!id && (
           <>
@@ -38,7 +38,7 @@ const ScrollToResult = (params) => {
   );
 };
 
-const ResultWrapper = ({ result, loading, id, bbMessage }) => {
+const ResultWrapper = ({ result, loading }) => {
   if (loading) {
     return <Loader />;
   }
@@ -47,7 +47,7 @@ const ResultWrapper = ({ result, loading, id, bbMessage }) => {
     return null;
   }
 
-  return <ScrollToResult result={result} id={id} bbMessage={bbMessage} />;
+  return <ScrollToResult {...result} />;
 };
 
 export default ResultWrapper;
