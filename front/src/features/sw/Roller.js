@@ -102,6 +102,7 @@ const Roller = ({
           bbMessage: bbMessage({ id, description, dice, parameters, result }),
           campaign,
           character,
+          description,
         });
       },
       error: ajaxError,

@@ -162,6 +162,7 @@ const D10Roller = ({
               character,
               campaign,
               bbMessage: bbMessage({ description, roll }),
+              description,
             }),
           error: ajaxError,
         });
