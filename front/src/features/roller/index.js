@@ -31,8 +31,6 @@ import Layout from "./Layout";
 import styles from "./index.module.less";
 import Title from "features/display/Title";
 
-const { Panel } = Collapse;
-
 export const StandardRoller = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -261,42 +259,43 @@ const Roller = ({ save }) => {
 
   return (
     <Layout>
-      <Collapse activeKey={activeKeys} onChange={setActiveKeys}>
-        <Panel
-          header="Declare"
-          key="declare"
-          collapsible={currentStep === DECLARE ? "disabled" : "header"}
-        >
-          <Summary {...roll} metadata={metadata} />
-        </Panel>
-        <Panel
-          header="Modify"
-          key="modify"
-          collapsible={
-            disabled(REROLL) || currentStep === REROLL ? "disabled" : "header"
-          }
-        >
-          <PanelContent name={REROLL} />
-        </Panel>
-        <Panel
-          header="Keep"
-          key="keep"
-          collapsible={
-            disabled(KEEP) || currentStep === KEEP ? "disabled" : "header"
-          }
-        >
-          <PanelContent name={KEEP} />
-        </Panel>
-        <Panel
-          header="Resolve"
-          key="resolve"
-          collapsible={
-            disabled(RESOLVE) || currentStep === RESOLVE ? "disabled" : "header"
-          }
-        >
-          <PanelContent name={RESOLVE} />
-        </Panel>
-      </Collapse>
+      <Collapse
+        activeKey={activeKeys}
+        onChange={setActiveKeys}
+        items={[
+          {
+            label: "Declare",
+            key: "declare",
+            collapsible: currentStep === DECLARE ? "disabled" : "header",
+            children: <Summary {...roll} metadata={metadata} />,
+          },
+          {
+            label: "Modify",
+            key: "modify",
+            collapsible:
+              disabled(REROLL) || currentStep === REROLL
+                ? "disabled"
+                : "header",
+            children: <PanelContent name={REROLL} />,
+          },
+          {
+            label: "Keep",
+            key: "keep",
+            collapsible:
+              disabled(KEEP) || currentStep === KEEP ? "disabled" : "header",
+            children: <PanelContent name={KEEP} />,
+          },
+          {
+            label: "Resolve",
+            key: "resolve",
+            collapsible:
+              disabled(RESOLVE) || currentStep === RESOLVE
+                ? "disabled"
+                : "header",
+            children: <PanelContent name={RESOLVE} />,
+          },
+        ]}
+      />
     </Layout>
   );
 };

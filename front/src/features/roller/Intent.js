@@ -27,8 +27,6 @@ import { useNavigate } from "react-router-dom";
 import NamedModifiers from "./form/NamedModifiers";
 import { distinctions, adversities } from "./data/advantages";
 
-const { Panel } = Collapse;
-
 const AnimatedIntent = ({ onFinish, values }) => {
   const [completed, setCompleted] = useState(false);
 
@@ -305,139 +303,172 @@ const Intent = ({ onFinish, values, onComplete }) => {
         ghost
         activeKey={collapseActiveKey}
         onChange={setCollapseActiveKey}
-      >
-        <Panel header={"Common modifiers"} key="modifiers">
-          <Form.Item name="common_modifiers" className={styles.checkboxes}>
-            <Checkbox.Group options={commonModifiersOptions} />
-          </Form.Item>
-          <ExplainOptions options={commonModifiersOptions} />
-        </Panel>
-        <Panel header={"Assistance"}>
-          <fieldset className={styles["assist-container"]}>
-            <Form.Item
-              label="Assistance (unskilled)"
-              name="unskilled_assist"
-              initialValue={0}
-            >
-              <InputNumber min={0} max={10} />
-            </Form.Item>
-            <Form.Item
-              label="Assistance (skilled)"
-              name="skilled_assist"
-              initialValue={0}
-            >
-              <InputNumber min={0} max={10} />
-            </Form.Item>
-          </fieldset>
-          <ExplainOptions
-            description={`If a character making a check receives assistance from one or more others, the character making the check rolls one additional Skill die per [skilled assistant], and one additional Ring die per [unskilled assistant]. Then [...] a character making a check with assistance may keep up to 1 additional die per assisting character. [Core, page 26]`}
-            options={[
-              {
-                label: `Assistance (unskilled)`,
-                description: `Number of assisting characters who have 0 ranks in the skill in use.`,
-              },
-              {
-                label: `Assistance (skilled)`,
-                description: `Number of assisting characters who have 1 or more ranks of the skill in use.`,
-              },
-            ]}
-          />
-        </Panel>
-        <Panel header={"School abilities, techniques"}>
-          <Form.Item label={`School Ability`} name="school">
-            <Select
-              showSearch
-              allowClear
-              options={[
-                ...Object.keys(ABILITIES)
-                  .map((key) => {
-                    return {
-                      value: key,
-                      label: longname(key),
-                    };
-                  })
-                  .sort(({ label: a }, { label: b }) => a.localeCompare(b)),
-                {
-                  value: "custom",
-                  label: `Any other School — Any other School Ability`,
-                },
-              ]}
-              optionFilterProp="label"
-            />
-          </Form.Item>
-          {school &&
-            (school === "custom" ? (
-              <Alert
-                className={styles["custom-school"]}
-                type="info"
-                showIcon={true}
-                message={`Other Schools`}
-                description={
-                  <>
-                    <p>
-                      {`Whether your School Ability allows you to reroll one or more dice (ex: Ikoma Shadow), alter (change the value) of one or more dice (ex: Kuni Purifier), add one or more kept dice set to a particular value (ex: Doji Diplomat), or any similar dice manipulation, you'll be able to apply it on the fly as the roll goes.`}
-                    </p>
-                    <p>{`For now, just roll without it, then, at the Keep step, click the “Do something else” button and select the appropriate option for you.`}</p>
-                  </>
-                }
-              />
-            ) : (
-              <AbilityDescription ability={school} className={styles.school} />
-            ))}
-          <Form.Item
-            label={"Misc."}
-            name="misc"
-            rules={[
-              {
-                validator: async (_, misc) => {
-                  if (
-                    misc?.includes("stirring") &&
-                    !form
-                      .getFieldValue("common_modifiers")
-                      ?.includes("distinction")
-                  ) {
-                    return Promise.reject(
-                      new Error(
-                        "Stirring the Embers has no effect on rolls not already affected by a Distinction."
-                      )
-                    );
+        items={[
+          {
+            label: "Common modifiers",
+            key: "modifiers",
+            children: (
+              <>
+                <Form.Item
+                  name="common_modifiers"
+                  className={styles.checkboxes}
+                >
+                  <Checkbox.Group options={commonModifiersOptions} />
+                </Form.Item>
+                <ExplainOptions options={commonModifiersOptions} />
+              </>
+            ),
+          },
+          {
+            label: "Assistance",
+            key: "assistance",
+            children: (
+              <>
+                <fieldset className={styles["assist-container"]}>
+                  <Form.Item
+                    label="Assistance (unskilled)"
+                    name="unskilled_assist"
+                    initialValue={0}
+                  >
+                    <InputNumber min={0} max={10} />
+                  </Form.Item>
+                  <Form.Item
+                    label="Assistance (skilled)"
+                    name="skilled_assist"
+                    initialValue={0}
+                  >
+                    <InputNumber min={0} max={10} />
+                  </Form.Item>
+                </fieldset>
+                <ExplainOptions
+                  description={`If a character making a check receives assistance from one or more others, the character making the check rolls one additional Skill die per [skilled assistant], and one additional Ring die per [unskilled assistant]. Then [...] a character making a check with assistance may keep up to 1 additional die per assisting character. [Core, page 26]`}
+                  options={[
+                    {
+                      label: `Assistance (unskilled)`,
+                      description: `Number of assisting characters who have 0 ranks in the skill in use.`,
+                    },
+                    {
+                      label: `Assistance (skilled)`,
+                      description: `Number of assisting characters who have 1 or more ranks of the skill in use.`,
+                    },
+                  ]}
+                />
+              </>
+            ),
+          },
+          {
+            label: "School abilities, techniques",
+            key: "school",
+            children: (
+              <>
+                <Form.Item label={`School Ability`} name="school">
+                  <Select
+                    showSearch
+                    allowClear
+                    options={[
+                      ...Object.keys(ABILITIES)
+                        .map((key) => {
+                          return {
+                            value: key,
+                            label: longname(key),
+                          };
+                        })
+                        .sort(({ label: a }, { label: b }) =>
+                          a.localeCompare(b)
+                        ),
+                      {
+                        value: "custom",
+                        label: `Any other School — Any other School Ability`,
+                      },
+                    ]}
+                    optionFilterProp="label"
+                  />
+                </Form.Item>
+                {school &&
+                  (school === "custom" ? (
+                    <Alert
+                      className={styles["custom-school"]}
+                      type="info"
+                      showIcon={true}
+                      message={`Other Schools`}
+                      description={
+                        <>
+                          <p>
+                            {`Whether your School Ability allows you to reroll one or more dice (ex: Ikoma Shadow), alter (change the value) of one or more dice (ex: Kuni Purifier), add one or more kept dice set to a particular value (ex: Doji Diplomat), or any similar dice manipulation, you'll be able to apply it on the fly as the roll goes.`}
+                          </p>
+                          <p>{`For now, just roll without it, then, at the Keep step, click the “Do something else” button and select the appropriate option for you.`}</p>
+                        </>
+                      }
+                    />
+                  ) : (
+                    <AbilityDescription
+                      ability={school}
+                      className={styles.school}
+                    />
+                  ))}
+                <Form.Item
+                  label={"Misc."}
+                  name="misc"
+                  rules={[
+                    {
+                      validator: async (_, misc) => {
+                        if (
+                          misc?.includes("stirring") &&
+                          !form
+                            .getFieldValue("common_modifiers")
+                            ?.includes("distinction")
+                        ) {
+                          return Promise.reject(
+                            new Error(
+                              "Stirring the Embers has no effect on rolls not already affected by a Distinction."
+                            )
+                          );
+                        }
+                      },
+                    },
+                  ]}
+                >
+                  <Select
+                    mode="multiple"
+                    placeholder={"Extra options for unusual cases"}
+                    options={miscOptions}
+                    optionFilterProp="label"
+                  />
+                </Form.Item>
+                <ExplainOptions options={miscOptions} />
+              </>
+            ),
+          },
+          {
+            key: "advanced",
+            label: "Advanced options",
+            children: (
+              <>
+                <Form.Item className={styles["advanced-button"]}>
+                  <Button
+                    icon={<ControlOutlined />}
+                    onClick={() => {
+                      navigate("/roll-advanced");
+                    }}
+                  >{`Fully customized roll`}</Button>
+                </Form.Item>
+                <ExplainOptions
+                  description={
+                    <div className={styles["advanced-explanation"]}>
+                      <p>{`For rolls that just follow their own rules, not much the default ones, and thus require a greater degree of customization. For example:`}</p>
+                      <ul>
+                        <li>{`Rolls modified with previously rolled dice, like Channeling [Core, page 190] or the Kata Striking as Air [Core, page 177].`}</li>
+                        <li>{`Rolls without a ring value, like the Center stance of a duel [Core, page 260].`}</li>
+                      </ul>
+                      <p>{`This mode can also be used to recreate a previous roll result, then pick different dice. Can be useful if you misread a TN or forgot to trigger a disadvantage for example.`}</p>
+                    </div>
                   }
-                },
-              },
-            ]}
-          >
-            <Select
-              mode="multiple"
-              placeholder={"Extra options for unusual cases"}
-              options={miscOptions}
-              optionFilterProp="label"
-            />
-          </Form.Item>
-          <ExplainOptions options={miscOptions} />
-        </Panel>
-        <Panel header={"Advanced options"}>
-          <Form.Item className={styles["advanced-button"]}>
-            <Button
-              icon={<ControlOutlined />}
-              onClick={() => {
-                navigate("/roll-advanced");
-              }}
-            >{`Fully customized roll`}</Button>
-          </Form.Item>
-          <ExplainOptions
-            description={
-              <div className={styles["advanced-explanation"]}>
-                <p>{`For rolls that just follow their own rules, not much the default ones, and thus require a greater degree of customization. For example:`}</p>
-                <ul>
-                  <li>{`Rolls modified with previously rolled dice, like Channeling [Core, page 190] or the Kata Striking as Air [Core, page 177].`}</li>
-                  <li>{`Rolls without a ring value, like the Center stance of a duel [Core, page 260].`}</li>
-                </ul>
-                <p>{`This mode can also be used to recreate a previous roll result, then pick different dice. Can be useful if you misread a TN or forgot to trigger a disadvantage for example.`}</p>
-              </div>
-            }
-          />
-        </Panel>
-      </Collapse>
+                />
+              </>
+            ),
+          },
+        ]}
+      />
       <Divider />
       <Form.Item>
         <NextButton htmlType="submit">{`Roll`}</NextButton>
