@@ -6,6 +6,7 @@ import DefaultErrorMessage from "DefaultErrorMessage";
 import Selector from "./Selector";
 import PreviousResults from "./PreviousResults";
 import CopyAllButton from "./CopyAllButton";
+import { Button } from "antd";
 
 const Roller = ({ rollType }) => {
   const [loading, setLoading] = useState(false);
@@ -48,8 +49,11 @@ const Roller = ({ rollType }) => {
         <Result loading={loading} result={result} />
         {resultHistory.length > 1 && (
           <>
-            <div>
+            <div className={styles.buttons}>
               <CopyAllButton results={resultHistory} />
+              <Button
+                onClick={() => setResultHistory([])}
+              >{`Clear history`}</Button>
             </div>
             <PreviousResults results={previousResults()} />
           </>
