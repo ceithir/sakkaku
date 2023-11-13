@@ -5,6 +5,7 @@ import Form from "./Form";
 import DefaultErrorMessage from "DefaultErrorMessage";
 import Selector from "./Selector";
 import PreviousResults from "./PreviousResults";
+import CopyAllButton from "./CopyAllButton";
 
 const Roller = ({ rollType }) => {
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,12 @@ const Roller = ({ rollType }) => {
         />
         <Result loading={loading} result={result} />
         {resultHistory.length > 1 && (
-          <PreviousResults results={previousResults()} />
+          <>
+            <div>
+              <CopyAllButton results={resultHistory} />
+            </div>
+            <PreviousResults results={previousResults()} />
+          </>
         )}
       </div>
     </div>
