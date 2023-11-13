@@ -449,33 +449,6 @@ export const selectStep = (state) => {
 
   return DECLARE;
 };
-export const selectIntent = (state) => {
-  const {
-    campaign,
-    character,
-    description,
-    tn,
-    ring,
-    skill,
-    modifiers,
-    player,
-    channeled,
-    addkept,
-  } = state.roll;
-
-  return {
-    campaign,
-    character,
-    description,
-    tn,
-    ring,
-    skill,
-    modifiers,
-    player,
-    channeled,
-    addkept,
-  };
-};
 
 export const selectToKeep = (state) => state.roll.toKeep;
 

@@ -7,7 +7,6 @@ import {
   softReset,
   keep,
   selectStep,
-  selectIntent,
   setAddKept,
   keepInsteadOfChanneling,
   channel,
@@ -62,7 +61,6 @@ const Roller = ({ save }) => {
   const roll = useSelector(selectAll);
   const user = useSelector(selectUser);
   const currentStep = useSelector(selectStep);
-  const intent = useSelector(selectIntent);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -269,7 +267,7 @@ const Roller = ({ save }) => {
           key="declare"
           collapsible={currentStep === DECLARE ? "disabled" : "header"}
         >
-          <Summary {...intent} metadata={metadata} />
+          <Summary {...roll} metadata={metadata} />
         </Panel>
         <Panel
           header="Modify"
