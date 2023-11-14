@@ -66,6 +66,7 @@ const Roller = ({
               campaign,
               character,
               bbMessage: bbMessage({ description, total, parameters }),
+              description,
             });
           },
           error: ajaxError,

@@ -102,6 +102,7 @@ export const Roller = ({
               bbMessage: bbMessage({ parameters, description, total }),
               campaign,
               character,
+              description,
             }),
           error: ajaxError,
         });
