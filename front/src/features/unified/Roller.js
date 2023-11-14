@@ -24,12 +24,12 @@ const Roller = ({ rollType }) => {
     [setResult, setResultHistory]
   );
 
-  const previousResults = () => {
+  const previousResults = (() => {
     if (!!result) {
       return resultHistory.filter(({ id }) => id !== result.id);
     }
     return resultHistory;
-  };
+  })();
 
   if (error) {
     return <DefaultErrorMessage />;
@@ -47,7 +47,7 @@ const Roller = ({ rollType }) => {
           setError={setError}
         />
         <Result loading={loading} result={result} />
-        {resultHistory.length > 1 && (
+        {previousResults.length > 0 && (
           <>
             <div className={styles.buttons}>
               <CopyAllButton results={resultHistory} />
@@ -55,7 +55,7 @@ const Roller = ({ rollType }) => {
                 onClick={() => setResultHistory([])}
               >{`Clear history`}</Button>
             </div>
-            <PreviousResults results={previousResults()} />
+            <PreviousResults results={previousResults} />
           </>
         )}
       </div>
