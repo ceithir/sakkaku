@@ -23,9 +23,9 @@ const Form = ({
 
   const updateResult = (
     content,
-    { id, campaign, character, bbMessage } = {}
+    { id, campaign, character, bbMessage, description } = {}
   ) => {
-    setResult({ content, id, bbMessage });
+    setResult({ content, id, bbMessage, description });
     dispatch(addCampaign(campaign));
     dispatch(addCharacter(character));
     setError(false);
