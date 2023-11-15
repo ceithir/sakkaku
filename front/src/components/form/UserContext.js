@@ -130,6 +130,7 @@ const UserContext = ({ description = {} }) => {
                 options={arrayToAutoCompleteOptions(campaigns)}
                 placeholder={`The Dead of Winter`}
                 filterOption={true}
+                disabled={!!queryString.parse(location.search).campaign}
               />
             </Form.Item>
             <Form.Item
