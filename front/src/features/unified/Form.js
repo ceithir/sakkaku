@@ -119,8 +119,6 @@ const Form = ({
 
   const params = {
     setLoading,
-    ajaxError,
-    updateResult,
     clearResult,
     createRoll,
     ...otherParams,
