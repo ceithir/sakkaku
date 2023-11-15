@@ -4,7 +4,7 @@ import styles from "./Prefiller.module.less";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCampaigns, addCampaign } from "features/user/reducer";
 import { arrayToAutoCompleteOptions } from "components/form/UserContext";
-import { CopyLink } from "components/aftermath/CopyButtons";
+import CopyButtons from "components/aftermath/CopyButtons";
 import queryString from "query-string";
 
 const { TextArea } = Input;
@@ -73,15 +73,18 @@ const Prefiller = () => {
             </Button>
           </Form.Item>
         </Form>
-        {!!link && (
-          <div className={styles.result}>
-            <a href={link} target="_blank" rel="noreferrer">
-              {link}
-            </a>
-            <CopyLink link={link} />
-          </div>
-        )}
       </div>
+      {!!link && (
+        <div className={styles.result}>
+          <p>{`Use the following link to initiate a roll with the parameters entered above:`}</p>
+          <a href={link} target="_blank" rel="noreferrer">
+            {link}
+          </a>
+          <div className={styles.buttons}>
+            <CopyButtons link={link} bbMessage={`Click here to roll.`} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
