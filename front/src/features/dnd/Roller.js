@@ -74,7 +74,9 @@ export const Roller = ({
               metadata,
             },
             success: ({ parameters, dice }) =>
-              updateResult(<Result parameters={parameters} dice={dice} />),
+              updateResult({
+                content: <Result parameters={parameters} dice={dice} />,
+              }),
             error: ajaxError,
           });
           return;
@@ -97,7 +99,8 @@ export const Roller = ({
             description,
             result: { total },
           }) =>
-            updateResult(<Result parameters={parameters} dice={dice} />, {
+            updateResult({
+              content: <Result parameters={parameters} dice={dice} />,
               id,
               bbMessage: bbMessage({ parameters, description, total }),
               campaign,

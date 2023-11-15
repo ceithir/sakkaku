@@ -124,10 +124,11 @@ const D10Roller = ({
           metadata,
           success: (data) => {
             if (!data.id) {
-              updateResult(<RollResult {...data} />);
+              updateResult({ content: <RollResult {...data} /> });
             } else {
               const { roll, id, character, campaign, description } = data;
-              updateResult(<RollResult {...roll} />, {
+              updateResult({
+                content: <RollResult {...roll} />,
                 id,
                 character,
                 campaign,

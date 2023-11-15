@@ -58,10 +58,14 @@ const Form = ({
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const updateResult = (
+  const updateResult = ({
     content,
-    { id, campaign, character, bbMessage, description } = {}
-  ) => {
+    id,
+    campaign,
+    character,
+    bbMessage,
+    description,
+  }) => {
     setResult({ content, id, bbMessage, description });
     dispatch(addCampaign(campaign));
     dispatch(addCharacter(character));
