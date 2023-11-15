@@ -1,18 +1,11 @@
 import { Form, Input, Button, InputNumber } from "antd";
 import styles from "./Roller.module.less";
-import { postOnServer, authentifiedPostOnServer } from "server";
 import { pattern, parse } from "./formula";
 import UserContext from "components/form/UserContext";
 import TextResult from "./TextResult";
 import { bbMessage } from "./Roll";
 
-const Roller = ({
-  loading,
-  setLoading,
-  ajaxError,
-  updateResult,
-  clearResult,
-}) => {
+const Roller = ({ loading, setLoading, clearResult, createRoll }) => {
   return (
     <Form
       onFinish={({ formula, tn, ...values }) => {
@@ -27,52 +20,27 @@ const Roller = ({
           original: formula,
         };
 
-        const { testMode, campaign, character, description } = values;
-        const stateless = testMode || !campaign;
-
-        if (stateless) {
-          postOnServer({
-            uri: "/public/cyberpunk/rolls/create",
-            body: {
-              parameters,
-              metadata,
-            },
-            success: ({ parameters, dice }) =>
-              updateResult({
-                content: <TextResult parameters={parameters} dice={dice} />,
-              }),
-            error: ajaxError,
-          });
-          return;
-        }
-
-        authentifiedPostOnServer({
+        createRoll({
           uri: "/cyberpunk/rolls/create",
-          body: {
-            parameters,
-            metadata,
-            campaign,
-            character,
-            description,
-          },
-          success: ({
-            roll: { parameters, dice },
-            id,
-            result: { total },
-            description,
-            campaign,
-            character,
-          }) => {
-            updateResult({
-              content: <TextResult parameters={parameters} dice={dice} />,
-              id,
-              campaign,
-              character,
-              bbMessage: bbMessage({ description, total, parameters }),
+          parameters,
+          metadata,
+          userData: values,
+          result: (data) => {
+            if (!data.id) {
+              return { content: <TextResult {...data} /> };
+            }
+
+            const {
+              roll,
               description,
-            });
+              result: { total },
+            } = data;
+            const { parameters } = roll;
+            return {
+              content: <TextResult {...roll} />,
+              bbMessage: bbMessage({ description, total, parameters }),
+            };
           },
-          error: ajaxError,
         });
       }}
     >
