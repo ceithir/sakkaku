@@ -22,7 +22,7 @@ const standardizedPostOnServer = ({
 }) => {
   const { campaign, character, description, testMode } = userData;
 
-  if (testMode || !campaign || !character || !description) {
+  if (testMode || !campaign || !character) {
     postOnServer({
       uri: `/public${uri}`,
       body: {
