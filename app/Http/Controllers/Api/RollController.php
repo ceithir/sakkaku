@@ -83,6 +83,7 @@ class RollController extends Controller
             'description' => 'required|string',
             'parameters' => 'required|array',
             'metadata' => 'nullable|array',
+            'tag' => 'nullable|string',
         ]);
 
         try {
@@ -92,6 +93,7 @@ class RollController extends Controller
             $roll->campaign = $request->input('campaign');
             $roll->character = $request->input('character');
             $roll->description = $request->input('description');
+            $roll->tag = $request->input('tag');
 
             $roll->type = $type;
             $roll->setRoll($classname::init($request->input('parameters'), metadata: $request->input('metadata', [])));
