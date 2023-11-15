@@ -1,10 +1,7 @@
 import styles from "./Roller.module.less";
 import { Form, Button, InputNumber } from "antd";
-import { postOnServer, authentifiedPostOnServer } from "server";
 import Result from "./Result";
 import UserContext from "components/form/UserContext";
-import { selectUser } from "features/user/reducer";
-import { useSelector } from "react-redux";
 import {
   AbilityDie,
   BoostDie,
@@ -36,15 +33,7 @@ const DiceNumber = ({ label, name, rules = [] }) => {
   );
 };
 
-const Roller = ({
-  loading,
-  setLoading,
-  updateResult,
-  clearResult,
-  ajaxError,
-}) => {
-  const user = useSelector(selectUser);
-
+const Roller = ({ loading, setLoading, clearResult, createRoll }) => {
   const onFinish = ({
     boost,
     ability,
@@ -54,10 +43,7 @@ const Roller = ({
     challenge,
     force,
 
-    testMode,
-    campaign,
-    character,
-    description,
+    ...userData
   }) => {
     setLoading(true);
     clearResult();
@@ -73,39 +59,23 @@ const Roller = ({
     };
     const metadata = {};
 
-    if (!user || testMode) {
-      postOnServer({
-        uri: "/public/ffg/sw/rolls/create",
-        body: {
-          parameters,
-          metadata,
-        },
-        success: (data) => updateResult(<Result {...data} />),
-        error: ajaxError,
-      });
-      return;
-    }
-
-    authentifiedPostOnServer({
+    createRoll({
       uri: "/ffg/sw/rolls/create",
-      body: {
-        parameters,
-        metadata,
-        campaign,
-        character,
-        description,
-      },
-      success: ({ roll, id, description, result }) => {
+      parameters,
+      metadata,
+      userData,
+      result: (data) => {
+        if (!data.id) {
+          return { content: <Result {...data} /> };
+        }
+
+        const { roll, id, description, result } = data;
         const { dice, parameters } = roll;
-        updateResult(<Result {...roll} />, {
-          id,
+        return {
+          content: <Result {...roll} />,
           bbMessage: bbMessage({ id, description, dice, parameters, result }),
-          campaign,
-          character,
-          description,
-        });
+        };
       },
-      error: ajaxError,
     });
   };
 

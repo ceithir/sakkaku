@@ -12,11 +12,8 @@ import {
 import { parse, cap } from "./formula";
 import styles from "./D10Roller.module.less";
 import UserContext from "components/form/UserContext";
-import { selectUser } from "features/user/reducer";
-import { useSelector } from "react-redux";
 import TextSummary from "./TextSummary";
 import ExternalLink from "features/navigation/ExternalLink";
-import { postOnServer, authentifiedPostOnServer } from "server";
 import RollResult from "./RollResult";
 import { bbMessage } from "./D10IdentifiedRoll";
 
@@ -42,13 +39,7 @@ const Syntax = () => {
   );
 };
 
-const D10Roller = ({
-  loading,
-  setLoading,
-  ajaxError,
-  updateResult,
-  clearResult,
-}) => {
+const D10Roller = ({ loading, setLoading, clearResult, createRoll }) => {
   const [parsedFormula, setParsedFormula] = useState();
   const [params, setParams] = useState({
     explosions: [
@@ -60,8 +51,6 @@ const D10Roller = ({
     tn: initialValues.tn,
   });
   const [showMeTheOdds, setShowMeTheOdds] = useState();
-
-  const user = useSelector(selectUser);
 
   const [form] = Form.useForm();
 
@@ -103,19 +92,8 @@ const D10Roller = ({
       onFinish={(values) => {
         const allValues = { ...initialValues, ...values };
 
-        const {
-          formula,
-          tn,
-          explodeOnTen,
-          otherExplosions,
-          rerolls,
-          select,
-
-          campaign,
-          character,
-          description,
-          testMode,
-        } = allValues;
+        const { formula, tn, explodeOnTen, otherExplosions, rerolls, select } =
+          allValues;
 
         const explosions = [...otherExplosions, ...(explodeOnTen ? [10] : [])];
         const metadata = {
@@ -133,38 +111,22 @@ const D10Roller = ({
           select,
         };
 
-        if (!user || testMode) {
-          postOnServer({
-            uri: "/public/aeg/l5r/rolls/create",
-            body: {
-              parameters,
-              metadata,
-            },
-            success: ({ dice, parameters }) =>
-              updateResult(<RollResult dice={dice} parameters={parameters} />),
-            error: ajaxError,
-          });
-          return;
-        }
-
-        authentifiedPostOnServer({
+        createRoll({
           uri: "/aeg/l5r/rolls/create",
-          body: {
-            parameters,
-            campaign,
-            character,
-            description,
-            metadata,
-          },
-          success: ({ roll, id, character, campaign, description }) =>
-            updateResult(<RollResult {...roll} />, {
-              id,
-              character,
-              campaign,
+          parameters,
+          metadata,
+          userData: values,
+          result: (data) => {
+            if (!data.id) {
+              return { content: <RollResult {...data} /> };
+            }
+
+            const { roll, description } = data;
+            return {
+              content: <RollResult {...roll} />,
               bbMessage: bbMessage({ description, roll }),
-              description,
-            }),
-          error: ajaxError,
+            };
+          },
         });
       }}
       initialValues={initialValues}
