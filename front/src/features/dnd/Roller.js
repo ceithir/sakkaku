@@ -2,10 +2,7 @@ import { useState } from "react";
 import { Form, Input, Button, InputNumber, Divider, Typography } from "antd";
 import styles from "./Roller.module.less";
 import { parse } from "./formula";
-import { postOnServer, authentifiedPostOnServer } from "server";
 import UserContext from "components/form/UserContext";
-import { selectUser } from "features/user/reducer";
-import { useSelector } from "react-redux";
 import Result from "./TextResult";
 import ExternalLink from "features/navigation/ExternalLink";
 import { bbMessage } from "./IdentifiedRoll";
@@ -36,15 +33,8 @@ const Syntax = () => {
   );
 };
 
-export const Roller = ({
-  loading,
-  setLoading,
-  ajaxError,
-  updateResult,
-  clearResult,
-}) => {
+export const Roller = ({ loading, setLoading, clearResult, createRoll }) => {
   const [parsedFormula, setParsedFormula] = useState();
-  const user = useSelector(selectUser);
 
   return (
     <Form
@@ -64,50 +54,27 @@ export const Roller = ({
           original: formula,
         };
 
-        const { testMode } = values;
-
-        if (!user || testMode) {
-          postOnServer({
-            uri: "/public/dnd/rolls/create",
-            body: {
-              parameters,
-              metadata,
-            },
-            success: ({ parameters, dice }) =>
-              updateResult({
-                content: <Result parameters={parameters} dice={dice} />,
-              }),
-            error: ajaxError,
-          });
-          return;
-        }
-
-        const { campaign, character, description } = values;
-
-        authentifiedPostOnServer({
+        createRoll({
           uri: "/dnd/rolls/create",
-          body: {
-            parameters,
-            metadata,
-            campaign,
-            character,
-            description,
-          },
-          success: ({
-            roll: { parameters, dice },
-            id,
-            description,
-            result: { total },
-          }) =>
-            updateResult({
-              content: <Result parameters={parameters} dice={dice} />,
-              id,
-              bbMessage: bbMessage({ parameters, description, total }),
-              campaign,
-              character,
+          parameters,
+          metadata,
+          userData: values,
+          result: (data) => {
+            if (!data.id) {
+              return { content: <Result {...data} /> };
+            }
+
+            const {
+              roll,
               description,
-            }),
-          error: ajaxError,
+              result: { total },
+            } = data;
+            const { parameters } = roll;
+            return {
+              content: <Result {...roll} />,
+              bbMessage: bbMessage({ parameters, description, total }),
+            };
+          },
         });
       }}
     >
