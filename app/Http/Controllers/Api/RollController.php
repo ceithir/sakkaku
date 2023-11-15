@@ -16,6 +16,10 @@ class RollController extends Controller
 
         if ($request->input('campaign')) {
             $query->where('campaign', $request->input('campaign'));
+
+            if ($request->input('text')) {
+                $query->whereFullText('description', $request->input('text'));
+            }
         }
 
         if ($request->input('character')) {
@@ -35,10 +39,6 @@ class RollController extends Controller
 
         if ($request->input('type')) {
             $query->where('type', $request->input('type'));
-        }
-
-        if ($request->input('text')) {
-            $query->whereFullText('description', $request->input('text'));
         }
 
         $paginator = $query
