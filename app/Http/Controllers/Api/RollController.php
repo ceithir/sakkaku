@@ -75,6 +75,44 @@ class RollController extends Controller
         return response()->noContent();
     }
 
+    protected function dbCreate(Request $request, string $type, string $classname)
+    {
+        $request->validate([
+            'campaign' => 'required|string',
+            'character' => 'required|string',
+            'description' => 'required|string',
+            'parameters' => 'required|array',
+            'metadata' => 'nullable|array',
+        ]);
+
+        try {
+            $roll = new ContextualizedRoll();
+
+            $roll->user_id = $request->user()->id;
+            $roll->campaign = $request->input('campaign');
+            $roll->character = $request->input('character');
+            $roll->description = $request->input('description');
+
+            $roll->type = $type;
+            $roll->setRoll($classname::init($request->input('parameters'), metadata: $request->input('metadata', [])));
+            $roll->result = $roll->getRoll()->result();
+
+            $roll->save();
+
+            return response()->json($this->rollToPublicArray($roll));
+        } catch (InvalidArgumentException $e) {
+            report($e);
+
+            return response(null, 400);
+        }
+    }
+
+    // TODO Legacy alias only used in legacy functions, to remove eventually
+    protected function toJson(ContextualizedRoll $roll): array
+    {
+        return $this->rollToPublicArray($roll);
+    }
+
     private function rollToPublicArray(ContextualizedRoll $roll): array
     {
         return [
