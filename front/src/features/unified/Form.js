@@ -10,6 +10,43 @@ import {
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { useEffect, useCallback } from "react";
+import { postOnServer, authentifiedPostOnServer } from "server";
+
+export const standardizedPostOnServer = ({
+  uri,
+  parameters,
+  metadata = {},
+  success,
+  error,
+  userData,
+}) => {
+  const { campaign, character, description, testMode } = userData;
+
+  if (testMode || !campaign || !character || !description) {
+    postOnServer({
+      uri: `/public${uri}`,
+      body: {
+        parameters,
+        metadata,
+      },
+      success,
+      error,
+    });
+  } else {
+    authentifiedPostOnServer({
+      uri,
+      body: {
+        parameters,
+        campaign,
+        character,
+        description,
+        metadata,
+      },
+      success,
+      error,
+    });
+  }
+};
 
 const Form = ({
   rollType,
