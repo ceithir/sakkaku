@@ -12,10 +12,10 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useCallback } from "react";
 import { postOnServer, authentifiedPostOnServer } from "server";
 
-export const standardizedPostOnServer = ({
+const standardizedPostOnServer = ({
   uri,
   parameters,
-  metadata = {},
+  metadata,
   success,
   error,
   userData,
@@ -91,11 +91,38 @@ const Form = ({
     setLoading(false);
   };
 
+  const createRoll = ({
+    uri,
+    parameters,
+    userData = {},
+    metadata = {},
+    result,
+  }) => {
+    standardizedPostOnServer({
+      uri,
+      parameters,
+      metadata,
+      success: (data) => {
+        const { id, character, campaign, description } = data;
+        updateResult({
+          id,
+          character,
+          campaign,
+          description,
+          ...result(data),
+        });
+      },
+      error: ajaxError,
+      userData,
+    });
+  };
+
   const params = {
     setLoading,
     ajaxError,
     updateResult,
     clearResult,
+    createRoll,
     ...otherParams,
   };
 

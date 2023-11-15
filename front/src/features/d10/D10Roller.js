@@ -16,7 +16,6 @@ import TextSummary from "./TextSummary";
 import ExternalLink from "features/navigation/ExternalLink";
 import RollResult from "./RollResult";
 import { bbMessage } from "./D10IdentifiedRoll";
-import { standardizedPostOnServer } from "features/unified/Form";
 
 const { Text } = Typography;
 
@@ -40,13 +39,7 @@ const Syntax = () => {
   );
 };
 
-const D10Roller = ({
-  loading,
-  setLoading,
-  ajaxError,
-  updateResult,
-  clearResult,
-}) => {
+const D10Roller = ({ loading, setLoading, clearResult, createRoll }) => {
   const [parsedFormula, setParsedFormula] = useState();
   const [params, setParams] = useState({
     explosions: [
@@ -118,27 +111,22 @@ const D10Roller = ({
           select,
         };
 
-        standardizedPostOnServer({
+        createRoll({
           uri: "/aeg/l5r/rolls/create",
           parameters,
           metadata,
-          success: (data) => {
-            if (!data.id) {
-              updateResult({ content: <RollResult {...data} /> });
-            } else {
-              const { roll, id, character, campaign, description } = data;
-              updateResult({
-                content: <RollResult {...roll} />,
-                id,
-                character,
-                campaign,
-                bbMessage: bbMessage({ description, roll }),
-                description,
-              });
-            }
-          },
-          error: ajaxError,
           userData: values,
+          result: (data) => {
+            if (!data.id) {
+              return { content: <RollResult {...data} /> };
+            }
+
+            const { roll, description } = data;
+            return {
+              content: <RollResult {...roll} />,
+              bbMessage: bbMessage({ description, roll }),
+            };
+          },
         });
       }}
       initialValues={initialValues}
