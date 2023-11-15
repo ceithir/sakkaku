@@ -19,6 +19,7 @@ import styles from "./UserContext.module.less";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
 import { LoginOutlined, ClearOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const { TextArea } = Input;
 
@@ -94,6 +95,7 @@ const UserContext = ({ description = {} }) => {
   const user = useSelector(selectUser);
   const [testMode, setTestMode] = useState(false);
   const [showTag, setShowTag] = useState(false);
+  const navigate = useNavigate();
 
   const location = useLocation();
   const form = Form.useFormInstance();
@@ -137,7 +139,7 @@ const UserContext = ({ description = {} }) => {
                 options={arrayToAutoCompleteOptions(campaigns)}
                 placeholder={`The Dead of Winter`}
                 filterOption={true}
-                disabled={!!queryString.parse(location.search).campaign}
+                disabled={showTag}
               />
             </Form.Item>
             <Form.Item
@@ -171,8 +173,7 @@ const UserContext = ({ description = {} }) => {
               </Form.Item>
               <Button
                 onClick={() => {
-                  form.setFieldsValue({ tag: null });
-                  setShowTag(false);
+                  navigate(location.pathname);
                 }}
               >
                 <ClearOutlined />
