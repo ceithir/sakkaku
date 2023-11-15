@@ -21,11 +21,11 @@ const Prefiller = () => {
         <Form
           className={styles.form}
           initialValues={{ type: "roll-dnd" }}
-          onFinish={({ campaign, type, description }) => {
+          onFinish={({ campaign, type, description, tag }) => {
             const link = `${
               window.location.origin
             }/${type}/?${queryString.stringify(
-              { campaign, description },
+              { campaign, description, tag },
               { skipEmptyString: true }
             )}`;
             setLink(link);
@@ -65,6 +65,14 @@ const Prefiller = () => {
                 { label: `Cyberpunk RED`, value: "cyberpunk/roll" },
               ]}
             />
+          </Form.Item>
+
+          <Form.Item
+            label={`Tag`}
+            name="tag"
+            tooltip={`If filled, give you the ability to filter on all rolls of that kind in one click.`}
+          >
+            <Input placeholder={`Archery Event`} />
           </Form.Item>
 
           <Form.Item>

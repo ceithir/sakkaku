@@ -18,7 +18,7 @@ import {
 import styles from "./UserContext.module.less";
 import { useLocation } from "react-router-dom";
 import queryString from "query-string";
-import { LoginOutlined } from "@ant-design/icons";
+import { LoginOutlined, ClearOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -93,6 +93,7 @@ const UserContext = ({ description = {} }) => {
   const characters = useSelector(selectCharacters);
   const user = useSelector(selectUser);
   const [testMode, setTestMode] = useState(false);
+  const [showTag, setShowTag] = useState(false);
 
   const location = useLocation();
   const form = Form.useFormInstance();
@@ -103,6 +104,12 @@ const UserContext = ({ description = {} }) => {
     }
     if (params.description) {
       form.setFieldsValue({ description: params.description });
+    }
+    if (params.tag) {
+      form.setFieldsValue({ tag: params.tag });
+      setShowTag(true);
+    } else {
+      setShowTag(false);
     }
   }, [location, form]);
 
@@ -152,6 +159,27 @@ const UserContext = ({ description = {} }) => {
           >
             <TextArea placeholder={description.placeholder} />
           </Form.Item>
+          {showTag && (
+            <div className={styles["tag-wrapper"]}>
+              <Form.Item
+                label={`Tagged as`}
+                name="tag"
+                className={styles.tag}
+                tooltip={`Some additional data your GM has specificied to help with their bookkeeping. Remove if (now) irrelevant.`}
+              >
+                <Input disabled={true} />
+              </Form.Item>
+              <Button
+                onClick={() => {
+                  form.setFieldsValue({ tag: null });
+                  setShowTag(false);
+                }}
+              >
+                <ClearOutlined />
+                {`Remove`}
+              </Button>
+            </div>
+          )}
         </>
       )}
       <Divider />
