@@ -20,7 +20,7 @@ const standardizedPostOnServer = ({
   error,
   userData,
 }) => {
-  const { campaign, character, description, testMode } = userData;
+  const { campaign, character, description, tag, testMode } = userData;
 
   if (testMode || !campaign || !character) {
     postOnServer({
@@ -41,6 +41,7 @@ const standardizedPostOnServer = ({
         character,
         description,
         metadata,
+        tag,
       },
       success,
       error,

@@ -16,6 +16,14 @@ class RollController extends Controller
 
         if ($request->input('campaign')) {
             $query->where('campaign', $request->input('campaign'));
+
+            if ($request->input('text')) {
+                $query->whereFullText('description', $request->input('text'));
+            }
+
+            if ($request->input('tag')) {
+                $query->where('tag', $request->input('tag'));
+            }
         }
 
         if ($request->input('character')) {
@@ -37,8 +45,14 @@ class RollController extends Controller
             $query->where('type', $request->input('type'));
         }
 
-        if ($request->input('text')) {
-            $query->whereFullText('description', $request->input('text'));
+        if ($request->input('raw') && $request->input('campaign')) {
+            return response()->json([
+                'items' => $query->get()->map(
+                    function (ContextualizedRoll $roll) {
+                        return $this->rollToPublicArray($roll);
+                    }
+                ),
+            ]);
         }
 
         $paginator = $query
@@ -73,6 +87,40 @@ class RollController extends Controller
         $roll->delete();
 
         return response()->noContent();
+    }
+
+    protected function dbCreate(Request $request, string $type, string $classname)
+    {
+        $request->validate([
+            'campaign' => 'required|string',
+            'character' => 'required|string',
+            'description' => 'required|string',
+            'parameters' => 'required|array',
+            'metadata' => 'nullable|array',
+            'tag' => 'nullable|string',
+        ]);
+
+        try {
+            $roll = new ContextualizedRoll();
+
+            $roll->user_id = $request->user()->id;
+            $roll->campaign = $request->input('campaign');
+            $roll->character = $request->input('character');
+            $roll->description = $request->input('description');
+            $roll->tag = $request->input('tag');
+
+            $roll->type = $type;
+            $roll->setRoll($classname::init($request->input('parameters'), metadata: $request->input('metadata', [])));
+            $roll->result = $roll->getRoll()->result();
+
+            $roll->save();
+
+            return response()->json($this->rollToPublicArray($roll));
+        } catch (InvalidArgumentException $e) {
+            report($e);
+
+            return response(null, 400);
+        }
     }
 
     private function rollToPublicArray(ContextualizedRoll $roll): array

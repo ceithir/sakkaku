@@ -19,6 +19,11 @@ class Roll implements RollInterface
         $this->metadata = $metadata;
     }
 
+    public static function init(array $parameters, array $metadata = [])
+    {
+        return new self($parameters, $metadata);
+    }
+
     public function result(): array
     {
         $total = array_reduce(

@@ -13,11 +13,27 @@
 }
 
 .result {
+  .centered-torii-box();
   margin-top: 24px;
-  text-align: center;
 
   a {
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: 24px;
+    text-align: center;
+    border: 1px solid @border-green;
+    border-radius: 4px;
+    padding: 4px;
+  }
+
+  .buttons {
+    text-align: center;
+    & > * {
+      margin: 0 12px;
+    }
+  }
+
+  .title {
+    .block-title();
+    margin-top: 0;
   }
 }
