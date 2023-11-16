@@ -45,7 +45,7 @@ class RollController extends Controller
             $query->where('type', $request->input('type'));
         }
 
-        if ($request->input('raw') && $request->input('campaign') && $request->input('tag')) {
+        if ($request->input('raw') && $request->input('campaign')) {
             return response()->json([
                 'items' => $query->get()->map(
                     function (ContextualizedRoll $roll) {
