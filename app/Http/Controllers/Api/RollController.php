@@ -20,6 +20,10 @@ class RollController extends Controller
             if ($request->input('text')) {
                 $query->whereFullText('description', $request->input('text'));
             }
+
+            if ($request->input('tag')) {
+                $query->where('tag', $request->input('tag'));
+            }
         }
 
         if ($request->input('character')) {
