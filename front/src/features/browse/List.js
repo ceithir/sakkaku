@@ -18,8 +18,36 @@ import { isAForceRoll, netSuccesses } from "features/sw/Result";
 import { stringify as dndStringify } from "features/dnd/formula";
 import { selectUser } from "features/user/reducer";
 import { useSelector } from "react-redux";
+import Actions from "./Actions";
 
 const { Text } = Typography;
+
+export const dicePoolAsText = ({ roll, type }) => {
+  if (type === "AEG-L5R") {
+    return aegStringify(roll.parameters);
+  }
+
+  if (["FFG-L5R-Heritage"].includes(type)) {
+    return `—`;
+  }
+
+  if (type === "DnD") {
+    return dndStringify(roll.parameters);
+  }
+
+  if (type === "Cyberpunk-RED") {
+    const modifier = roll.parameters.modifier;
+    if (!modifier) {
+      return `"1d10"`;
+    }
+    if (modifier < 0) {
+      return `"1d10"${modifier}`;
+    }
+    return `"1d10"+${modifier}`;
+  }
+
+  return null;
+};
 
 const defaultColumns = [
   {
@@ -87,31 +115,14 @@ const defaultColumns = [
     title: `Dice pool`,
     dataIndex: "input",
     key: "input",
-    render: ({ metadata, roll, type }) => {
-      if (type === "AEG-L5R") {
-        return <>{aegStringify(roll.parameters)}</>;
+    render: ({ roll, type }) => {
+      const text = dicePoolAsText({ roll, type });
+
+      if (!text) {
+        return <Text type="secondary">{`See page`}</Text>;
       }
 
-      if (["FFG-L5R-Heritage"].includes(type)) {
-        return `—`;
-      }
-
-      if (type === "DnD") {
-        return <>{dndStringify(roll.parameters)}</>;
-      }
-
-      if (type === "Cyberpunk-RED") {
-        const modifier = roll.parameters.modifier;
-        if (!modifier) {
-          return <>{`"1d10"`}</>;
-        }
-        if (modifier < 0) {
-          return <>{`"1d10"${modifier}`}</>;
-        }
-        return <>{`"1d10"+${modifier}`}</>;
-      }
-
-      return <Text type="secondary">{`See page`}</Text>;
+      return <>{text}</>;
     },
     responsive: ["md"],
     align: "center",
@@ -343,6 +354,7 @@ const List = () => {
 
   return (
     <>
+      <Actions />
       <Table
         columns={columns({ user, softReload })}
         dataSource={dataSource}

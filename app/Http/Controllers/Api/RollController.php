@@ -45,6 +45,16 @@ class RollController extends Controller
             $query->where('type', $request->input('type'));
         }
 
+        if ($request->input('raw') && $request->input('campaign') && $request->input('tag')) {
+            return response()->json([
+                'items' => $query->get()->map(
+                    function (ContextualizedRoll $roll) {
+                        return $this->rollToPublicArray($roll);
+                    }
+                ),
+            ]);
+        }
+
         $paginator = $query
             ->with('user')
             ->paginate()
