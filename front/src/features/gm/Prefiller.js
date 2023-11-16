@@ -4,7 +4,7 @@ import styles from "./Prefiller.module.less";
 import { useDispatch, useSelector } from "react-redux";
 import { selectCampaigns, addCampaign } from "features/user/reducer";
 import { arrayToAutoCompleteOptions } from "components/form/UserContext";
-import CopyButtons from "components/aftermath/CopyButtons";
+import CopyButtons, { CopyLink } from "components/aftermath/CopyButtons";
 import queryString from "query-string";
 
 const { TextArea } = Input;
@@ -13,6 +13,7 @@ const Prefiller = () => {
   const campaigns = useSelector(selectCampaigns);
   const dispatch = useDispatch();
   const [link, setLink] = useState();
+  const [trackingLink, setTrackingLink] = useState();
 
   return (
     <div className={styles.layout}>
@@ -29,6 +30,13 @@ const Prefiller = () => {
               { skipEmptyString: true }
             )}`;
             setLink(link);
+            const trackingLink = tag
+              ? `${window.location.origin}/rolls/?${queryString.stringify({
+                  campaign,
+                  tag,
+                })}`
+              : undefined;
+            setTrackingLink(trackingLink);
             dispatch(addCampaign(campaign));
           }}
         >
@@ -93,6 +101,18 @@ const Prefiller = () => {
           </a>
           <div className={styles.buttons}>
             <CopyButtons link={link} bbMessage={`Click here to roll.`} />
+          </div>
+        </div>
+      )}
+      {!!trackingLink && (
+        <div className={styles.result}>
+          <h4 className={styles.title}>{`For GM convenience`}</h4>
+          <p>{`Use the following link to track and export all rolls with the given tag:`}</p>
+          <a href={trackingLink} target="_blank" rel="noreferrer">
+            {link}
+          </a>
+          <div className={styles.buttons}>
+            <CopyLink link={trackingLink} />
           </div>
         </div>
       )}
