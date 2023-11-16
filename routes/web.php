@@ -30,9 +30,9 @@ Route::get('/probabilities', function () {
 });
 
 Route::get('/heritage/{uuid}', function ($uuid) {
-    ContextualizedRoll::where('type', 'FFG-L5R-Heritage')->where('uuid', $uuid)->firstOrFail();
+    $roll = ContextualizedRoll::where('type', 'FFG-L5R-Heritage')->where('uuid', $uuid)->firstOrFail();
 
-    return File::get(public_path().'/react/index.html');
+    return redirect("/r/{$roll->id}", 301);
 })->where('uuid', '[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')->name('heritage.show');
 
 Route::get('/heritage', function () {

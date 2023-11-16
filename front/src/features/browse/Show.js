@@ -7,6 +7,7 @@ import L5RAEGRoll from "features/d10/D10IdentifiedRoll";
 import DnDRoll from "features/dnd/IdentifiedRoll";
 import CyberpunkRoll from "features/cyberpunk/Roll";
 import FFGSWRoll from "features/sw/Roll";
+import L5RFFGHeritageRoll from "features/heritage/RollLoader";
 
 const Show = () => {
   const { id } = useParams();
@@ -41,15 +42,22 @@ const Show = () => {
     return null;
   }
 
+  const params = {
+    ...data,
+    player: data.user,
+  };
+
   switch (data.type) {
     case "AEG-L5R":
-      return <L5RAEGRoll {...data} player={data.user} />;
+      return <L5RAEGRoll {...params} />;
     case "DnD":
-      return <DnDRoll {...data} player={data.user} />;
+      return <DnDRoll {...params} />;
     case "Cyberpunk-RED":
-      return <CyberpunkRoll {...data} player={data.user} />;
+      return <CyberpunkRoll {...params} />;
     case "FFG-SW":
-      return <FFGSWRoll {...data} player={data.user} />;
+      return <FFGSWRoll {...params} />;
+    case "FFG-L5R-Heritage":
+      return <L5RFFGHeritageRoll {...params} />;
     default:
       return null;
   }

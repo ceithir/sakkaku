@@ -26,7 +26,7 @@ const isOngoingRollOfCurrentUser = ({ data, user }) => {
 };
 
 const RollLoader = () => {
-  const { uuid } = useParams();
+  const { id } = useParams();
   const user = useSelector(selectUser);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
@@ -37,7 +37,7 @@ const RollLoader = () => {
   useEffect(() => {
     dispatch(setLoading(true));
     getOnServer({
-      uri: `/public/ffg/l5r/heritage-rolls/${uuid}`,
+      uri: `/rolls/${id}`,
       success: (data) => {
         setData(data);
         dispatch(setLoading(false));
@@ -47,7 +47,7 @@ const RollLoader = () => {
         dispatch(setError(true));
       },
     });
-  }, [uuid, dispatch]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     if (!data) {
@@ -55,13 +55,13 @@ const RollLoader = () => {
     }
     if (isOngoingRollOfCurrentUser({ data, user })) {
       const {
-        uuid,
+        id,
         roll: { dices, metadata },
         ...context
       } = data;
       dispatch(
         load({
-          uuid,
+          id,
           dices: dices,
           metadata: metadata,
           context,

@@ -10,7 +10,7 @@ const slice = createSlice({
     error: false,
     metadata: {},
     context: {},
-    uuid: null,
+    id: null,
   },
   reducers: {
     setLoading: (state, action) => {
@@ -29,31 +29,31 @@ const slice = createSlice({
       state.dices = [];
       state.metadata = {};
       state.context = {};
-      state.uuid = null;
+      state.id = null;
       window.history.pushState(null, null, `/heritage`);
     },
     setContext: (state, action) => {
       state.context = action.payload;
     },
-    setUuid: (state, action) => {
-      const uuid = action.payload;
-      state.uuid = uuid;
-      window.history.pushState(null, null, `/heritage/${uuid}`);
+    setId: (state, action) => {
+      const id = action.payload;
+      state.id = id;
+      window.history.pushState(null, null, `/r/${id}`);
     },
     load: (state, action) => {
-      const { uuid, dices, metadata, context } = action.payload;
-      state.uuid = uuid;
+      const { id, dices, metadata, context } = action.payload;
+      state.id = id;
       state.dices = dices;
       state.metadata = metadata;
       state.context = context;
-      window.history.pushState(null, null, `/heritage/${uuid}`);
+      window.history.pushState(null, null, `/r/${id}`);
     },
   },
 });
 
 export const { setLoading, setError, reset, load } = slice.actions;
 
-const { update, setContext, setUuid } = slice.actions;
+const { update, setContext, setId } = slice.actions;
 
 const errorHandler = (dispatch) => {
   return (err) => {
@@ -85,8 +85,8 @@ export const create =
           description,
           metadata,
         },
-        success: ({ uuid, roll }) => {
-          dispatch(setUuid(uuid));
+        success: ({ id, roll }) => {
+          dispatch(setId(id));
           dispatch(update(roll));
         },
         error,
@@ -111,10 +111,10 @@ export const keep =
 
     const error = errorHandler(dispatch);
 
-    const { uuid } = roll;
-    if (uuid) {
+    const { id } = roll;
+    if (id) {
       authentifiedPostOnServer({
-        uri: `/ffg/l5r/heritage-rolls/${uuid}/keep`,
+        uri: `/ffg/l5r/heritage-rolls/${id}/keep`,
         body: {
           position,
         },
@@ -140,7 +140,7 @@ export const selectLoading = (state) => state.heritage.loading;
 export const selectError = (state) => state.heritage.error;
 export const selectRoll = (state) => {
   return {
-    uuid: state.heritage.uuid,
+    id: state.heritage.id,
     dices: state.heritage.dices,
     metadata: state.heritage.metadata,
   };
