@@ -86,9 +86,3 @@ Route::middleware('auth:sanctum')->post('/ffg/sw/rolls/create', [FFGSWRollContro
 
 Route::post('/public/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statelessCreate']);
 Route::middleware('auth:sanctum')->post('/cyberpunk/rolls/create', [CyberpunkRollController::class, 'statefulCreate']);
-
-// TODO Deprecated routes, to be removed eventually
-Route::get('/public/aeg/l5r/rolls/{id}', [D10RollAndKeepController::class, 'show'])->where('id', '[0-9]+');
-Route::get('/public/dnd/rolls/{id}', [DnDRollController::class, 'show'])->where('id', '[0-9]+');
-Route::get('/public/cyberpunk/rolls/{id}', [CyberpunkRollController::class, 'show'])->where('id', '[0-9]+');
-Route::get('/public/ffg/sw/rolls/{id}', [FFGSWRollController::class, 'show'])->where('id', '[0-9]+');

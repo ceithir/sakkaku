@@ -113,12 +113,6 @@ class RollController extends Controller
         }
     }
 
-    // TODO Legacy alias only used in legacy functions, to remove eventually
-    protected function toJson(ContextualizedRoll $roll): array
-    {
-        return $this->rollToPublicArray($roll);
-    }
-
     private function rollToPublicArray(ContextualizedRoll $roll): array
     {
         return [

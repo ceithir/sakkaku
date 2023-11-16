@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\AEG\L5R;
 
 use App\Concepts\AEG\L5R\Roll;
 use App\Http\Controllers\Api\RollController;
-use App\Models\ContextualizedRoll;
 use Assert\InvalidArgumentException;
 use Illuminate\Http\Request;
 
@@ -28,12 +27,5 @@ class D10RollAndKeepController extends RollController
     public function statefulCreate(Request $request)
     {
         return $this->dbCreate($request, self::ROLL_TYPE, Roll::class);
-    }
-
-    public function show(int $id)
-    {
-        $roll = ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
-
-        return response()->json($this->toJson($roll));
     }
 }
