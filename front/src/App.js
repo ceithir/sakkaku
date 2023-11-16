@@ -8,7 +8,6 @@ import IdentifiedRoll from "./features/roller/IdentifiedRoll";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./features/user/reducer";
 import HeritageRoll from "./features/heritage/Roll";
-import HeritageRollLoader from "./features/heritage/RollLoader";
 import Calculator from "./features/probabilities/Calculator";
 import Homepage from "./features/navigation/Homepage";
 import Map from "./features/trinket/Map";
@@ -50,7 +49,6 @@ const App = () => {
               </>
             }
           />
-          <Route path="/heritage/:uuid" element={<HeritageRollLoader />} />
           <Route
             path="/heritage"
             element={

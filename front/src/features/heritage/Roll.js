@@ -71,7 +71,7 @@ const Roll = () => {
             .map(({ value }) => value)}
         />
         <div className={styles.footer}>
-          <CopyLink link={link(roll.uuid)} />
+          <CopyLink link={link(roll.id)} />
           <Button
             onClick={() => {
               dispatch(reset());

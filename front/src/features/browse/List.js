@@ -201,17 +201,21 @@ const defaultColumns = [
     title: `Link`,
     dataIndex: "see_more",
     key: "see_more",
-    render: ({ id, uuid, type }) => {
+    render: ({ id, type }) => {
       const url = (() => {
         if (type === "FFG-L5R") {
           return `/rolls/${id}`;
         }
 
-        if (type === "FFG-L5R-Heritage") {
-          return `/heritage/${uuid}`;
-        }
-
-        if (["AEG-L5R", "DnD", "Cyberpunk-RED", "FFG-SW"].includes(type)) {
+        if (
+          [
+            "AEG-L5R",
+            "DnD",
+            "Cyberpunk-RED",
+            "FFG-SW",
+            "FFG-L5R-Heritage",
+          ].includes(type)
+        ) {
           return `/r/${id}`;
         }
 
@@ -324,7 +328,6 @@ const List = () => {
   const dataSource = data.items.map(
     ({
       id,
-      uuid,
       type,
       created_at,
       campaign,
@@ -345,7 +348,7 @@ const List = () => {
         description: { description, type, metadata },
         result: { result, type, metadata, parameters },
         success: { type, roll, result },
-        see_more: { id, uuid, type },
+        see_more: { id, type },
         input: { metadata, roll, type },
         admin: { id, description },
       };

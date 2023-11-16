@@ -3,14 +3,13 @@
 namespace App\Http\Controllers\Api\FFG\L5R;
 
 use App\Concepts\FFG\L5R\InheritanceRoll;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Api\RollController;
 use App\Models\ContextualizedRoll;
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 
-class InheritanceRollController extends Controller
+class InheritanceRollController extends RollController
 {
     public const ROLL_TYPE = 'FFG-L5R-Heritage';
 
@@ -54,7 +53,6 @@ class InheritanceRollController extends Controller
             $description = $request->input('description');
             Assertion::allNotEmpty([$campaign, $character]);
 
-            $roll->uuid = Str::uuid();
             $roll->campaign = $campaign;
             $roll->character = $character;
             $roll->description = $description;
@@ -74,14 +72,9 @@ class InheritanceRollController extends Controller
         }
     }
 
-    public function show(string $uuid)
+    public function keep(int $id, Request $request)
     {
-        return response()->json($this->toJson($this->load($uuid)));
-    }
-
-    public function keep(string $uuid, Request $request)
-    {
-        $rollWithContext = $this->load($uuid);
+        $rollWithContext = ContextualizedRoll::where('type', self::ROLL_TYPE)->where('id', $id)->firstOrFail();
         if (!$rollWithContext->user_id || $rollWithContext->user_id !== $request->user()->id) {
             return response(null, 403);
         }
@@ -103,28 +96,5 @@ class InheritanceRollController extends Controller
 
             return response(null, 400);
         }
-    }
-
-    private function load(string $uuid): ContextualizedRoll
-    {
-        return ContextualizedRoll::where('type', self::ROLL_TYPE)->where('uuid', $uuid)->firstOrFail();
-    }
-
-    private function toJson(ContextualizedRoll $roll): array
-    {
-        return [
-            'uuid' => $roll->uuid,
-            'user' => $roll->user_id ? [
-                'id' => $roll->user->id,
-                'name' => $roll->user->name,
-            ] : null,
-            'created_at' => $roll->created_at,
-            'updated_at' => $roll->updated_at,
-            'campaign' => $roll->campaign,
-            'character' => $roll->character,
-            'description' => $roll->description,
-            'roll' => $roll->roll,
-            'result' => $roll->result,
-        ];
     }
 }

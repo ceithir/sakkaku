@@ -9,7 +9,13 @@ class RollRenderController extends Controller
     public function show(int $id): string
     {
         // TODO: Extend as more types become supported
-        $roll = ContextualizedRoll::whereIn('type', ['DnD', 'AEG-L5R', 'Cyberpunk-RED', 'FFG-SW'])->findOrFail($id);
+        $roll = ContextualizedRoll::whereIn('type', [
+            'DnD',
+            'AEG-L5R',
+            'Cyberpunk-RED',
+            'FFG-SW',
+            'FFG-L5R-Heritage',
+        ])->findOrFail($id);
 
         $metadata = [
             'og:title' => "Sakkaku – Roll for {$roll->campaign}",
@@ -26,8 +32,13 @@ class RollRenderController extends Controller
         $description = "{$roll->campaign} 🌸 {$roll->character} 🌸 ";
 
         if ('FFG-SW' === $roll->type) {
-            // A.k.a "I have no idea what to put there"
             $description .= 'Star Wars RPG (FFG)';
+
+            return $description;
+        }
+
+        if ('FFG-L5R-Heritage' === $roll->type) {
+            $description .= 'Legend of the Five Rings (FFG) – Heritage Roll';
 
             return $description;
         }
