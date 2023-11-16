@@ -84,7 +84,10 @@ const Prefiller = () => {
       </div>
       {!!link && (
         <div className={styles.result}>
-          <p>{`Use the following link to initiate a roll with the parameters entered above:`}</p>
+          <h4
+            className={styles.title}
+          >{`To be communicated to the players`}</h4>
+          <p>{`Use the following link to initiate a roll prefilled with the parameters entered above:`}</p>
           <a href={link} target="_blank" rel="noreferrer">
             {link}
           </a>
