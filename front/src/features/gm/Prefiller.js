@@ -109,7 +109,7 @@ const Prefiller = () => {
           <h4 className={styles.title}>{`For GM convenience`}</h4>
           <p>{`Use the following link to track and export all rolls with the given tag:`}</p>
           <a href={trackingLink} target="_blank" rel="noreferrer">
-            {link}
+            {trackingLink}
           </a>
           <div className={styles.buttons}>
             <CopyLink link={trackingLink} />
