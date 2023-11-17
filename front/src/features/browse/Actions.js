@@ -9,6 +9,7 @@ import { mkConfig, generateCsv, download } from "export-to-csv";
 import sanitizeFilename from "sanitize-filename";
 import { Input, Form } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const cleanEntryForCsv = (input) => {
   if (input === null || input === undefined) {
@@ -132,6 +133,11 @@ const Actions = () => {
   const query = queryString.parse(location.search);
   const { campaign, tag } = query;
   const navigate = useNavigate();
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(query);
+  }, [query, form]);
 
   return (
     <div className={styles.container}>
@@ -141,6 +147,7 @@ const Actions = () => {
         onFinish={(data) => {
           navigate(`/rolls?${queryString.stringify(data)}`);
         }}
+        form={form}
       >
         <Form.Item
           label={`Campaign`}
