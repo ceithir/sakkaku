@@ -7,6 +7,8 @@ import { getOnServer } from "server";
 import { dicePoolAsText } from "./List";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import sanitizeFilename from "sanitize-filename";
+import { Input, Form } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const cleanEntryForCsv = (input) => {
   if (input === null || input === undefined) {
@@ -37,7 +39,7 @@ const processData = (rawData) => {
           character,
           player: user?.name,
           description,
-          tn: roll.parameters.tn,
+          tn: roll.parameters?.tn,
           result: result?.total,
           link: `${window.location.origin}/r/${id}`,
         };
@@ -94,6 +96,10 @@ const csvColumns = [
 const ExportAsCsv = ({ campaign, tag }) => {
   const [loading, setLoading] = useState(false);
 
+  if (!campaign) {
+    return;
+  }
+
   const onClick = () => {
     setLoading(true);
     getOnServer({
@@ -101,7 +107,7 @@ const ExportAsCsv = ({ campaign, tag }) => {
       success: (data) => {
         const csvConfig = mkConfig({
           columnHeaders: csvColumns,
-          filename: sanitizeFilename(`${campaign}-${tag}`),
+          filename: sanitizeFilename(`${campaign}${tag ? `-${tag}` : ""}`),
           quoteStrings: true,
         });
         const csv = generateCsv(csvConfig)(processData(data.items));
@@ -112,32 +118,44 @@ const ExportAsCsv = ({ campaign, tag }) => {
     });
   };
 
-  return <Button loading={loading} onClick={onClick}>{`Export as CSV`}</Button>;
+  return (
+    <Button
+      loading={loading}
+      onClick={onClick}
+    >{`Export selection as CSV`}</Button>
+  );
 };
 
 const Actions = () => {
   const location = useLocation();
 
   const query = queryString.parse(location.search);
+  const { campaign, tag } = query;
+  const navigate = useNavigate();
 
-  if (!!query.campaign && !!query.tag) {
-    const { campaign, tag } = query;
-    return (
-      <div className={styles.container}>
-        <h2 className={styles.title}>
-          {`Showing `}
-          <strong>{tag}</strong>
-          {` rolls for campaign `}
-          <strong>{campaign}</strong>
-        </h2>
+  return (
+    <div className={styles.container}>
+      <h4>{`Filter`}</h4>
+      <Form
+        layout="inline"
+        onFinish={({ campaign }) => {
+          navigate(`/rolls?${queryString.stringify({ campaign })}`);
+        }}
+      >
+        <Form.Item
+          label={`Campaign`}
+          name="campaign"
+          rules={[{ required: true, message: `Please specify a campaign.` }]}
+        >
+          <Input />
+        </Form.Item>
         <div className={styles.buttons}>
+          <Button type="primary" htmlType="submit">{`Search`}</Button>
           <ExportAsCsv campaign={campaign} tag={tag} />
         </div>
-      </div>
-    );
-  }
-
-  return null;
+      </Form>
+    </div>
+  );
 };
 
 export default Actions;

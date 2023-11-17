@@ -357,7 +357,6 @@ const List = () => {
 
   return (
     <>
-      <Actions />
       <Table
         columns={columns({ user, softReload })}
         dataSource={dataSource}
@@ -369,6 +368,7 @@ const List = () => {
         current={page}
         total={data["total"]}
       />
+      <Actions />
     </>
   );
 };
