@@ -138,8 +138,8 @@ const Actions = () => {
       <h4>{`Filter`}</h4>
       <Form
         layout="inline"
-        onFinish={({ campaign }) => {
-          navigate(`/rolls?${queryString.stringify({ campaign })}`);
+        onFinish={(data) => {
+          navigate(`/rolls?${queryString.stringify(data)}`);
         }}
       >
         <Form.Item
@@ -147,6 +147,9 @@ const Actions = () => {
           name="campaign"
           rules={[{ required: true, message: `Please specify a campaign.` }]}
         >
+          <Input />
+        </Form.Item>
+        <Form.Item label={`Tag`} name="tag">
           <Input />
         </Form.Item>
         <div className={styles.buttons}>
