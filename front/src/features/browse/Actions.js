@@ -152,6 +152,9 @@ const Actions = () => {
         <Form.Item label={`Tag`} name="tag">
           <Input />
         </Form.Item>
+        <Form.Item label={`Text`} name="text">
+          <Input />
+        </Form.Item>
         <div className={styles.buttons}>
           <Button type="primary" htmlType="submit">{`Search`}</Button>
           <ExportAsCsv campaign={campaign} tag={tag} />
