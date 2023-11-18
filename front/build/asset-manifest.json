@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/react/static/css/main.1c22c3b1.css",
-    "main.js": "/react/static/js/main.b8bc83ae.js",
+    "main.js": "/react/static/js/main.857cef06.js",
     "static/media/rokugan-map-1800.jpg": "/react/static/media/rokugan-map-1800.05a263da48ba4a02fe14.jpg",
     "static/media/wandering.jpg": "/react/static/media/wandering.01e959d9ac549b548f37.jpg",
     "static/media/manipulator.png": "/react/static/media/manipulator.0ef16af07dfd77101f97.png",
@@ -27,10 +27,10 @@
     "index.html": "/react/index.html",
     "static/media/external-link.svg": "/react/static/media/external-link.7808b7fbbb437f6a567b2377f11e2e13.svg",
     "main.1c22c3b1.css.map": "/react/static/css/main.1c22c3b1.css.map",
-    "main.b8bc83ae.js.map": "/react/static/js/main.b8bc83ae.js.map"
+    "main.857cef06.js.map": "/react/static/js/main.857cef06.js.map"
   },
   "entrypoints": [
     "static/css/main.1c22c3b1.css",
-    "static/js/main.b8bc83ae.js"
+    "static/js/main.857cef06.js"
   ]
 }
