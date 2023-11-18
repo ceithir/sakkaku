@@ -2,11 +2,13 @@ import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import styles from "./Actions.module.less";
 import { Button } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getOnServer } from "server";
 import { dicePoolAsText } from "./List";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import sanitizeFilename from "sanitize-filename";
+import { Input, Form, AutoComplete } from "antd";
+import { useNavigate } from "react-router-dom";
 
 const cleanEntryForCsv = (input) => {
   if (input === null || input === undefined) {
@@ -37,7 +39,7 @@ const processData = (rawData) => {
           character,
           player: user?.name,
           description,
-          tn: roll.parameters.tn,
+          tn: roll.parameters?.tn,
           result: result?.total,
           link: `${window.location.origin}/r/${id}`,
         };
@@ -91,8 +93,15 @@ const csvColumns = [
   },
 ];
 
-const ExportAsCsv = ({ campaign, tag }) => {
+const ExportAsCsv = () => {
+  const location = useLocation();
+  const query = queryString.parse(location.search);
+  const { campaign, tag } = query;
   const [loading, setLoading] = useState(false);
+
+  if (!campaign) {
+    return;
+  }
 
   const onClick = () => {
     setLoading(true);
@@ -101,7 +110,7 @@ const ExportAsCsv = ({ campaign, tag }) => {
       success: (data) => {
         const csvConfig = mkConfig({
           columnHeaders: csvColumns,
-          filename: sanitizeFilename(`${campaign}-${tag}`),
+          filename: sanitizeFilename(`${campaign}${tag ? `-${tag}` : ""}`),
           quoteStrings: true,
         });
         const csv = generateCsv(csvConfig)(processData(data.items));
@@ -112,32 +121,89 @@ const ExportAsCsv = ({ campaign, tag }) => {
     });
   };
 
-  return <Button loading={loading} onClick={onClick}>{`Export as CSV`}</Button>;
+  return (
+    <Button
+      loading={loading}
+      onClick={onClick}
+    >{`Export selection as CSV`}</Button>
+  );
 };
 
-const Actions = () => {
-  const location = useLocation();
-
-  const query = queryString.parse(location.search);
-
-  if (!!query.campaign && !!query.tag) {
-    const { campaign, tag } = query;
-    return (
-      <div className={styles.container}>
-        <h2 className={styles.title}>
-          {`Showing `}
-          <strong>{tag}</strong>
-          {` rolls for campaign `}
-          <strong>{campaign}</strong>
-        </h2>
-        <div className={styles.buttons}>
-          <ExportAsCsv campaign={campaign} tag={tag} />
-        </div>
+const SearchForm = ({ campaigns, tags, ...formParams }) => {
+  return (
+    <Form layout="inline" {...formParams}>
+      <Form.Item
+        label={`Campaign`}
+        name="campaign"
+        rules={[{ required: true, message: `Please specify a campaign.` }]}
+        className={styles.autocomplete}
+      >
+        <AutoComplete
+          options={campaigns.map((campaign) => {
+            return { value: campaign };
+          })}
+          filterOption={true}
+        />
+      </Form.Item>
+      <Form.Item label={`Tag`} name="tag" className={styles.autocomplete}>
+        <AutoComplete
+          options={tags.map(({ label, campaign }) => {
+            return { value: label, campaign };
+          })}
+          filterOption={true}
+        />
+      </Form.Item>
+      <Form.Item
+        label={`Description`}
+        name="text"
+        tooltip={`Will search for all rolls whose description contains the given word(s).`}
+      >
+        <Input />
+      </Form.Item>
+      <div className={styles.buttons}>
+        <Button type="primary" htmlType="submit">{`Search`}</Button>
+        <ExportAsCsv />
       </div>
-    );
-  }
+    </Form>
+  );
+};
 
-  return null;
+const Actions = ({ campaigns, tags }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [currentCampaign, setCurrentCampaign] = useState();
+
+  useEffect(() => {
+    const query = queryString.parse(location.search);
+    form.setFieldsValue(query);
+    setCurrentCampaign(query.campaign);
+  }, [location, form]);
+
+  const onFinish = (data) => {
+    navigate(`/rolls?${queryString.stringify(data)}`);
+  };
+
+  const relevantTags = tags.filter(
+    ({ campaign }) => campaign === currentCampaign
+  );
+
+  return (
+    <div className={styles.container}>
+      <h4>{`Filter`}</h4>
+      <SearchForm
+        form={form}
+        onFinish={onFinish}
+        campaigns={campaigns}
+        tags={relevantTags}
+        onValuesChange={(changedValues) => {
+          if (Object.keys(changedValues).includes("campaign")) {
+            setCurrentCampaign(changedValues.campaign);
+          }
+        }}
+      />
+    </div>
+  );
 };
 
 export default Actions;
