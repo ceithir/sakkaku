@@ -60,6 +60,25 @@ class RollController extends Controller
             ->paginate()
         ;
 
+        $tagsPerCampaign = ContextualizedRoll::select(['campaign', 'tag'])
+            ->distinct()
+            ->get()
+            ->toArray()
+        ;
+        $campaigns = array_values(array_unique(array_map(function ($data) {
+            return $data['campaign'];
+        }, $tagsPerCampaign)));
+        $tags = [];
+        foreach ($tagsPerCampaign as $data) {
+            if (!$data['tag']) {
+                continue;
+            }
+            $tags[] = [
+                'label' => $data['tag'],
+                'campaign' => $data['campaign'],
+            ];
+        }
+
         return response()->json([
             'items' => $paginator->map(
                 function (ContextualizedRoll $roll) {
@@ -70,6 +89,8 @@ class RollController extends Controller
             'per_page' => $paginator->perPage(),
             'first' => $paginator->firstItem(),
             'last' => $paginator->lastItem(),
+            'campaigns' => $campaigns,
+            'tags' => $tags,
         ]);
     }
 
