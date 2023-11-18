@@ -2,14 +2,13 @@ import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import styles from "./Actions.module.less";
 import { Button } from "antd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { getOnServer } from "server";
 import { dicePoolAsText } from "./List";
 import { mkConfig, generateCsv, download } from "export-to-csv";
 import sanitizeFilename from "sanitize-filename";
-import { Input, Form } from "antd";
+import { Input, Form, AutoComplete } from "antd";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const cleanEntryForCsv = (input) => {
   if (input === null || input === undefined) {
@@ -127,7 +126,7 @@ const ExportAsCsv = ({ campaign, tag }) => {
   );
 };
 
-const Actions = () => {
+const Actions = ({ campaigns, tags }) => {
   const location = useLocation();
 
   const query = queryString.parse(location.search);
@@ -153,11 +152,28 @@ const Actions = () => {
           label={`Campaign`}
           name="campaign"
           rules={[{ required: true, message: `Please specify a campaign.` }]}
+          className={styles.autocomplete}
         >
-          <Input />
+          <AutoComplete
+            options={campaigns.map((campaign) => {
+              return { value: campaign };
+            })}
+            filterOption={true}
+          />
         </Form.Item>
-        <Form.Item label={`Tag`} name="tag">
-          <Input />
+        <Form.Item label={`Tag`} name="tag" className={styles.autocomplete}>
+          <AutoComplete
+            options={tags.map(({ label, campaign }) => {
+              return { value: label, campaign };
+            })}
+            filterOption={(inputValue, option) => {
+              const campaign = form.getFieldValue("campaign");
+              return (
+                option.campaign === campaign &&
+                option.value.indexOf(inputValue) !== -1
+              );
+            }}
+          />
         </Form.Item>
         <Form.Item
           label={`Description`}
