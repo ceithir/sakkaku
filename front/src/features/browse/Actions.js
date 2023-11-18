@@ -93,7 +93,10 @@ const csvColumns = [
   },
 ];
 
-const ExportAsCsv = ({ campaign, tag }) => {
+const ExportAsCsv = () => {
+  const location = useLocation();
+  const query = queryString.parse(location.search);
+  const { campaign, tag } = query;
   const [loading, setLoading] = useState(false);
 
   if (!campaign) {
@@ -126,67 +129,73 @@ const ExportAsCsv = ({ campaign, tag }) => {
   );
 };
 
+const SearchForm = ({ form, onFinish, campaigns, tags }) => {
+  return (
+    <Form layout="inline" onFinish={onFinish} form={form}>
+      <Form.Item
+        label={`Campaign`}
+        name="campaign"
+        rules={[{ required: true, message: `Please specify a campaign.` }]}
+        className={styles.autocomplete}
+      >
+        <AutoComplete
+          options={campaigns.map((campaign) => {
+            return { value: campaign };
+          })}
+          filterOption={true}
+        />
+      </Form.Item>
+      <Form.Item label={`Tag`} name="tag" className={styles.autocomplete}>
+        <AutoComplete
+          options={tags.map(({ label, campaign }) => {
+            return { value: label, campaign };
+          })}
+          filterOption={(inputValue, option) => {
+            const campaign = form.getFieldValue("campaign");
+            return (
+              option.campaign === campaign &&
+              option.value.indexOf(inputValue) !== -1
+            );
+          }}
+        />
+      </Form.Item>
+      <Form.Item
+        label={`Description`}
+        name="text"
+        tooltip={`Will search for all rolls whose description contains the given word(s).`}
+      >
+        <Input />
+      </Form.Item>
+      <div className={styles.buttons}>
+        <Button type="primary" htmlType="submit">{`Search`}</Button>
+        <ExportAsCsv />
+      </div>
+    </Form>
+  );
+};
+
 const Actions = ({ campaigns, tags }) => {
   const location = useLocation();
-
-  const query = queryString.parse(location.search);
-  const { campaign, tag } = query;
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue(query);
-  }, [query, form]);
+    form.setFieldsValue(queryString.parse(location.search));
+  }, [location, form]);
+
+  const onFinish = (data) => {
+    navigate(`/rolls?${queryString.stringify(data)}`);
+  };
 
   return (
     <div className={styles.container}>
       <h4>{`Filter`}</h4>
-      <Form
-        layout="inline"
-        onFinish={(data) => {
-          navigate(`/rolls?${queryString.stringify(data)}`);
-        }}
+      <SearchForm
         form={form}
-      >
-        <Form.Item
-          label={`Campaign`}
-          name="campaign"
-          rules={[{ required: true, message: `Please specify a campaign.` }]}
-          className={styles.autocomplete}
-        >
-          <AutoComplete
-            options={campaigns.map((campaign) => {
-              return { value: campaign };
-            })}
-            filterOption={true}
-          />
-        </Form.Item>
-        <Form.Item label={`Tag`} name="tag" className={styles.autocomplete}>
-          <AutoComplete
-            options={tags.map(({ label, campaign }) => {
-              return { value: label, campaign };
-            })}
-            filterOption={(inputValue, option) => {
-              const campaign = form.getFieldValue("campaign");
-              return (
-                option.campaign === campaign &&
-                option.value.indexOf(inputValue) !== -1
-              );
-            }}
-          />
-        </Form.Item>
-        <Form.Item
-          label={`Description`}
-          name="text"
-          tooltip={`Will search for all rolls whose description contains the given word(s).`}
-        >
-          <Input />
-        </Form.Item>
-        <div className={styles.buttons}>
-          <Button type="primary" htmlType="submit">{`Search`}</Button>
-          <ExportAsCsv campaign={campaign} tag={tag} />
-        </div>
-      </Form>
+        onFinish={onFinish}
+        campaigns={campaigns}
+        tags={tags}
+      />
     </div>
   );
 };
