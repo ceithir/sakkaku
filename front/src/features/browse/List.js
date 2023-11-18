@@ -344,7 +344,7 @@ const List = () => {
         current={page}
         total={data["total"]}
       />
-      <Actions campaigns={data.campaigns} tags={data.tags} />
+      <Actions campaigns={data.campaigns} tags={data.tags} total={data.total} />
     </>
   );
 };
