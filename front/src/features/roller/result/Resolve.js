@@ -10,7 +10,7 @@ import CopyButtons from "components/aftermath/CopyButtons";
 import { diceToImageSrc } from "../Dice";
 import { countDices } from "../utils";
 
-const link = (id) => !!id && `${window.location.origin}/rolls/${id}`;
+const link = (id) => !!id && `${window.location.origin}/r/${id}`;
 const bbMessage = ({ id, description, tn, modifiers = [], cleanedUpDice }) => {
   const { successCount, opportunityCount, strifeCount, blankCount } =
     countDices(cleanedUpDice);

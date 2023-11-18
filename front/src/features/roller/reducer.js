@@ -86,7 +86,7 @@ const slice = createSlice({
       state.metadata = metadata;
 
       state.loading = false;
-      window.history.pushState(null, null, `/rolls/${id}`);
+      window.history.pushState(null, null, `/r/${id}`);
     },
     update: (state, action) => {
       const { dices, metadata } = action.payload;

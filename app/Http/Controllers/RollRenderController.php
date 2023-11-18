@@ -8,14 +8,7 @@ class RollRenderController extends Controller
 {
     public function show(int $id): string
     {
-        // TODO: Extend as more types become supported
-        $roll = ContextualizedRoll::whereIn('type', [
-            'DnD',
-            'AEG-L5R',
-            'Cyberpunk-RED',
-            'FFG-SW',
-            'FFG-L5R-Heritage',
-        ])->findOrFail($id);
+        $roll = ContextualizedRoll::findOrFail($id);
 
         $metadata = [
             'og:title' => "Sakkaku – Roll for {$roll->campaign}",
@@ -33,20 +26,22 @@ class RollRenderController extends Controller
 
         if ('FFG-SW' === $roll->type) {
             $description .= 'Star Wars RPG (FFG)';
-
-            return $description;
         }
 
         if ('FFG-L5R-Heritage' === $roll->type) {
             $description .= 'Legend of the Five Rings (FFG) – Heritage Roll';
-
-            return $description;
         }
 
-        $actualRoll = $roll->getRoll();
-        $description .= "{$actualRoll->parameters->formula()} => {$actualRoll->result()['total']}";
-        if ($actualRoll->parameters->tn) {
-            $description .= " (TN: {$actualRoll->parameters->tn})";
+        if ('FFG-L5R' === $roll->type) {
+            $description .= 'Legend of the Five Rings (FFG)';
+        }
+
+        if (in_array($roll->type, ['DnD', 'AEG-L5R', 'Cyberpunk-RED'])) {
+            $actualRoll = $roll->getRoll();
+            $description .= "{$actualRoll->parameters->formula()} => {$actualRoll->result()['total']}";
+            if ($actualRoll->parameters->tn) {
+                $description .= " (TN: {$actualRoll->parameters->tn})";
+            }
         }
 
         return $description;

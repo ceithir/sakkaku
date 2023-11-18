@@ -1,17 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { getOnServer } from "../../server";
-import DefaultErrorMessage from "../../DefaultErrorMessage";
-import Loader from "../navigation/Loader";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUser } from "../user/reducer";
-import {
-  selectLoading,
-  selectError,
-  setLoading,
-  setError,
-  load,
-} from "./reducer";
+import { load } from "./reducer";
 import StaticRoll from "./StaticRoll";
 import Roll from "./Roll";
 
@@ -25,29 +15,9 @@ const isOngoingRollOfCurrentUser = ({ data, user }) => {
   );
 };
 
-const RollLoader = () => {
-  const { id } = useParams();
+const RollLoader = (data) => {
   const user = useSelector(selectUser);
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
   const dispatch = useDispatch();
-
-  const [data, setData] = useState();
-
-  useEffect(() => {
-    dispatch(setLoading(true));
-    getOnServer({
-      uri: `/rolls/${id}`,
-      success: (data) => {
-        setData(data);
-        dispatch(setLoading(false));
-      },
-      error: () => {
-        dispatch(setLoading(false));
-        dispatch(setError(true));
-      },
-    });
-  }, [id, dispatch]);
 
   useEffect(() => {
     if (!data) {
@@ -69,18 +39,6 @@ const RollLoader = () => {
       );
     }
   }, [data, user, dispatch]);
-
-  if (!data) {
-    if (loading) {
-      return <Loader />;
-    }
-
-    if (error) {
-      return <DefaultErrorMessage />;
-    }
-
-    return null;
-  }
 
   if (isOngoingRollOfCurrentUser({ user, data })) {
     return <Roll />;

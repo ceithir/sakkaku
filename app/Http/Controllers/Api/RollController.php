@@ -96,14 +96,7 @@ class RollController extends Controller
 
     public function show(int $id)
     {
-        // TODO Progressively extend to other types of rolls (as soon as the front will support them)
-        $roll = ContextualizedRoll::whereIn('type', [
-            'DnD',
-            'AEG-L5R',
-            'Cyberpunk-RED',
-            'FFG-SW',
-            'FFG-L5R-Heritage',
-        ])->findOrFail($id);
+        $roll = ContextualizedRoll::findOrFail($id);
 
         return $this->rollToPublicArray($roll);
     }

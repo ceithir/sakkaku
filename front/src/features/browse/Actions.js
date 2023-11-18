@@ -1,7 +1,7 @@
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import styles from "./Actions.module.less";
-import { Button } from "antd";
+import { Button, Divider } from "antd";
 import { useState, useEffect } from "react";
 import { getOnServer } from "server";
 import { dicePoolAsText } from "./List";
@@ -93,10 +93,8 @@ const csvColumns = [
   },
 ];
 
-const ExportAsCsv = () => {
-  const location = useLocation();
-  const query = queryString.parse(location.search);
-  const { campaign } = query;
+const ExportAsCsv = ({ query }) => {
+  const { campaign, tag, text } = query;
   const [loading, setLoading] = useState(false);
 
   if (!campaign) {
@@ -106,7 +104,12 @@ const ExportAsCsv = () => {
   const onClick = () => {
     setLoading(true);
     getOnServer({
-      uri: `/rolls?${queryString.stringify({ ...query, raw: true })}`,
+      uri: `/rolls?${queryString.stringify({
+        campaign,
+        tag,
+        text,
+        raw: true,
+      })}`,
       success: (data) => {
         const csvConfig = mkConfig({
           columnHeaders: csvColumns,
@@ -121,12 +124,7 @@ const ExportAsCsv = () => {
     });
   };
 
-  return (
-    <Button
-      loading={loading}
-      onClick={onClick}
-    >{`Export selection as CSV`}</Button>
-  );
+  return <Button loading={loading} onClick={onClick}>{`Export as CSV`}</Button>;
 };
 
 const SearchForm = ({ campaigns, tags, ...formParams }) => {
@@ -162,17 +160,18 @@ const SearchForm = ({ campaigns, tags, ...formParams }) => {
       </Form.Item>
       <div className={styles.buttons}>
         <Button type="primary" htmlType="submit">{`Search`}</Button>
-        <ExportAsCsv />
       </div>
     </Form>
   );
 };
 
-const Actions = ({ campaigns, tags }) => {
+const Actions = ({ campaigns, tags, total }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
   const [currentCampaign, setCurrentCampaign] = useState();
+
+  const query = queryString.parse(location.search);
 
   useEffect(() => {
     const query = queryString.parse(location.search);
@@ -181,7 +180,12 @@ const Actions = ({ campaigns, tags }) => {
   }, [location, form]);
 
   const onFinish = (data) => {
-    navigate(`/rolls?${queryString.stringify(data)}`);
+    navigate(
+      `/rolls?${queryString.stringify(
+        { ...data, showExport: true },
+        { skipEmptyString: true }
+      )}`
+    );
   };
 
   const relevantTags = tags.filter(
@@ -202,6 +206,29 @@ const Actions = ({ campaigns, tags }) => {
           }
         }}
       />
+      {!!query.showExport && !!query.campaign && (
+        <>
+          <Divider />
+          <div className={styles["export-block"]}>
+            <span>
+              <strong>{total}</strong>
+              {` result${total > 1 ? `s` : ""} found`}
+              {(!!query.tag || !!query.text) && (
+                <>
+                  {` matching `}
+                  <strong>
+                    {[query.tag, query.text].filter(Boolean).join(", ")}
+                  </strong>
+                </>
+              )}
+              {` for campaign `}
+              <strong>{query.campaign}</strong>
+              {`.`}
+            </span>
+            <ExportAsCsv query={query} />
+          </div>
+        </>
+      )}
     </div>
   );
 };
