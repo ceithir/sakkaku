@@ -4,7 +4,7 @@ import styles from "./Prefiller.module.less";
 import { useSelector } from "react-redux";
 import { selectCampaigns } from "features/user/reducer";
 import { arrayToAutoCompleteOptions } from "components/form/UserContext";
-import CopyButtons, { CopyLink } from "components/aftermath/CopyButtons";
+import CopyButtons from "components/aftermath/CopyButtons";
 import queryString from "query-string";
 
 const { TextArea } = Input;
@@ -33,6 +33,7 @@ const Prefiller = () => {
               ? `${window.location.origin}/rolls/?${queryString.stringify({
                   campaign,
                   tag,
+                  showExport: true,
                 })}`
               : undefined;
             setTrackingLink(trackingLink);
@@ -94,7 +95,12 @@ const Prefiller = () => {
             className={styles.title}
           >{`To be communicated to the players`}</h4>
           <p>{`Use the following link to initiate a roll prefilled with the parameters entered above:`}</p>
-          <a href={link} target="_blank" rel="noreferrer">
+          <a
+            href={link}
+            target="_blank"
+            rel="noreferrer"
+            className={styles["squared-link"]}
+          >
             {link}
           </a>
           <div className={styles.buttons}>
@@ -105,13 +111,13 @@ const Prefiller = () => {
       {!!trackingLink && (
         <div className={styles.result}>
           <h4 className={styles.title}>{`For GM convenience`}</h4>
-          <p>{`Use the following link to track and export all rolls with the given tag:`}</p>
-          <a href={trackingLink} target="_blank" rel="noreferrer">
-            {trackingLink}
-          </a>
-          <div className={styles.buttons}>
-            <CopyLink link={trackingLink} />
-          </div>
+          <p>
+            {`You can now filter on the specified tag through `}
+            <a href={trackingLink} target="_blank" rel="noreferrer">
+              {` the usual page `}
+            </a>
+            {`tracking all rolls.`}
+          </p>
         </div>
       )}
     </div>
