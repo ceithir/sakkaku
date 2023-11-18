@@ -8,6 +8,7 @@ import DnDRoll from "features/dnd/IdentifiedRoll";
 import CyberpunkRoll from "features/cyberpunk/Roll";
 import FFGSWRoll from "features/sw/Roll";
 import L5RFFGHeritageRoll from "features/heritage/RollLoader";
+import L5RFFGRoll from "features/roller/IdentifiedRoll";
 
 const Show = () => {
   const { id } = useParams();
@@ -58,6 +59,8 @@ const Show = () => {
       return <FFGSWRoll {...params} />;
     case "FFG-L5R-Heritage":
       return <L5RFFGHeritageRoll {...params} />;
+    case "FFG-L5R":
+      return <L5RFFGRoll {...params} />;
     default:
       return null;
   }

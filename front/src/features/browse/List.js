@@ -201,33 +201,9 @@ const defaultColumns = [
     title: `Link`,
     dataIndex: "see_more",
     key: "see_more",
-    render: ({ id, type }) => {
-      const url = (() => {
-        if (type === "FFG-L5R") {
-          return `/rolls/${id}`;
-        }
-
-        if (
-          [
-            "AEG-L5R",
-            "DnD",
-            "Cyberpunk-RED",
-            "FFG-SW",
-            "FFG-L5R-Heritage",
-          ].includes(type)
-        ) {
-          return `/r/${id}`;
-        }
-
-        return null;
-      })();
-
-      if (!url) {
-        return null;
-      }
-
+    render: ({ id }) => {
       return (
-        <Link title="See more" to={url} className={styles["see-more"]}>
+        <Link title="See more" to={`/r/${id}`} className={styles["see-more"]}>
           {"➥"}
         </Link>
       );
@@ -348,7 +324,7 @@ const List = () => {
         description: { description, type, metadata },
         result: { result, type, metadata, parameters },
         success: { type, roll, result },
-        see_more: { id, type },
+        see_more: { id },
         input: { metadata, roll, type },
         admin: { id, description },
       };

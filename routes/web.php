@@ -39,11 +39,7 @@ Route::get('/heritage', function () {
     return File::get(public_path().'/react/index.html');
 });
 
-Route::get('/rolls/{id}', function ($id) {
-    ContextualizedRoll::where('type', 'FFG-L5R')->findOrFail($id);
-
-    return File::get(public_path().'/react/index.html');
-})->where('id', '[0-9]+');
+Route::permanentRedirect('/rolls/{id}', '/r/{id}');
 
 Route::get('/rolls', function () {
     return File::get(public_path().'/react/index.html');

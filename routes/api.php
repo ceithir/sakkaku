@@ -49,8 +49,6 @@ Route::middleware(['auth:sanctum', 'superadmin'])->delete('/admin/rolls/{id}', [
 Route::get('/rolls/{id}', [RollController::class, 'show'])->where(['id' => '[0-9]+']);
 
 // L5R FFG rolls
-Route::get('public/ffg/l5r/rolls/{id}', [CheckRollController::class, 'show'])->where('id', '[0-9]+');
-
 Route::post('public/ffg/l5r/rolls/{action}', [CheckRollController::class, 'stateless'])->where('action', '[a-z]+');
 
 Route::middleware('auth:sanctum')->post('/ffg/l5r/rolls/create', [CheckRollController::class, 'create']);

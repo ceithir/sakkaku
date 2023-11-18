@@ -4,7 +4,6 @@ import { StandardRoller, AdvancedRoller } from "./features/roller";
 import Layout from "./features/navigation/Layout";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import List from "./features/browse/List";
-import IdentifiedRoll from "./features/roller/IdentifiedRoll";
 import { useDispatch } from "react-redux";
 import { fetchUser } from "./features/user/reducer";
 import HeritageRoll from "./features/heritage/Roll";
@@ -58,7 +57,6 @@ const App = () => {
               </>
             }
           />
-          <Route path="/rolls/:id" element={<IdentifiedRoll />} />
           <Route path="/rolls" element={<List />} />
           <Route
             path="/roll-advanced"

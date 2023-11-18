@@ -129,31 +129,8 @@ class CheckRollController extends Controller
         }
     }
 
-    public function show(int $id)
-    {
-        return response()->json($this->rollToPublicArray($this->loadRoll($id)));
-    }
-
     private function loadRoll(int $id): ContextualizedRoll
     {
         return ContextualizedRoll::where('type', self::ROLL_TYPE)->findOrFail($id);
-    }
-
-    private function rollToPublicArray(ContextualizedRoll $roll): array
-    {
-        return [
-            'id' => $roll->id,
-            'user' => $roll->user_id ? [
-                'id' => $roll->user->id,
-                'name' => $roll->user->name,
-            ] : null,
-            'created_at' => $roll->created_at,
-            'updated_at' => $roll->updated_at,
-            'campaign' => $roll->campaign,
-            'character' => $roll->character,
-            'description' => $roll->description,
-            'roll' => $roll->roll,
-            'result' => $roll->result,
-        ];
     }
 }
