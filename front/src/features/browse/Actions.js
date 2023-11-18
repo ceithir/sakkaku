@@ -159,7 +159,11 @@ const Actions = () => {
         <Form.Item label={`Tag`} name="tag">
           <Input />
         </Form.Item>
-        <Form.Item label={`Text`} name="text">
+        <Form.Item
+          label={`Description`}
+          name="text"
+          tooltip={`Will search for all rolls whose description contains the given word(s).`}
+        >
           <Input />
         </Form.Item>
         <div className={styles.buttons}>
