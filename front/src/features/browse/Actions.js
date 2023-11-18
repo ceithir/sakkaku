@@ -129,9 +129,9 @@ const ExportAsCsv = () => {
   );
 };
 
-const SearchForm = ({ form, onFinish, campaigns, tags }) => {
+const SearchForm = ({ campaigns, tags, ...formParams }) => {
   return (
-    <Form layout="inline" onFinish={onFinish} form={form}>
+    <Form layout="inline" {...formParams}>
       <Form.Item
         label={`Campaign`}
         name="campaign"
@@ -150,13 +150,7 @@ const SearchForm = ({ form, onFinish, campaigns, tags }) => {
           options={tags.map(({ label, campaign }) => {
             return { value: label, campaign };
           })}
-          filterOption={(inputValue, option) => {
-            const campaign = form.getFieldValue("campaign");
-            return (
-              option.campaign === campaign &&
-              option.value.indexOf(inputValue) !== -1
-            );
-          }}
+          filterOption={true}
         />
       </Form.Item>
       <Form.Item
@@ -178,14 +172,21 @@ const Actions = ({ campaigns, tags }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [form] = Form.useForm();
+  const [currentCampaign, setCurrentCampaign] = useState();
 
   useEffect(() => {
-    form.setFieldsValue(queryString.parse(location.search));
+    const query = queryString.parse(location.search);
+    form.setFieldsValue(query);
+    setCurrentCampaign(query.campaign);
   }, [location, form]);
 
   const onFinish = (data) => {
     navigate(`/rolls?${queryString.stringify(data)}`);
   };
+
+  const relevantTags = tags.filter(
+    ({ campaign }) => campaign === currentCampaign
+  );
 
   return (
     <div className={styles.container}>
@@ -194,7 +195,12 @@ const Actions = ({ campaigns, tags }) => {
         form={form}
         onFinish={onFinish}
         campaigns={campaigns}
-        tags={tags}
+        tags={relevantTags}
+        onValuesChange={(changedValues) => {
+          if (Object.keys(changedValues).includes("campaign")) {
+            setCurrentCampaign(changedValues.campaign);
+          }
+        }}
       />
     </div>
   );
