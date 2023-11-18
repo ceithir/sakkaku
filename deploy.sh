@@ -7,7 +7,7 @@ cd front
 yarn build
 cd ..
 git add .
-git commit -m "Pre-release front update"
+git commit -m "Pre-release front update" --allow-empty
 git push origin release
 eb deploy
 git checkout main
