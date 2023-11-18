@@ -96,7 +96,7 @@ const csvColumns = [
 const ExportAsCsv = () => {
   const location = useLocation();
   const query = queryString.parse(location.search);
-  const { campaign, tag } = query;
+  const { campaign } = query;
   const [loading, setLoading] = useState(false);
 
   if (!campaign) {
@@ -106,11 +106,11 @@ const ExportAsCsv = () => {
   const onClick = () => {
     setLoading(true);
     getOnServer({
-      uri: `/rolls?${queryString.stringify({ campaign, tag, raw: true })}`,
+      uri: `/rolls?${queryString.stringify({ ...query, raw: true })}`,
       success: (data) => {
         const csvConfig = mkConfig({
           columnHeaders: csvColumns,
-          filename: sanitizeFilename(`${campaign}${tag ? `-${tag}` : ""}`),
+          filename: sanitizeFilename(campaign),
           quoteStrings: true,
         });
         const csv = generateCsv(csvConfig)(processData(data.items));
