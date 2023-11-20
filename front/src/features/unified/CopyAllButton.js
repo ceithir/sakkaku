@@ -7,7 +7,7 @@ const CopyAllButton = ({ results }) => {
       if (!id || !bbMessage) {
         return "";
       }
-      return `[url=/r/${id}]${bbMessage}[/url]`;
+      return `[url=${window.location.origin}/r/${id}]${bbMessage}[/url]`;
     })
     .join("\n\n")
     .trim();
