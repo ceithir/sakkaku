@@ -95,7 +95,7 @@ const csvColumns = [
 ];
 
 const ExportAsCsv = ({ query }) => {
-  const { campaign, tag, text } = query;
+  const { campaign } = query;
   const [loading, setLoading] = useState(false);
 
   if (!campaign) {
@@ -106,9 +106,7 @@ const ExportAsCsv = ({ query }) => {
     setLoading(true);
     getOnServer({
       uri: `/rolls?${queryString.stringify({
-        campaign,
-        tag,
-        text,
+        ...query,
         raw: true,
       })}`,
       success: (data) => {
@@ -126,6 +124,41 @@ const ExportAsCsv = ({ query }) => {
   };
 
   return <Button loading={loading} onClick={onClick}>{`Export as CSV`}</Button>;
+};
+
+const ResultText = ({ query, total }) => {
+  const { text, tag, notext } = query;
+
+  return (
+    <span>
+      <strong>{total}</strong>
+      {` result${total > 1 ? `s` : ""} `}
+      {!!text && (
+        <>
+          {`matching `}
+          <strong>{text}</strong>
+          {` `}
+        </>
+      )}
+      {!!notext && (
+        <>
+          {!!text && `and `}
+          {`excluding `}
+          <strong>{notext}</strong>
+          {` `}
+        </>
+      )}
+      {`found for campaign `}
+      <strong>{query.campaign}</strong>
+      {!!tag && (
+        <>
+          {` and tag `}
+          <strong>{tag}</strong>
+        </>
+      )}
+      {`.`}
+    </span>
+  );
 };
 
 const SearchForm = ({ campaigns, tags, ...formParams }) => {
@@ -149,9 +182,16 @@ const SearchForm = ({ campaigns, tags, ...formParams }) => {
         />
       </Form.Item>
       <Form.Item
-        label={`Description`}
+        label={`Include`}
         name="text"
-        tooltip={`Will search for all rolls whose description contains the given word(s).`}
+        tooltip={`Will search for all rolls whose description contains the given word.`}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label={`Exclude`}
+        name="notext"
+        tooltip={`Will exclude all rolls whose description contains the given word.`}
       >
         <Input />
       </Form.Item>
@@ -207,21 +247,7 @@ const Actions = ({ campaigns, tags, total }) => {
         <>
           <Divider />
           <div className={styles["export-block"]}>
-            <span>
-              <strong>{total}</strong>
-              {` result${total > 1 ? `s` : ""} found`}
-              {(!!query.tag || !!query.text) && (
-                <>
-                  {` matching `}
-                  <strong>
-                    {[query.tag, query.text].filter(Boolean).join(", ")}
-                  </strong>
-                </>
-              )}
-              {` for campaign `}
-              <strong>{query.campaign}</strong>
-              {`.`}
-            </span>
+            <ResultText query={query} total={total} />
             <ExportAsCsv query={query} />
           </div>
         </>
