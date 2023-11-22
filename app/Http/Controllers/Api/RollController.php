@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ContextualizedRoll;
 use Assert\Assertion;
 use Assert\InvalidArgumentException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class RollController extends Controller
@@ -23,6 +24,15 @@ class RollController extends Controller
 
             if ($request->input('tag')) {
                 $query->where('tag', $request->input('tag'));
+            }
+
+            if ($request->input('notext')) {
+                $toExclude = $request->input('notext');
+                $query->where(function (Builder $query) use ($toExclude) {
+                    $query->whereNull('description')->orWhereNot(function (Builder $query) use ($toExclude) {
+                        $query->whereFullText('description', $toExclude);
+                    });
+                });
             }
         }
 

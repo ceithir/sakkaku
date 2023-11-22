@@ -75,7 +75,7 @@ export const create =
     const error = errorHandler(dispatch);
 
     if (user) {
-      const { campaign, character, description } = context;
+      const { campaign, character, description, tag } = context;
 
       authentifiedPostOnServer({
         uri: "/ffg/l5r/heritage-rolls/create",
@@ -83,6 +83,7 @@ export const create =
           campaign,
           character,
           description,
+          tag,
           metadata,
         },
         success: ({ id, roll }) => {
