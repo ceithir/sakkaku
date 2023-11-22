@@ -9,6 +9,7 @@ import { mkConfig, generateCsv, download } from "export-to-csv";
 import sanitizeFilename from "sanitize-filename";
 import { Input, Form, AutoComplete } from "antd";
 import { useNavigate } from "react-router-dom";
+import { arrayToAutoCompleteOptions } from "components/form/UserContext";
 
 const cleanEntryForCsv = (input) => {
   if (input === null || input === undefined) {
@@ -137,17 +138,13 @@ const SearchForm = ({ campaigns, tags, ...formParams }) => {
         className={styles.autocomplete}
       >
         <AutoComplete
-          options={campaigns.map((campaign) => {
-            return { value: campaign };
-          })}
+          options={arrayToAutoCompleteOptions(campaigns)}
           filterOption={true}
         />
       </Form.Item>
       <Form.Item label={`Tag`} name="tag" className={styles.autocomplete}>
         <AutoComplete
-          options={tags.map(({ label, campaign }) => {
-            return { value: label, campaign };
-          })}
+          options={arrayToAutoCompleteOptions(tags.map(({ label }) => label))}
           filterOption={true}
         />
       </Form.Item>
