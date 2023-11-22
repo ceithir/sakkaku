@@ -97,6 +97,8 @@ const UserContext = ({ description = {} }) => {
   const [showTag, setShowTag] = useState(false);
   const navigate = useNavigate();
 
+  //TODO Legacy; no way to set that anymore without modifying the url directly
+  //To be removed eventually
   const location = useLocation();
   const form = Form.useFormInstance();
   useEffect(() => {

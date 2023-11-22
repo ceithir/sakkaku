@@ -13,7 +13,6 @@ import Map from "./features/trinket/Map";
 import ScrollToTop from "./features/navigation/ScrollToTop";
 import FfgSubmenu from "features/navigation/FfgSubmenu";
 import ReconnectionModal from "features/user/ReconnectionModal";
-import Prefiller from "features/gm/Prefiller";
 import Show from "features/browse/Show";
 import UnifiedRoller from "features/unified/Roller";
 
@@ -29,7 +28,6 @@ const App = () => {
       <Layout>
         <ReconnectionModal />
         <Routes>
-          <Route path="/gm/prefiller" element={<Prefiller />} />
           <Route
             path="/resources/rokugan-map"
             element={
