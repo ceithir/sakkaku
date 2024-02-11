@@ -62,8 +62,8 @@ Note: The command `php artisan config:cache` is missing from the deployment proc
 
 ## Local install
 
-1. Install PHP 8.0, Composer and run `composer install`
-2. Install PostgreSQL 12 and setup a database
+1. Install PHP 8.2, Composer and run `composer install`
+2. Install PostgreSQL 15 and setup a database
 3. Create a .env file with:
 
 -   APP_ENV=local
