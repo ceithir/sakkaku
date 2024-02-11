@@ -9,23 +9,23 @@ import proficiencyDie from "./images/proficiency-60.png";
 import setbackDie from "./images/setback-60.png";
 import classNames from "classnames";
 
-const LabeledDie = ({ label, src, alt, className }) => {
+const LabeledDie = ({ label, src, className }) => {
   return (
     <span
       className={classNames(styles.container, { [className]: !!className })}
     >
       {label}
-      <img src={src} alt={alt} />
+      <img src={src} alt={label + ` die`} />
     </span>
   );
 };
 
 export const AbilityDie = () => {
-  return <LabeledDie label={`Ability`} src={abiltyDie} alt={`Ability die`} />;
+  return <LabeledDie label={`Ability`} src={abiltyDie} />;
 };
 
 export const BoostDie = () => {
-  return <LabeledDie label={`Boost`} src={boostDie} alt={`Boost die`} />;
+  return <LabeledDie label={`Boost`} src={boostDie} />;
 };
 
 export const ChallengeDie = () => {
@@ -33,24 +33,17 @@ export const ChallengeDie = () => {
     <LabeledDie
       label={`Challenge`}
       src={challengeDie}
-      alt={`Challenge die`}
       className={styles.challenge}
     />
   );
 };
 
 export const DifficutlyDie = () => {
-  return (
-    <LabeledDie
-      label={`Difficulty`}
-      src={difficultyDie}
-      alt={`Difficulty die`}
-    />
-  );
+  return <LabeledDie label={`Difficulty`} src={difficultyDie} />;
 };
 
 export const ForceDie = () => {
-  return <LabeledDie label={`Force`} src={forceDie} alt={`Force die`} />;
+  return <LabeledDie label={`Force`} src={forceDie} />;
 };
 
 export const ProficiencyDie = () => {
@@ -58,14 +51,13 @@ export const ProficiencyDie = () => {
     <LabeledDie
       label={`Proficiency`}
       src={proficiencyDie}
-      alt={`Proficiency die`}
       className={styles.proficiency}
     />
   );
 };
 
 export const SetbackDie = () => {
-  return <LabeledDie label={`Setback`} src={setbackDie} alt={`Setback die`} />;
+  return <LabeledDie label={`Setback`} src={setbackDie} />;
 };
 
 export default LabeledDie;
