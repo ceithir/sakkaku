@@ -8,7 +8,7 @@ const { Link: AntdLink } = Typography;
 
 const ExternalLink = ({ children, ...props }) => {
   return (
-    <AntdLink className={styles.link} {...props}>
+    <AntdLink className={styles.link} target="_blank" {...props}>
       {children}
       <ExternalLinkIcon />
     </AntdLink>
