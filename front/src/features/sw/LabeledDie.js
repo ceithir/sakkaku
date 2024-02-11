@@ -14,7 +14,7 @@ const LabeledDie = ({ label, src, className }) => {
     <span
       className={classNames(styles.container, { [className]: !!className })}
     >
-      {label}
+      <span className={styles.label}>{label}</span>
       <img src={src} alt={label + ` die`} />
     </span>
   );
