@@ -12,6 +12,7 @@ import {
   SetbackDie,
 } from "./LabeledDie";
 import { bbMessage } from "./Roll";
+import ExternalLink from "features/navigation/ExternalLink";
 
 const DiceNumber = ({ label, name, rules = [] }) => {
   return (
@@ -122,6 +123,7 @@ const Roller = ({ loading, setLoading, clearResult, createRoll }) => {
           ]}
         />
       </div>
+      <ExternalLink href="https://ttftcuts.github.io/sw_dice/">{`Tell me the odds.`}</ExternalLink>
       <Form.Item>
         <Button type="primary" htmlType="submit" loading={loading}>
           {`Roll`}
